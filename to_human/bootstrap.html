@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>gpack research bootstrap</title>
+<style>
+body{font:17px/1.55 system-ui,sans-serif;max-width:960px;margin:48px auto;padding:0 24px;color:#17212b;background:#f6f8fa}
+h1{font-size:clamp(2.2rem,5vw,3.25rem);line-height:1.08;letter-spacing:-.025em}h2{font-size:1.55rem;line-height:1.2}header{border-bottom:1px solid #ccd5dd;margin-bottom:28px;padding-bottom:16px}
+.callout{background:#e6f2ff;padding:14px 18px;border-radius:6px}
+table{border-collapse:collapse;width:100%;background:white}th,td{padding:10px;border:1px solid #d5dce2;text-align:left;vertical-align:top}
+code{background:#e9edf0;padding:2px 5px;border-radius:4px}a{color:#075c9e}
+</style>
+<body>
+<header><h1>gpack: research bootstrap</h1><p>Deep dive into binary packers, similar implementations, and Goose programs · 22 Nov 2026</p></header>
+<h2>What is in this repository?</h2>
+<p><code>PRODUCT.md</code> is a detailed proposed architecture. There is no gpack implementation or measured baseline yet. <code>goose-bin/</code> bundles the Goose compiler, language docs, stdlib, sample programs, and graphics/physics packages.</p>
+<h2>Prior art points to an access-model choice</h2>
+<p>ZIP combines local headers and a trailing central directory. libarchive is deliberately stream-oriented and treats random access as a separate capability. Zstandard seekable frames add an index for independent decompression, with frame size trading ratio against range-read latency. Quake PAK is a compact payload-then-directory example. These are competing design points, not one universal format.</p>
+<h2>Goose-specific finding</h2>
+<div class="callout"><strong>Large result queues are the primary design risk.</strong> Goose threads exchange copied flat values. Queue limits count messages, not bytes. The bundled Mandelbrot worker sample sends tiny rows, so it demonstrates ordering but not large-chunk scalability. Current <code>os.read_file</code> reads the whole file; scalable streaming needs a native I/O boundary or a stdlib extension.</div>
+<h2>Hypotheses to test next</h2>
+<table><thead><tr><th>ID</th><th>Question</th><th>Primary measures</th></tr></thead><tbody>
+<tr><td>H1</td><td>Does queueing whole chunk payloads cause memory and throughput costs?</td><td>MiB/s, peak RSS, bytes in flight</td></tr>
+<tr><td>H2</td><td>Do whole-file frames and fixed chunks win on different asset workloads?</td><td>Archive size, range latency, verify time</td></tr>
+<tr><td>H3</td><td>Can a narrow C streaming ABI keep performance near C while Goose owns format policy?</td><td>Throughput, RSS, validation and ABI complexity</td></tr>
+</tbody></table>
+<h2>Recommendation</h2>
+<p>Before freezing a format or default chunk size, implement a small benchmark comparing whole-file frames, fixed chunks, and raw storage. Bound in-flight bytes explicitly. Specify deterministic metadata/path policy and safe extraction rules. Keep archive structs explicitly encoded rather than dumping Goose structs.</p>
+<p>Full evidence and source links: <a href="../literature/survey.md">literature/survey.md</a>. Research state: <a href="../research-state.yaml">research-state.yaml</a>.</p>
+</body></html>
