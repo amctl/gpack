@@ -58,8 +58,8 @@ def validate(binary: pathlib.Path, archive: pathlib.Path, source_manifest: pathl
     require_ok([str(binary), str(archive), str(source_manifest), "validate"], f"validation failed: {archive}")
 
 
-def zip_malformed_checks(reader: pathlib.Path, archive: pathlib.Path, source_manifest: pathlib.Path,
-                         scratch: pathlib.Path) -> dict[str, bool]:
+def zip_malformed_checks(reader: pathlib.Path, zpack: pathlib.Path, archive: pathlib.Path,
+                         source_manifest: pathlib.Path, scratch: pathlib.Path) -> dict[str, bool]:
     original = archive.read_bytes()
     # The first local record starts at byte zero; its name length is at 26.
     name_len = int.from_bytes(original[26:28], "little")
@@ -68,10 +68,36 @@ def zip_malformed_checks(reader: pathlib.Path, archive: pathlib.Path, source_man
     cd_offset = int.from_bytes(original[eocd_at + 16:eocd_at + 20], "little")
     first_cd_name_len = int.from_bytes(original[cd_offset + 28:cd_offset + 30], "little")
     descriptor_offset = payload_offset + int.from_bytes(original[cd_offset + 20:cd_offset + 24], "little")
+    first_name = original[30:30 + name_len]
+    slash = first_name.find(b"/")
+    if slash < 0:
+        raise RuntimeError("first ZIP path needs a separator for backslash/NUL fixtures")
+    backslash = bytearray(original)
+    backslash[30 + slash] = ord("\\")
+    backslash[cd_offset + 46 + slash] = ord("\\")
+    nul_name = bytearray(original)
+    nul_name[30 + slash] = 0
+    nul_name[cd_offset + 46 + slash] = 0
+    malformed_cd = bytearray(original)
+    malformed_cd[cd_offset] ^= 0xff
+    bad_local_ref = bytearray(original)
+    bad_local_ref[cd_offset + 42:cd_offset + 46] = (1).to_bytes(4, "little")
+    out_of_range = bytearray(original)
+    out_of_range[cd_offset + 42:cd_offset + 46] = (0xfffffffe).to_bytes(4, "little")
+    bad_size = bytearray(original)
+    old_uncompressed = int.from_bytes(original[cd_offset + 24:cd_offset + 28], "little")
+    bad_size[cd_offset + 24:cd_offset + 28] = (old_uncompressed + 1).to_bytes(4, "little")
     cases: dict[str, bytes] = {
         "truncated_eocd": original[:-1],
+        "truncated_central_directory": original[:eocd_at - 1] + original[eocd_at:],
+        "malformed_central_directory_signature": bytes(malformed_cd),
         "unsupported_method": original[:cd_offset + 10] + b"\x63\x00" + original[cd_offset + 12:],
         "zip64_required_boundary": original[:cd_offset + 24] + b"\xff\xff\xff\xff" + original[cd_offset + 28:],
+        "backslash_path": bytes(backslash),
+        "nul_path": bytes(nul_name),
+        "invalid_local_header_reference": bytes(bad_local_ref),
+        "out_of_range_local_header_reference": bytes(out_of_range),
+        "central_local_size_mismatch": bytes(bad_size),
     }
     unsafe = bytearray(original)
     unsafe[30] = ord("/")
@@ -86,6 +112,30 @@ def zip_malformed_checks(reader: pathlib.Path, archive: pathlib.Path, source_man
     if payload_offset < cd_offset:
         damaged[payload_offset] ^= 0xff
         cases["payload_crc_or_deflate_corruption"] = bytes(damaged)
+    overlap_root = scratch / "overlap-source"
+    overlap_root.mkdir()
+    (overlap_root / "a.bin").write_bytes(b"a" * 4096)
+    (overlap_root / "b.bin").write_bytes(b"b")
+    overlap_archive = scratch / "overlap-source.zip"
+    require_ok([str(zpack), "STORE", str(overlap_root), str(overlap_archive)], "overlap fixture packing failed")
+    overlap_bytes = overlap_archive.read_bytes()
+    overlap_eocd = overlap_bytes.rfind(b"PK\x05\x06")
+    overlap_cd = int.from_bytes(overlap_bytes[overlap_eocd + 16:overlap_eocd + 20], "little")
+    first_cd = overlap_cd
+    first_nlen = int.from_bytes(overlap_bytes[first_cd + 28:first_cd + 30], "little")
+    first_elen = int.from_bytes(overlap_bytes[first_cd + 30:first_cd + 32], "little")
+    first_clen = int.from_bytes(overlap_bytes[first_cd + 32:first_cd + 34], "little")
+    second_cd = first_cd + 46 + first_nlen + first_elen + first_clen
+    first_local = int.from_bytes(overlap_bytes[first_cd + 42:first_cd + 46], "little")
+    second_local = int.from_bytes(overlap_bytes[second_cd + 42:second_cd + 46], "little")
+    injection = first_local + 30 + int.from_bytes(overlap_bytes[first_local + 26:first_local + 28], "little") + 64
+    segment = overlap_bytes[second_local:overlap_cd]
+    if injection + len(segment) >= second_local:
+        raise RuntimeError("overlap fixture segment does not fit inside first payload")
+    overlapping = bytearray(overlap_bytes)
+    overlapping[injection:injection + len(segment)] = segment
+    overlapping[second_cd + 42:second_cd + 46] = injection.to_bytes(4, "little")
+    cases["overlapping_payload_ranges"] = bytes(overlapping)
     results = {}
     for name, payload in cases.items():
         bad = scratch / f"malformed-{name}.zip"
@@ -242,7 +292,7 @@ def main() -> None:
                 validate(zreader, zipped, source_manifest)
                 artifacts[method] = zipped
             if name == "godot-real":
-                artifacts["zip_malformed_rejection"] = zip_malformed_checks(zreader, artifacts["STORE"], source_manifest, scratch)
+                artifacts["zip_malformed_rejection"] = zip_malformed_checks(zreader, zpack, artifacts["STORE"], source_manifest, scratch)
             prepared[name] = artifacts
             correctness[name] = {"files": file_count, "source_bytes": byte_count,
                                  "gpack_raw_full_read_crc_pass": True,

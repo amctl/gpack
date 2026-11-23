@@ -45,16 +45,18 @@ package/CLI. Isolate its native DEFLATE dependency from the production target.
 The restricted Goose ZIP implementation passed full-read source CRC and
 determinism checks across the 63-file Godot real corpus, 579-file deterministic
 mixed workload, and 109-file Material Testers project. Edge fixtures covered
-empty, UTF-8, nested, and case-distinct paths; malformed-path, duplicate,
-truncation, CRC/descriptor, unsupported method, ZIP64-boundary, and 32 MiB
-limit rejection passed. Four-reader runs and external `unzip -t` checks passed.
+empty, UTF-8, nested, and case-distinct paths. Rejection passed for absolute,
+traversal, backslash, NUL, and duplicate paths; truncated/malformed central
+directory; invalid/out-of-range local references; overlapping ranges; size,
+descriptor, and payload CRC corruption; unsupported method; ZIP64 boundary;
+and the 32 MiB limit. Four-reader runs and external `unzip -t` checks passed.
 
 In the container arm, GPack raw was 5.6–47.2 KiB smaller than ZIP STORED on
 these workloads, while pack time, lookup throughput/latency, and RSS were
 similar. In the codec arm, GPack Zstandard/raw packed and read faster and was
 slightly smaller on the mixed workload. On Material Testers, ZIP DEFLATE was
 1.5% smaller and used less reader RSS; GPack packed about 2.5 times faster and
-read about 35% faster. The small real corpus has sub-millisecond behavior and
+read about 39% faster. The small real corpus has sub-millisecond behavior and
 visible run variation. These observations describe the named inputs and one
 Linux host, not a general winner.
 
