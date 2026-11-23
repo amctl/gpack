@@ -277,7 +277,9 @@ def main() -> None:
         for name, root in workloads:
             source_manifest = scratch / f"{name}.crc.tsv"
             file_count, byte_count = manifest(root, source_manifest)
-            artifacts = {"root": root, "manifest": source_manifest, "files": file_count, "source_bytes": byte_count}
+            manifest_sha256 = hashlib.sha256(source_manifest.read_bytes()).hexdigest()
+            artifacts = {"root": root, "manifest": source_manifest, "manifest_sha256": manifest_sha256,
+                         "files": file_count, "source_bytes": byte_count}
             gpk = scratch / f"{name}.gpk"
             require_ok([str(gpack), "pack", str(root), str(gpk)], f"GPack pack failed: {name}")
             validate(greader, gpk, source_manifest)
@@ -349,7 +351,8 @@ def main() -> None:
             archive_meta["zip-store"]["archive_sha256"] = hashlib.sha256(data["STORE"].read_bytes()).hexdigest()
             archive_meta["zip-deflate-3"]["archive_bytes"] = data["DEFLATE"].stat().st_size
             archive_meta["zip-deflate-3"]["archive_sha256"] = hashlib.sha256(data["DEFLATE"].read_bytes()).hexdigest()
-            workload_meta[name] = {"files": data["files"], "source_bytes": data["source_bytes"], "archives": archive_meta}
+            workload_meta[name] = {"files": data["files"], "source_bytes": data["source_bytes"],
+                                   "source_manifest_sha256": data["manifest_sha256"], "archives": archive_meta}
             for pair in range(1, 6):
                 order = cases if pair % 2 else list(reversed(cases))
                 for label, _packer, archive, pattern in order:

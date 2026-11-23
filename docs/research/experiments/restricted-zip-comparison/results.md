@@ -36,7 +36,9 @@ full-asset CRC checks, and a 32 MiB default read limit. Pack and reader peak
 RSS are process peak RSS from GNU `time`. Latency is per full-asset read; p50
 and p95 are calculated over assets in the run. All paired observations,
 archive hashes, workload manifests, environment details, and min/median/max
-summaries are in [results.json](results.json).
+summaries are in [results.json](results.json). The artifact includes each
+source CRC manifest's SHA-256 so the recorded archive results bind to the exact
+path/CRC input list used for validation and timing.
 
 Workloads:
 

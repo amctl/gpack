@@ -1836,7 +1836,8 @@
         }
       },
       "files": 109,
-      "source_bytes": 133365708
+      "source_bytes": 133365708,
+      "source_manifest_sha256": "5ff2f786abd760b88a5974078811ce210777e7f377598d379d295322f43beac8"
     },
     "godot-real": {
       "archives": {
@@ -2066,7 +2067,8 @@
         }
       },
       "files": 63,
-      "source_bytes": 1197336
+      "source_bytes": 1197336,
+      "source_manifest_sha256": "6cda4821b45c6a5f0e198a839c1201e50d766c692aac53bd72d51294a6538e8f"
     },
     "mixed": {
       "archives": {
@@ -2296,7 +2298,8 @@
         }
       },
       "files": 579,
-      "source_bytes": 137512216
+      "source_bytes": 137512216,
+      "source_manifest_sha256": "31a7a1f1d99909f9515ec5a0e8b75e313a3a5de7e3fc0866675722fb9dbdf9ed"
     }
   }
 }
