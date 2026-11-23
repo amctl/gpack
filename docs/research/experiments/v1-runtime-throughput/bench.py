@@ -14,6 +14,7 @@ import statistics
 import subprocess
 import sys
 import tempfile
+import time
 import zlib
 from datetime import datetime
 from zoneinfo import ZoneInfo
@@ -86,12 +87,15 @@ def malformed_checks(goose_bin: pathlib.Path, c_bin: pathlib.Path, archive: path
 
 
 def main() -> None:
-    if len(sys.argv) != 5:
-        raise SystemExit("usage: bench.py CORPUS_ROOT GPACK_CLI GOOSE_READER C_READER")
-    corpus, packer, goose_bin, c_bin = map(lambda p: pathlib.Path(p).resolve(), sys.argv[1:])
+    if len(sys.argv) not in (5, 6):
+        raise SystemExit("usage: bench.py CORPUS_ROOT GPACK_CLI GOOSE_READER C_READER [ADDITIONAL_REAL_CORPUS]")
+    corpus, packer, goose_bin, c_bin = map(lambda p: pathlib.Path(p).resolve(), sys.argv[1:5])
+    additional_real = pathlib.Path(sys.argv[5]).resolve() if len(sys.argv) == 6 else None
     for path in (corpus, packer, goose_bin, c_bin):
         if not path.exists():
             raise SystemExit(f"missing benchmark input: {path}")
+    if additional_real is not None and not additional_real.is_dir():
+        raise SystemExit(f"additional real workload is not a directory: {additional_real}")
     env = os.environ.copy()
     scratch = pathlib.Path(tempfile.mkdtemp(prefix="gpack-v1-runtime-"))
     try:
@@ -101,16 +105,21 @@ def main() -> None:
         hashes = {}
         malformed = {}
         workload_meta = {}
-        for workload in ("godot-real", "mixed"):
-            root = inputs[workload]
+        workloads = [("godot-real", inputs["godot-real"]), ("mixed", inputs["mixed"])]
+        if additional_real is not None:
+            workloads.append(("godot-material-testers", additional_real))
+        for workload, root in workloads:
             archive = scratch / f"{workload}.gpk"
             manifest_path = scratch / f"{workload}.crc.tsv"
             file_count, byte_count = manifest(root, manifest_path)
+            pack_started = time.perf_counter()
             packed = run([str(packer), "pack", str(root), str(archive)], env=env)
+            pack_seconds = time.perf_counter() - pack_started
             if packed.returncode:
                 raise RuntimeError(f"product pack failed for {workload}: {packed.stderr[-1500:]}")
             hashes[workload] = hashlib.sha256(archive.read_bytes()).hexdigest()
             workload_meta[workload] = {"files": file_count, "source_bytes": byte_count,
+                                       "pack_seconds": pack_seconds,
                                        "archive_bytes": archive.stat().st_size,
                                        "archive_sha256": hashes[workload]}
             if not valid(goose_bin, archive, manifest_path) or not valid(c_bin, archive, manifest_path):
@@ -159,6 +168,7 @@ def main() -> None:
         output = {"experiment": "GPack product v1 runtime throughput",
                   "date": datetime.now(ZoneInfo("Asia/Kolkata")).date().isoformat(),
                   "corpus_root": str(corpus), "paired_runs": 5, "reader_threads": 4,
+                  "additional_real_corpus": str(additional_real) if additional_real else None,
                   "reader_limit_bytes": 32 * 1024 * 1024,
                   "build_mode": os.environ.get("GPACK_BUILD_DESCRIPTION", "unspecified"),
                   "zstd_version_number": int(run([str(c_bin), "--version"]).stdout.strip()),
@@ -167,7 +177,7 @@ def main() -> None:
                               "cc": run(["gcc", "--version"]).stdout.splitlines()[0]},
                   "workload_metadata": workload_meta, "malformed_rejection": malformed,
                   "summaries": summaries, "observations": records}
-        destination = HERE / "results.json"
+        destination = HERE / ("results-larger-corpus.json" if additional_real else "results.json")
         destination.write_text(json.dumps(output, indent=2, sort_keys=True) + "\n")
         print(json.dumps({"results": str(destination), "summaries": summaries,
                           "malformed_rejection": malformed}, indent=2))

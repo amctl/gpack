@@ -19,6 +19,13 @@ Results: [results.md](results.md), with raw observations in [results.json](resul
   deterministic 4 KiB files, two 32 MiB compressible files, and two 32 MiB
   high-entropy files. The default 32 MiB reader cap and four-reader default are
   used without an override.
+- For an expanded run, pass an optional fifth path to `bench.py` for an
+  additional real project. The harness runs that project as its own workload,
+  retains the existing small-real and mixed workloads, and writes a separate
+  `results-larger-corpus.json` artifact so the original acceptance data is
+  preserved. The 2026-11-24 supplemental run used Godot 4.7
+  `3d/material_testers`; see [expanded results](results-larger-corpus.md) and
+  its [per-file manifest](../godot-4.7-corpus/material-testers-manifest.json).
 - `/usr/bin/time` records process peak RSS. Per-asset p50/p95 latency covers
   the complete read, decompression when used, and content CRC verification.
   Parse time is reported separately from the timed lookup phase.

@@ -77,6 +77,20 @@ Unpack each ZIP, retain the included notices, and use the paths and SHA-256
 values in the manifest to verify the extracted corpus. Do not commit the ZIPs
 or extracted corpus.
 
+## Larger real-project workload
+
+The supplementary runtime benchmark also uses the pinned release asset
+[`3d_material_testers.zip`](https://github.com/godotengine/godot-demo-projects/releases/download/4.7-6ad6167/3d_material_testers.zip),
+published SHA-256
+`f84524261ec5c1012af6e66f5304861f4f1afa0eef78daf71f2791897397ad87`.
+The verified local extraction has 109 regular files totaling 133,365,708
+bytes; the largest file is 29,029,087 bytes. The release archive passed
+`unzip -t`. Its included MIT `LICENSE.md` was retained, and no other
+license/notice files were present. The file-level size/hash inventory is
+[`material-testers-manifest.json`](material-testers-manifest.json); binaries
+remain outside the repository. Runtime measurements are in the
+[expanded benchmark results](../v1-runtime-throughput/results-larger-corpus.md).
+
 ## Sources
 
 - [Godot demo repository and MIT statement](https://github.com/godotengine/godot-demo-projects)

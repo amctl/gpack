@@ -35,3 +35,14 @@ The measured build used Goose v2026.4 and statically linked vendored Zstandard
 1.5.7. It bypassed the repository's CMake wrapper because CMake is unavailable
 on this host. The benchmark passes issue 22 for this Linux build; production
 CMake linkage and other supported platforms remain issue 23 work.
+
+## Larger real-project follow-up
+
+A supplementary run added the pinned Godot 4.7 `3d/material_testers` project
+(109 files, 133,365,708 bytes). Five paired reads on the production CMake
+build measured a 0.970 median Goose/C throughput ratio and 106,684 KiB median
+Goose process peak RSS on this Linux host. The small real corpus was highly
+variable in this rerun (0.808 median paired ratio). Keep claims scoped to the
+reported workloads and host; see
+[`results-larger-corpus.md`](../../../docs/research/experiments/v1-runtime-throughput/results-larger-corpus.md)
+and its [file manifest](../../../docs/research/experiments/godot-4.7-corpus/material-testers-manifest.json).
