@@ -1,0 +1,2294 @@
+{
+  "build_mode": "unspecified",
+  "correctness": {
+    "godot-material-testers": {
+      "files": 109,
+      "gpack_full_read_crc_pass": true,
+      "gpack_raw_full_read_crc_pass": true,
+      "source_bytes": 133365708,
+      "zip_deflate_full_read_crc_pass": true,
+      "zip_store_full_read_crc_pass": true
+    },
+    "godot-real": {
+      "files": 63,
+      "gpack_full_read_crc_pass": true,
+      "gpack_raw_full_read_crc_pass": true,
+      "source_bytes": 1197336,
+      "zip_deflate_full_read_crc_pass": true,
+      "zip_store_full_read_crc_pass": true
+    },
+    "mixed": {
+      "files": 579,
+      "gpack_full_read_crc_pass": true,
+      "gpack_raw_full_read_crc_pass": true,
+      "source_bytes": 137512216,
+      "zip_deflate_full_read_crc_pass": true,
+      "zip_store_full_read_crc_pass": true
+    }
+  },
+  "date": "2026-11-24",
+  "edge_case_correctness": {
+    "above_32_mib_asset_rejected": true,
+    "case_distinct_paths": true,
+    "duplicate_path_rejected": true,
+    "empty_file": true,
+    "file_count": 5,
+    "four_reader_concurrency": true,
+    "gpack_full_read_crc_pass": true,
+    "gpack_raw_full_read_crc_pass": true,
+    "nested_path": true,
+    "source_bytes": 26,
+    "traversal_path_rejected": true,
+    "utf8_path": true,
+    "zip_deflate_full_read_crc_pass": true,
+    "zip_store_full_read_crc_pass": true
+  },
+  "experiment": "Restricted Goose ZIP vs GPack v1",
+  "machine": {
+    "cc": "gcc (GCC) 16.2.1 20261029 (Red Hat 16.2.1-3)",
+    "cpu": "Intel(R) Core(TM) Ultra 7 255H",
+    "goose": "goose v2026.4 (runtime dce889723a23)",
+    "os": "Linux-7.3.4-300.fc45.x86_64-x86_64-with-glibc2.44",
+    "ram_bytes": 32963203072,
+    "zstd": "1.5.7",
+    "zlib": "1.3.1.zlib-ng"
+  },
+  "malformed_rejection": {
+    "absolute_path": true,
+    "descriptor_crc_mismatch": true,
+    "payload_crc_or_deflate_corruption": true,
+    "truncated_eocd": true,
+    "unsupported_method": true,
+    "zip64_required_boundary": true
+  },
+  "observations": [
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 63,
+      "format": "gpack-raw",
+      "lookup_ns": 5956331,
+      "mib_s": 191.7067052365951,
+      "p50_ms": 0.006983,
+      "p95_ms": 0.134931,
+      "paired_run": 1,
+      "parse_ns": 119868,
+      "peak_rss_kib": 3708,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 63,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 5977154,
+      "mib_s": 191.03884412357348,
+      "p50_ms": 0.017337,
+      "p95_ms": 0.152237,
+      "paired_run": 1,
+      "parse_ns": 49312,
+      "peak_rss_kib": 3900,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 63,
+      "format": "zip-store",
+      "lookup_ns": 5936234,
+      "mib_s": 192.35572440516896,
+      "p50_ms": 0.004709,
+      "p95_ms": 0.081124,
+      "paired_run": 1,
+      "parse_ns": 268483,
+      "peak_rss_kib": 3688,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 63,
+      "format": "zip-deflate-3",
+      "lookup_ns": 13287341,
+      "mib_s": 85.93657612223497,
+      "p50_ms": 0.073965,
+      "p95_ms": 0.814289,
+      "paired_run": 1,
+      "parse_ns": 276935,
+      "peak_rss_kib": 7780,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 63,
+      "format": "zip-deflate-3",
+      "lookup_ns": 12941316,
+      "mib_s": 88.2343489107749,
+      "p50_ms": 0.082685,
+      "p95_ms": 0.885679,
+      "paired_run": 2,
+      "parse_ns": 248858,
+      "peak_rss_kib": 7952,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 63,
+      "format": "zip-store",
+      "lookup_ns": 8274314,
+      "mib_s": 138.00160246620973,
+      "p50_ms": 0.007837,
+      "p95_ms": 0.125797,
+      "paired_run": 2,
+      "parse_ns": 263188,
+      "peak_rss_kib": 3936,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 63,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 6370627,
+      "mib_s": 179.23959310576396,
+      "p50_ms": 0.020575,
+      "p95_ms": 0.191749,
+      "paired_run": 2,
+      "parse_ns": 140333,
+      "peak_rss_kib": 3768,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 63,
+      "format": "gpack-raw",
+      "lookup_ns": 6313687,
+      "mib_s": 180.85606576768754,
+      "p50_ms": 0.007728,
+      "p95_ms": 0.124267,
+      "paired_run": 2,
+      "parse_ns": 119834,
+      "peak_rss_kib": 3636,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 63,
+      "format": "gpack-raw",
+      "lookup_ns": 5910251,
+      "mib_s": 193.20137018014864,
+      "p50_ms": 0.006465,
+      "p95_ms": 0.108525,
+      "paired_run": 3,
+      "parse_ns": 103803,
+      "peak_rss_kib": 3340,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 63,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 6647858,
+      "mib_s": 171.76488897756147,
+      "p50_ms": 0.019276,
+      "p95_ms": 0.181046,
+      "paired_run": 3,
+      "parse_ns": 140469,
+      "peak_rss_kib": 4024,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 63,
+      "format": "zip-store",
+      "lookup_ns": 6294117,
+      "mib_s": 181.41839297054594,
+      "p50_ms": 0.007812,
+      "p95_ms": 0.126167,
+      "paired_run": 3,
+      "parse_ns": 281122,
+      "peak_rss_kib": 3880,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 63,
+      "format": "zip-deflate-3",
+      "lookup_ns": 14696847,
+      "mib_s": 77.69480020500953,
+      "p50_ms": 0.076985,
+      "p95_ms": 0.93062,
+      "paired_run": 3,
+      "parse_ns": 257257,
+      "peak_rss_kib": 7656,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 63,
+      "format": "zip-deflate-3",
+      "lookup_ns": 14723989,
+      "mib_s": 77.55157867264053,
+      "p50_ms": 0.081976,
+      "p95_ms": 1.102467,
+      "paired_run": 4,
+      "parse_ns": 260423,
+      "peak_rss_kib": 7652,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 63,
+      "format": "zip-store",
+      "lookup_ns": 5275123,
+      "mib_s": 216.46293201288267,
+      "p50_ms": 0.008063,
+      "p95_ms": 0.126535,
+      "paired_run": 4,
+      "parse_ns": 310810,
+      "peak_rss_kib": 3748,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 63,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 8696484,
+      "mib_s": 131.30232761982816,
+      "p50_ms": 0.024655,
+      "p95_ms": 0.209836,
+      "paired_run": 4,
+      "parse_ns": 186507,
+      "peak_rss_kib": 4028,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 63,
+      "format": "gpack-raw",
+      "lookup_ns": 6526092,
+      "mib_s": 174.96973553369978,
+      "p50_ms": 0.008424,
+      "p95_ms": 0.133388,
+      "paired_run": 4,
+      "parse_ns": 135976,
+      "peak_rss_kib": 3456,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 63,
+      "format": "gpack-raw",
+      "lookup_ns": 6691985,
+      "mib_s": 170.63226999292343,
+      "p50_ms": 0.008118,
+      "p95_ms": 0.133053,
+      "paired_run": 5,
+      "parse_ns": 139991,
+      "peak_rss_kib": 3388,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 63,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 9057025,
+      "mib_s": 126.07545980149042,
+      "p50_ms": 0.019859,
+      "p95_ms": 0.200437,
+      "paired_run": 5,
+      "parse_ns": 123752,
+      "peak_rss_kib": 3836,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 63,
+      "format": "zip-store",
+      "lookup_ns": 4893761,
+      "mib_s": 233.33149929238346,
+      "p50_ms": 0.005431,
+      "p95_ms": 0.111102,
+      "paired_run": 5,
+      "parse_ns": 287256,
+      "peak_rss_kib": 3684,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 63,
+      "format": "zip-deflate-3",
+      "lookup_ns": 13034939,
+      "mib_s": 87.60060874152106,
+      "p50_ms": 0.067572,
+      "p95_ms": 0.930576,
+      "paired_run": 5,
+      "parse_ns": 271990,
+      "peak_rss_kib": 7884,
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 579,
+      "format": "gpack-raw",
+      "lookup_ns": 110008002,
+      "mib_s": 1192.1120846400663,
+      "p50_ms": 0.024675,
+      "p95_ms": 0.033733,
+      "paired_run": 1,
+      "parse_ns": 750007,
+      "peak_rss_kib": 133824,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 579,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 93182155,
+      "mib_s": 1407.3710636044916,
+      "p50_ms": 0.008764,
+      "p95_ms": 0.009568,
+      "paired_run": 1,
+      "parse_ns": 180382,
+      "peak_rss_kib": 134268,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 579,
+      "format": "zip-store",
+      "lookup_ns": 98247263,
+      "mib_s": 1334.8144730638307,
+      "p50_ms": 0.008836,
+      "p95_ms": 0.009596,
+      "paired_run": 1,
+      "parse_ns": 545035,
+      "peak_rss_kib": 134112,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 579,
+      "format": "zip-deflate-3",
+      "lookup_ns": 101889358,
+      "mib_s": 1287.1007450190098,
+      "p50_ms": 0.025264,
+      "p95_ms": 0.030172,
+      "paired_run": 1,
+      "parse_ns": 1695471,
+      "peak_rss_kib": 137956,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 579,
+      "format": "zip-deflate-3",
+      "lookup_ns": 97851942,
+      "mib_s": 1340.2071119989482,
+      "p50_ms": 0.025667,
+      "p95_ms": 0.034641,
+      "paired_run": 2,
+      "parse_ns": 1700404,
+      "peak_rss_kib": 137956,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 579,
+      "format": "zip-store",
+      "lookup_ns": 94967918,
+      "mib_s": 1380.9070615964076,
+      "p50_ms": 0.008953,
+      "p95_ms": 0.009648,
+      "paired_run": 2,
+      "parse_ns": 716691,
+      "peak_rss_kib": 134052,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 579,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 96572582,
+      "mib_s": 1357.961709994547,
+      "p50_ms": 0.008735,
+      "p95_ms": 0.010178,
+      "paired_run": 2,
+      "parse_ns": 185256,
+      "peak_rss_kib": 134008,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 579,
+      "format": "gpack-raw",
+      "lookup_ns": 100889342,
+      "mib_s": 1299.8584983467192,
+      "p50_ms": 0.009011,
+      "p95_ms": 0.010143,
+      "paired_run": 2,
+      "parse_ns": 207738,
+      "peak_rss_kib": 133692,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 579,
+      "format": "gpack-raw",
+      "lookup_ns": 103514939,
+      "mib_s": 1266.888333782514,
+      "p50_ms": 0.009287,
+      "p95_ms": 0.010085,
+      "paired_run": 3,
+      "parse_ns": 215693,
+      "peak_rss_kib": 133940,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 579,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 107893763,
+      "mib_s": 1215.472191764306,
+      "p50_ms": 0.009425,
+      "p95_ms": 0.029889,
+      "paired_run": 3,
+      "parse_ns": 218421,
+      "peak_rss_kib": 134076,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 579,
+      "format": "zip-store",
+      "lookup_ns": 95049138,
+      "mib_s": 1379.7270690798753,
+      "p50_ms": 0.008827,
+      "p95_ms": 0.009499,
+      "paired_run": 3,
+      "parse_ns": 771701,
+      "peak_rss_kib": 133860,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 579,
+      "format": "zip-deflate-3",
+      "lookup_ns": 100081295,
+      "mib_s": 1310.3534340888434,
+      "p50_ms": 0.0252,
+      "p95_ms": 0.02905,
+      "paired_run": 3,
+      "parse_ns": 650058,
+      "peak_rss_kib": 137960,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 579,
+      "format": "zip-deflate-3",
+      "lookup_ns": 96451648,
+      "mib_s": 1359.6643635504142,
+      "p50_ms": 0.025413,
+      "p95_ms": 0.029065,
+      "paired_run": 4,
+      "parse_ns": 1001606,
+      "peak_rss_kib": 138256,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 579,
+      "format": "zip-store",
+      "lookup_ns": 104442006,
+      "mib_s": 1255.6429507042271,
+      "p50_ms": 0.009167,
+      "p95_ms": 0.030843,
+      "paired_run": 4,
+      "parse_ns": 746978,
+      "peak_rss_kib": 133972,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 579,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 101128757,
+      "mib_s": 1296.7811775962855,
+      "p50_ms": 0.009364,
+      "p95_ms": 0.010517,
+      "paired_run": 4,
+      "parse_ns": 710194,
+      "peak_rss_kib": 133944,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 579,
+      "format": "gpack-raw",
+      "lookup_ns": 101180199,
+      "mib_s": 1296.121868581308,
+      "p50_ms": 0.009401,
+      "p95_ms": 0.011627,
+      "paired_run": 4,
+      "parse_ns": 185296,
+      "peak_rss_kib": 134012,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 579,
+      "format": "gpack-raw",
+      "lookup_ns": 101341442,
+      "mib_s": 1294.0596265771371,
+      "p50_ms": 0.00931,
+      "p95_ms": 0.010143,
+      "paired_run": 5,
+      "parse_ns": 188184,
+      "peak_rss_kib": 133820,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 579,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 97586984,
+      "mib_s": 1343.845902557134,
+      "p50_ms": 0.009354,
+      "p95_ms": 0.01308,
+      "paired_run": 5,
+      "parse_ns": 187961,
+      "peak_rss_kib": 134124,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 579,
+      "format": "zip-store",
+      "lookup_ns": 101806176,
+      "mib_s": 1288.1523866617738,
+      "p50_ms": 0.009321,
+      "p95_ms": 0.011256,
+      "paired_run": 5,
+      "parse_ns": 787364,
+      "peak_rss_kib": 134024,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 579,
+      "format": "zip-deflate-3",
+      "lookup_ns": 103134446,
+      "mib_s": 1271.5622537140364,
+      "p50_ms": 0.026096,
+      "p95_ms": 0.10189,
+      "paired_run": 5,
+      "parse_ns": 1253146,
+      "peak_rss_kib": 138132,
+      "workload": "mixed"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 109,
+      "format": "gpack-raw",
+      "lookup_ns": 94067231,
+      "mib_s": 1352.0909359916798,
+      "p50_ms": 0.004212,
+      "p95_ms": 8.583875,
+      "paired_run": 1,
+      "parse_ns": 69549,
+      "peak_rss_kib": 92608,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 109,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 116941552,
+      "mib_s": 1087.6155501077628,
+      "p50_ms": 0.008591,
+      "p95_ms": 13.171042,
+      "paired_run": 1,
+      "parse_ns": 56360,
+      "peak_rss_kib": 106812,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 109,
+      "format": "zip-store",
+      "lookup_ns": 87476104,
+      "mib_s": 1453.9679363056173,
+      "p50_ms": 0.004439,
+      "p95_ms": 8.473134,
+      "paired_run": 1,
+      "parse_ns": 189977,
+      "peak_rss_kib": 92840,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 109,
+      "format": "zip-deflate-3",
+      "lookup_ns": 161865338,
+      "mib_s": 785.7608798798884,
+      "p50_ms": 0.058409,
+      "p95_ms": 15.034538,
+      "paired_run": 1,
+      "parse_ns": 286072,
+      "peak_rss_kib": 96936,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 109,
+      "format": "zip-deflate-3",
+      "lookup_ns": 160987682,
+      "mib_s": 790.0446098039696,
+      "p50_ms": 0.059013,
+      "p95_ms": 14.624111,
+      "paired_run": 2,
+      "parse_ns": 179861,
+      "peak_rss_kib": 96936,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 109,
+      "format": "zip-store",
+      "lookup_ns": 86832062,
+      "mib_s": 1464.7521604282015,
+      "p50_ms": 0.004113,
+      "p95_ms": 9.161935,
+      "paired_run": 2,
+      "parse_ns": 189588,
+      "peak_rss_kib": 93028,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 109,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 123931841,
+      "mib_s": 1026.269354047081,
+      "p50_ms": 0.009788,
+      "p95_ms": 13.565373,
+      "paired_run": 2,
+      "parse_ns": 70053,
+      "peak_rss_kib": 106564,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 109,
+      "format": "gpack-raw",
+      "lookup_ns": 86734509,
+      "mib_s": 1466.3996127416315,
+      "p50_ms": 0.005416,
+      "p95_ms": 8.977092,
+      "paired_run": 2,
+      "parse_ns": 63948,
+      "peak_rss_kib": 92596,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 109,
+      "format": "gpack-raw",
+      "lookup_ns": 92154856,
+      "mib_s": 1380.1491959244725,
+      "p50_ms": 0.004471,
+      "p95_ms": 8.873162,
+      "paired_run": 3,
+      "parse_ns": 55082,
+      "peak_rss_kib": 92604,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 109,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 116234374,
+      "mib_s": 1094.2326786130886,
+      "p50_ms": 0.01016,
+      "p95_ms": 13.140627,
+      "paired_run": 3,
+      "parse_ns": 63486,
+      "peak_rss_kib": 106620,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 109,
+      "format": "zip-store",
+      "lookup_ns": 83184088,
+      "mib_s": 1528.9877363196617,
+      "p50_ms": 0.003866,
+      "p95_ms": 8.572044,
+      "paired_run": 3,
+      "parse_ns": 184021,
+      "peak_rss_kib": 93004,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 109,
+      "format": "zip-deflate-3",
+      "lookup_ns": 159004709,
+      "mib_s": 799.89738171173,
+      "p50_ms": 0.054525,
+      "p95_ms": 14.585575,
+      "paired_run": 3,
+      "parse_ns": 185005,
+      "peak_rss_kib": 97100,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 109,
+      "format": "zip-deflate-3",
+      "lookup_ns": 160842108,
+      "mib_s": 790.759658589749,
+      "p50_ms": 0.056488,
+      "p95_ms": 14.67515,
+      "paired_run": 4,
+      "parse_ns": 165586,
+      "peak_rss_kib": 97124,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 109,
+      "format": "zip-store",
+      "lookup_ns": 85886031,
+      "mib_s": 1480.8863435421245,
+      "p50_ms": 0.003702,
+      "p95_ms": 8.622253,
+      "paired_run": 4,
+      "parse_ns": 451402,
+      "peak_rss_kib": 92840,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 109,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 117364319,
+      "mib_s": 1083.6977668565141,
+      "p50_ms": 0.011385,
+      "p95_ms": 13.678943,
+      "paired_run": 4,
+      "parse_ns": 70352,
+      "peak_rss_kib": 106684,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "zip-deflate-3",
+        "zip-store",
+        "gpack-zstd-raw",
+        "gpack-raw"
+      ],
+      "files": 109,
+      "format": "gpack-raw",
+      "lookup_ns": 84892009,
+      "mib_s": 1498.226416209982,
+      "p50_ms": 0.004608,
+      "p95_ms": 9.019351,
+      "paired_run": 4,
+      "parse_ns": 244757,
+      "peak_rss_kib": 92672,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 109,
+      "format": "gpack-raw",
+      "lookup_ns": 87097427,
+      "mib_s": 1460.2894114074752,
+      "p50_ms": 0.005019,
+      "p95_ms": 8.638178,
+      "paired_run": 5,
+      "parse_ns": 61130,
+      "peak_rss_kib": 92864,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 109,
+      "format": "gpack-zstd-raw",
+      "lookup_ns": 117338539,
+      "mib_s": 1083.935861933099,
+      "p50_ms": 0.009138,
+      "p95_ms": 12.214654,
+      "paired_run": 5,
+      "parse_ns": 71683,
+      "peak_rss_kib": 107004,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 109,
+      "format": "zip-store",
+      "lookup_ns": 86033591,
+      "mib_s": 1478.3464101705988,
+      "p50_ms": 0.005082,
+      "p95_ms": 8.705406,
+      "paired_run": 5,
+      "parse_ns": 221660,
+      "peak_rss_kib": 92840,
+      "workload": "godot-material-testers"
+    },
+    {
+      "bytes": 133365708,
+      "execution_order": [
+        "gpack-raw",
+        "gpack-zstd-raw",
+        "zip-store",
+        "zip-deflate-3"
+      ],
+      "files": 109,
+      "format": "zip-deflate-3",
+      "lookup_ns": 159502672,
+      "mib_s": 797.4001238608438,
+      "p50_ms": 0.049249,
+      "p95_ms": 14.250735,
+      "paired_run": 5,
+      "parse_ns": 183247,
+      "peak_rss_kib": 97120,
+      "workload": "godot-material-testers"
+    }
+  ],
+  "paired_runs": 5,
+  "reader_limit_bytes": 33554432,
+  "reader_threads": 4,
+  "summaries": {
+    "godot-material-testers": {
+      "gpack-raw": {
+        "lookup_ns": {
+          "max": 94067231,
+          "median": 87097427,
+          "min": 84892009
+        },
+        "mib_s": {
+          "max": 1498.226416209982,
+          "median": 1460.2894114074752,
+          "min": 1352.0909359916798
+        },
+        "p50_ms": {
+          "max": 0.005416,
+          "median": 0.004608,
+          "min": 0.004212
+        },
+        "p95_ms": {
+          "max": 9.019351,
+          "median": 8.873162,
+          "min": 8.583875
+        },
+        "parse_ns": {
+          "max": 244757,
+          "median": 63948,
+          "min": 55082
+        },
+        "peak_rss_kib": {
+          "max": 92864,
+          "median": 92608,
+          "min": 92596
+        }
+      },
+      "gpack-zstd-raw": {
+        "lookup_ns": {
+          "max": 123931841,
+          "median": 117338539,
+          "min": 116234374
+        },
+        "mib_s": {
+          "max": 1094.2326786130886,
+          "median": 1083.935861933099,
+          "min": 1026.269354047081
+        },
+        "p50_ms": {
+          "max": 0.011385,
+          "median": 0.009788,
+          "min": 0.008591
+        },
+        "p95_ms": {
+          "max": 13.678943,
+          "median": 13.171042,
+          "min": 12.214654
+        },
+        "parse_ns": {
+          "max": 71683,
+          "median": 70053,
+          "min": 56360
+        },
+        "peak_rss_kib": {
+          "max": 107004,
+          "median": 106684,
+          "min": 106564
+        }
+      },
+      "zip-deflate-3": {
+        "lookup_ns": {
+          "max": 161865338,
+          "median": 160842108,
+          "min": 159004709
+        },
+        "mib_s": {
+          "max": 799.89738171173,
+          "median": 790.759658589749,
+          "min": 785.7608798798884
+        },
+        "p50_ms": {
+          "max": 0.059013,
+          "median": 0.056488,
+          "min": 0.049249
+        },
+        "p95_ms": {
+          "max": 15.034538,
+          "median": 14.624111,
+          "min": 14.250735
+        },
+        "parse_ns": {
+          "max": 286072,
+          "median": 183247,
+          "min": 165586
+        },
+        "peak_rss_kib": {
+          "max": 97124,
+          "median": 97100,
+          "min": 96936
+        }
+      },
+      "zip-store": {
+        "lookup_ns": {
+          "max": 87476104,
+          "median": 86033591,
+          "min": 83184088
+        },
+        "mib_s": {
+          "max": 1528.9877363196617,
+          "median": 1478.3464101705988,
+          "min": 1453.9679363056173
+        },
+        "p50_ms": {
+          "max": 0.005082,
+          "median": 0.004113,
+          "min": 0.003702
+        },
+        "p95_ms": {
+          "max": 9.161935,
+          "median": 8.622253,
+          "min": 8.473134
+        },
+        "parse_ns": {
+          "max": 451402,
+          "median": 189977,
+          "min": 184021
+        },
+        "peak_rss_kib": {
+          "max": 93028,
+          "median": 92840,
+          "min": 92840
+        }
+      }
+    },
+    "godot-real": {
+      "gpack-raw": {
+        "lookup_ns": {
+          "max": 6691985,
+          "median": 6313687,
+          "min": 5910251
+        },
+        "mib_s": {
+          "max": 193.20137018014864,
+          "median": 180.85606576768754,
+          "min": 170.63226999292343
+        },
+        "p50_ms": {
+          "max": 0.008424,
+          "median": 0.007728,
+          "min": 0.006465
+        },
+        "p95_ms": {
+          "max": 0.134931,
+          "median": 0.133053,
+          "min": 0.108525
+        },
+        "parse_ns": {
+          "max": 139991,
+          "median": 119868,
+          "min": 103803
+        },
+        "peak_rss_kib": {
+          "max": 3708,
+          "median": 3456,
+          "min": 3340
+        }
+      },
+      "gpack-zstd-raw": {
+        "lookup_ns": {
+          "max": 9057025,
+          "median": 6647858,
+          "min": 5977154
+        },
+        "mib_s": {
+          "max": 191.03884412357348,
+          "median": 171.76488897756147,
+          "min": 126.07545980149042
+        },
+        "p50_ms": {
+          "max": 0.024655,
+          "median": 0.019859,
+          "min": 0.017337
+        },
+        "p95_ms": {
+          "max": 0.209836,
+          "median": 0.191749,
+          "min": 0.152237
+        },
+        "parse_ns": {
+          "max": 186507,
+          "median": 140333,
+          "min": 49312
+        },
+        "peak_rss_kib": {
+          "max": 4028,
+          "median": 3900,
+          "min": 3768
+        }
+      },
+      "zip-deflate-3": {
+        "lookup_ns": {
+          "max": 14723989,
+          "median": 13287341,
+          "min": 12941316
+        },
+        "mib_s": {
+          "max": 88.2343489107749,
+          "median": 85.93657612223497,
+          "min": 77.55157867264053
+        },
+        "p50_ms": {
+          "max": 0.082685,
+          "median": 0.076985,
+          "min": 0.067572
+        },
+        "p95_ms": {
+          "max": 1.102467,
+          "median": 0.930576,
+          "min": 0.814289
+        },
+        "parse_ns": {
+          "max": 276935,
+          "median": 260423,
+          "min": 248858
+        },
+        "peak_rss_kib": {
+          "max": 7952,
+          "median": 7780,
+          "min": 7652
+        }
+      },
+      "zip-store": {
+        "lookup_ns": {
+          "max": 8274314,
+          "median": 5936234,
+          "min": 4893761
+        },
+        "mib_s": {
+          "max": 233.33149929238346,
+          "median": 192.35572440516896,
+          "min": 138.00160246620973
+        },
+        "p50_ms": {
+          "max": 0.008063,
+          "median": 0.007812,
+          "min": 0.004709
+        },
+        "p95_ms": {
+          "max": 0.126535,
+          "median": 0.125797,
+          "min": 0.081124
+        },
+        "parse_ns": {
+          "max": 310810,
+          "median": 281122,
+          "min": 263188
+        },
+        "peak_rss_kib": {
+          "max": 3936,
+          "median": 3748,
+          "min": 3684
+        }
+      }
+    },
+    "mixed": {
+      "gpack-raw": {
+        "lookup_ns": {
+          "max": 110008002,
+          "median": 101341442,
+          "min": 100889342
+        },
+        "mib_s": {
+          "max": 1299.8584983467192,
+          "median": 1294.0596265771371,
+          "min": 1192.1120846400663
+        },
+        "p50_ms": {
+          "max": 0.024675,
+          "median": 0.00931,
+          "min": 0.009011
+        },
+        "p95_ms": {
+          "max": 0.033733,
+          "median": 0.010143,
+          "min": 0.010085
+        },
+        "parse_ns": {
+          "max": 750007,
+          "median": 207738,
+          "min": 185296
+        },
+        "peak_rss_kib": {
+          "max": 134012,
+          "median": 133824,
+          "min": 133692
+        }
+      },
+      "gpack-zstd-raw": {
+        "lookup_ns": {
+          "max": 107893763,
+          "median": 97586984,
+          "min": 93182155
+        },
+        "mib_s": {
+          "max": 1407.3710636044916,
+          "median": 1343.845902557134,
+          "min": 1215.472191764306
+        },
+        "p50_ms": {
+          "max": 0.009425,
+          "median": 0.009354,
+          "min": 0.008735
+        },
+        "p95_ms": {
+          "max": 0.029889,
+          "median": 0.010517,
+          "min": 0.009568
+        },
+        "parse_ns": {
+          "max": 710194,
+          "median": 187961,
+          "min": 180382
+        },
+        "peak_rss_kib": {
+          "max": 134268,
+          "median": 134076,
+          "min": 133944
+        }
+      },
+      "zip-deflate-3": {
+        "lookup_ns": {
+          "max": 103134446,
+          "median": 100081295,
+          "min": 96451648
+        },
+        "mib_s": {
+          "max": 1359.6643635504142,
+          "median": 1310.3534340888434,
+          "min": 1271.5622537140364
+        },
+        "p50_ms": {
+          "max": 0.026096,
+          "median": 0.025413,
+          "min": 0.0252
+        },
+        "p95_ms": {
+          "max": 0.10189,
+          "median": 0.030172,
+          "min": 0.02905
+        },
+        "parse_ns": {
+          "max": 1700404,
+          "median": 1253146,
+          "min": 650058
+        },
+        "peak_rss_kib": {
+          "max": 138256,
+          "median": 137960,
+          "min": 137956
+        }
+      },
+      "zip-store": {
+        "lookup_ns": {
+          "max": 104442006,
+          "median": 98247263,
+          "min": 94967918
+        },
+        "mib_s": {
+          "max": 1380.9070615964076,
+          "median": 1334.8144730638307,
+          "min": 1255.6429507042271
+        },
+        "p50_ms": {
+          "max": 0.009321,
+          "median": 0.008953,
+          "min": 0.008827
+        },
+        "p95_ms": {
+          "max": 0.030843,
+          "median": 0.009648,
+          "min": 0.009499
+        },
+        "parse_ns": {
+          "max": 787364,
+          "median": 746978,
+          "min": 545035
+        },
+        "peak_rss_kib": {
+          "max": 134112,
+          "median": 134024,
+          "min": 133860
+        }
+      }
+    }
+  },
+  "unzip_interoperability_pass": true,
+  "workload_metadata": {
+    "godot-material-testers": {
+      "archives": {
+        "gpack-raw": {
+          "archive_bytes": 133373582,
+          "archive_sha256": "abbde0f2ab459949613693172a0890156f48b13757d8e3ab66032b16e9fcdcf4",
+          "pack_peak_rss_kib": {
+            "median": 3636,
+            "runs": [
+              3636,
+              3784,
+              3784,
+              3624,
+              3444
+            ]
+          },
+          "pack_seconds": {
+            "median": 0.3451374339929316,
+            "runs": [
+              0.32539230899419636,
+              0.2945115610054927,
+              0.3451374339929316,
+              0.35019435999856796,
+              0.3523091150127584
+            ]
+          },
+          "paired_order": [
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ]
+          ]
+        },
+        "gpack-zstd-raw": {
+          "archive_bytes": 114083027,
+          "archive_sha256": "44c9adf8fd7d25e6a078d0a8e82c4b4f0a1883011077dcec0896b1c5ca64d028",
+          "pack_peak_rss_kib": {
+            "median": 8440,
+            "runs": [
+              8608,
+              8440,
+              8604,
+              8312,
+              8436
+            ]
+          },
+          "pack_seconds": {
+            "median": 0.8528805139940232,
+            "runs": [
+              0.8545613570022397,
+              0.7999192450079136,
+              0.801637917989865,
+              0.8914503419946413,
+              0.8528805139940232
+            ]
+          },
+          "paired_order": [
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ]
+          ]
+        },
+        "zip-deflate-3": {
+          "archive_bytes": 112402059,
+          "archive_sha256": "317a8189011d8f9aafa03033b24c3ba270febd3ba04198a886cc98c53679cd28",
+          "pack_peak_rss_kib": {
+            "median": 5060,
+            "runs": [
+              5060,
+              5288,
+              4988,
+              4892,
+              5280
+            ]
+          },
+          "pack_seconds": {
+            "median": 2.108485903998371,
+            "runs": [
+              2.0541808260022663,
+              1.9427338329987833,
+              2.136170804995345,
+              2.108485903998371,
+              2.117142276998493
+            ]
+          },
+          "paired_order": [
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ]
+          ]
+        },
+        "zip-store": {
+          "archive_bytes": 133382650,
+          "archive_sha256": "e7d10c0820613e99565c463519d19ac200aa1dda20f25b80f6a22503fc904dbe",
+          "pack_peak_rss_kib": {
+            "median": 3616,
+            "runs": [
+              3884,
+              3552,
+              3616,
+              3552,
+              3800
+            ]
+          },
+          "pack_seconds": {
+            "median": 0.34291448700241745,
+            "runs": [
+              0.34291448700241745,
+              0.28760973300086334,
+              0.3124165129993344,
+              0.35520223299681675,
+              0.3528536130033899
+            ]
+          },
+          "paired_order": [
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ]
+          ]
+        }
+      },
+      "files": 109,
+      "source_bytes": 133365708
+    },
+    "godot-real": {
+      "archives": {
+        "gpack-raw": {
+          "archive_bytes": 1202379,
+          "archive_sha256": "6b7d7c3849227c2cfcf94035f9804cf525ff4064b96b55c1f372aceb8cf3e0af",
+          "pack_peak_rss_kib": {
+            "median": 3656,
+            "runs": [
+              3784,
+              3636,
+              3656,
+              3444,
+              3784
+            ]
+          },
+          "pack_seconds": {
+            "median": 0.017555929996888153,
+            "runs": [
+              0.01620196299336385,
+              0.01741758600110188,
+              0.017555929996888153,
+              0.01789692899910733,
+              0.01810818699595984
+            ]
+          },
+          "paired_order": [
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ]
+          ]
+        },
+        "gpack-zstd-raw": {
+          "archive_bytes": 1118384,
+          "archive_sha256": "bc62d2c34dc6437b50f4f87940b40b402873c441cb856c75ef8e756e0db689ad",
+          "pack_peak_rss_kib": {
+            "median": 6640,
+            "runs": [
+              6872,
+              6636,
+              6816,
+              6640,
+              6508
+            ]
+          },
+          "pack_seconds": {
+            "median": 0.022630573992501013,
+            "runs": [
+              0.022630573992501013,
+              0.029202931007603183,
+              0.020380604997626506,
+              0.018830932007404044,
+              0.027543488002265804
+            ]
+          },
+          "paired_order": [
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ]
+          ]
+        },
+        "zip-deflate-3": {
+          "archive_bytes": 1112898,
+          "archive_sha256": "dcbe6df85e7cf91f15ee99bfbb001a85fda2cef7fed1a036d437cf61c0158ff0",
+          "pack_peak_rss_kib": {
+            "median": 5052,
+            "runs": [
+              5048,
+              5052,
+              5060,
+              5040,
+              5204
+            ]
+          },
+          "pack_seconds": {
+            "median": 0.03728833400236908,
+            "runs": [
+              0.04010980400198605,
+              0.027631016011582687,
+              0.03728833400236908,
+              0.03432370499649551,
+              0.0388283189968206
+            ]
+          },
+          "paired_order": [
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ]
+          ]
+        },
+        "zip-store": {
+          "archive_bytes": 1208064,
+          "archive_sha256": "fe605627a81d8790a78834cadde67f965acc60877b09c2dfccd31f346c97f15c",
+          "pack_peak_rss_kib": {
+            "median": 3700,
+            "runs": [
+              3552,
+              3980,
+              3648,
+              3884,
+              3700
+            ]
+          },
+          "pack_seconds": {
+            "median": 0.01357561101031024,
+            "runs": [
+              0.018223118997411802,
+              0.01332808299048338,
+              0.006334862991934642,
+              0.01357561101031024,
+              0.01605383399873972
+            ]
+          },
+          "paired_order": [
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ]
+          ]
+        }
+      },
+      "files": 63,
+      "source_bytes": 1197336
+    },
+    "mixed": {
+      "archives": {
+        "gpack-raw": {
+          "archive_bytes": 137553714,
+          "archive_sha256": "19c43ec67d9c2dd8ed0e1a369a86e97d7bd8f3fd881fd3d81c47e362ccaef52e",
+          "pack_peak_rss_kib": {
+            "median": 3704,
+            "runs": [
+              3868,
+              3752,
+              3704,
+              3636,
+              3572
+            ]
+          },
+          "pack_seconds": {
+            "median": 0.3346957489993656,
+            "runs": [
+              0.3660984050075058,
+              0.30476983900007326,
+              0.3136660289892461,
+              0.35835109298932366,
+              0.3346957489993656
+            ]
+          },
+          "paired_order": [
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ]
+          ]
+        },
+        "gpack-zstd-raw": {
+          "archive_bytes": 70375233,
+          "archive_sha256": "89c9a93357468d3c1e9035abb302668e95d66b11fa09d2e417dc645328ec381a",
+          "pack_peak_rss_kib": {
+            "median": 8428,
+            "runs": [
+              8304,
+              8436,
+              8428,
+              8312,
+              8536
+            ]
+          },
+          "pack_seconds": {
+            "median": 0.5130846660031239,
+            "runs": [
+              0.5202473819954321,
+              0.5051825189875672,
+              0.4765896500030067,
+              0.5130846660031239,
+              0.5192425520071993
+            ]
+          },
+          "paired_order": [
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ]
+          ]
+        },
+        "zip-deflate-3": {
+          "archive_bytes": 71004327,
+          "archive_sha256": "8a937a0b6855b9d10fdceadd755973ca84ecd64079d1e6e1b206289e4b902a09",
+          "pack_peak_rss_kib": {
+            "median": 5104,
+            "runs": [
+              5056,
+              5156,
+              5060,
+              5372,
+              5104
+            ]
+          },
+          "pack_seconds": {
+            "median": 1.129495275003137,
+            "runs": [
+              1.0952803380059777,
+              1.1053252659912687,
+              1.1344708660035394,
+              1.129495275003137,
+              1.1335917880060151
+            ]
+          },
+          "paired_order": [
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ]
+          ]
+        },
+        "zip-store": {
+          "archive_bytes": 137602046,
+          "archive_sha256": "002674fd1b45f6e954b4ecd50568282c9e3538d28af1dc07277c5094bc3fcc98",
+          "pack_peak_rss_kib": {
+            "median": 3860,
+            "runs": [
+              3860,
+              3836,
+              4052,
+              4108,
+              3836
+            ]
+          },
+          "pack_seconds": {
+            "median": 0.3374273549998179,
+            "runs": [
+              0.3045224890083773,
+              0.3106113340036245,
+              0.349279504007427,
+              0.3374273549998179,
+              0.34622970000782516
+            ]
+          },
+          "paired_order": [
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ],
+            [
+              "zip-deflate-3",
+              "zip-store",
+              "gpack-zstd-raw",
+              "gpack-raw"
+            ],
+            [
+              "gpack-raw",
+              "gpack-zstd-raw",
+              "zip-store",
+              "zip-deflate-3"
+            ]
+          ]
+        }
+      },
+      "files": 579,
+      "source_bytes": 137512216
+    }
+  }
+}

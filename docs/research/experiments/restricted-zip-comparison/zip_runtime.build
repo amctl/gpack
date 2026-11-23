@@ -1,0 +1,4 @@
+c_sources = ["zip_inflate.c"];
+c_include = ["../../../../src/gpack/native"];
+c_libs = ["z"];
+output = "zip_runtime";
