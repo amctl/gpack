@@ -1,5 +1,46 @@
 # Research log
 
+## 2026-11-24 — Restricted ZIP comparison
+
+- Implemented a research-only Goose ZIP writer/reader for classic single-disk
+  ZIP with STORED and DEFLATE, plus a raw GPack packer to isolate container
+  overhead. ZIP remains outside the product package and CLI.
+- Correctness, malformed-input, deterministic-output, four-reader, and
+  interoperability checks passed before paired measurements on the small real,
+  deterministic mixed, and larger Material Testers workloads. Results show a
+  small raw-container size advantage and codec tradeoffs that vary by corpus;
+  they do not establish a general winner. See the
+  [report](experiments/restricted-zip-comparison/results.md) and
+  [raw observations](experiments/restricted-zip-comparison/results.json).
+
+## 2026-11-24 — Larger real-project workload
+
+- Acquired the official Godot 4.7 `3d_material_testers.zip`, verified its
+  published SHA-256 and ZIP integrity, retained its MIT notice, and recorded a
+  SHA-256 for every extracted file. The 109-file input totals 133,365,708
+  bytes; its largest asset is below the default 32 MiB limit.
+- Ran five paired Goose/C reads with the production CMake-linked build. On this
+  Linux host, the 127 MiB project measured a 0.970 median paired throughput
+  ratio; Goose median peak RSS was 106,684 KiB. Results and limits are in the
+  [expanded report](experiments/v1-runtime-throughput/results-larger-corpus.md).
+- The small real workload rerun was noisy and had a 0.808 median paired ratio.
+  Performance and memory claims remain scoped to named workloads and host.
+
+## 2026-11-24 — Restricted ZIP capability review
+
+- Compared PKWARE ZIP/ZIP64 capabilities with the accepted GPack v1 runtime
+  and build contract. ZIP can support streaming construction and central-
+  directory indexed complete-member lookup; path safety, bounded parsing,
+  reproducibility, memory limits, and concurrent reads remain application
+  policy. No ZIP implementation or performance result was measured.
+- Proposed a restricted single-volume UTF-8 profile and separated STORED vs
+  GPack raw (container-focused) from DEFLATE vs GPack Zstandard/raw (full
+  profile) comparisons. The detailed source review and preregistered protocol
+  are [here](zip-profile-capabilities.md) and
+  [here](experiments/restricted-zip-comparison/protocol.md).
+- Added issue 24 to implement and measure the Goose comparison; issue 23's
+  deferred macOS/Windows validation remains open.
+
 ## 2026-11-22 — Bootstrap and initial prior-art pass
 
 - Applied the autoresearch workflow requested by the user. This is a research

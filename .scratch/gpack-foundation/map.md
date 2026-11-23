@@ -48,6 +48,7 @@ implementation proceeds through issues 17–23.
 - [Harden input scanning, limits, and atomic output](issues/21-input-safety-and-atomic-output.md): unsafe/non-regular inputs are rejected, runtime read limits are configurable, and sibling-temp flush/replace preserves an existing destination after detected source mutation; Linux validation passes, with cross-platform execution assigned to issue 23.
 - [Meet the runtime throughput acceptance gate](issues/22-runtime-throughput-acceptance.md): the product v1 Goose reader met the 10% median throughput gate against a C reference on five paired Linux runs for Godot-real and mixed workloads, with correctness, malformed-input, latency, RSS, and four-reader/32 MiB default measurements recorded in the benchmark report.
 - [Validate cross-platform archives and release artifacts](issues/23-platform-release-gate.md): the production CMake path, golden archive, Unicode/case lookup, static Zstandard linkage, and notices pass on Linux; native macOS/Windows CI and cross-platform golden-byte matches remain to be verified.
+- [Compare v1 with a restricted ZIP profile](issues/24-restricted-zip-comparison.md): the Goose comparison passed correctness on three workloads; GPack raw had a small container-size advantage and codec results were workload-dependent, so retain v1 without claiming a general winner.
 
 ## Implementation tickets
 
@@ -57,8 +58,10 @@ implementation proceeds through issues 17–23.
 
 ## Not yet specified
 
-- Validate the runtime implementation and 32 MiB/four-reader defaults on the
-  remaining supported platforms; implementation gate is issue 23.
+- Complete native macOS/Windows validation and cross-platform golden-byte
+  comparison when resumed; release gate is [issue 23](issues/23-platform-release-gate.md).
+- Revisit the custom-format versus ZIP tradeoff if target-project evidence or
+  interoperability requirements change; see resolved [issue 24](issues/24-restricted-zip-comparison.md).
 
 ## Wayfinder scope limits
 

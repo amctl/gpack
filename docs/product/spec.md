@@ -113,13 +113,21 @@ Zstandard license notices. See the [release procedure](../release.md).
 
 ## Evidence and unresolved acceptance risks
 
-The custom format is the selected product contract, but the current evidence
-does not show that it outperforms a restricted ZIP profile. H2 found that
+The custom format remains the selected product contract. The completed
+restricted ZIP comparison found a small raw-container size advantage for
+GPack and workload-dependent codec results: GPack's Zstandard/raw profile was
+faster on the mixed and Material Testers workloads, while ZIP DEFLATE was
+slightly smaller and used less reader RSS on Material Testers. No general
+winner is established. H2 found that
 per-asset framing did not materially change the real corpus. H3 pack-side
 measurements support the native streaming boundary for large assets, while the
-H3 runtime Goose prototype missed its 10% throughput-gap target. The subsequent
-product v1 benchmark met that gate on the measured Linux host after CRC and
-small-frame decode hot-path changes; this is not a cross-platform performance
-claim. See the [runtime benchmark](../research/experiments/v1-runtime-throughput/results.md),
-[research findings](../research/findings.md), and [ZIP comparison evidence](../research/wayfinder-format-access.md),
+H3 runtime Goose prototype missed its 10% throughput-gap target. The product
+v1 benchmark met the 10% median throughput gate on one Linux host in its
+original run; a supplementary 127 MiB real project also measured within that
+gate and recorded workload-specific peak RSS. A repeated run of the small real
+corpus had high variability. These results do not establish general or
+cross-platform performance/memory guarantees. See the [original runtime benchmark](../research/experiments/v1-runtime-throughput/results.md),
+[expanded workload results](../research/experiments/v1-runtime-throughput/results-larger-corpus.md),
+[research findings](../research/findings.md), [restricted ZIP comparison](../research/experiments/restricted-zip-comparison/results.md),
+and [ZIP capability review](../research/zip-profile-capabilities.md),
 as well as the [risk register](risks.md).

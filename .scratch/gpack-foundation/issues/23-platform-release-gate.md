@@ -1,7 +1,7 @@
 # Validate cross-platform archives and release artifacts
 
 Type: task
-Status: claimed
+Status: open
 Blocked by: 17, 20, 21, 22
 
 ## Goal
@@ -44,3 +44,4 @@ procedure.
 - This checkout has no Git remote configured, and GitHub CLI cannot reach the
   API from this network. Native hosted-runner results therefore cannot be
   inspected or triggered from this environment.
+- Native macOS and Windows validation is deferred by the user for later.

@@ -33,14 +33,19 @@ current_understanding: >-
   handling; H3 measured material pack-side gains, while runtime positional
   lookup is functional but missed the preregistered throughput gap. The verified benchmark
   corpus is one MIT Godot 4.7 demo each from 2D, 3D, and audio; the 3D project's
-  CC0 checker notice is retained. The repository plan keeps format ownership
-  in Goose and limits native code to I/O/Zstandard; it pins Goose v2026.4 and
-  targets native Linux/GCC, macOS/Apple Clang, and Windows/MSVC builds.
+  CC0 checker notice is retained. A supplementary run adds the pinned 127 MiB,
+  109-file 3D Material Testers project; its median throughput and workload RSS
+  are recorded separately. A small-corpus rerun had high variation, so
+  performance and memory claims remain scoped to named workloads and this host.
+  The repository plan keeps format ownership in Goose and limits native code
+  to I/O/Zstandard; it pins Goose v2026.4 and targets native Linux/GCC,
+  macOS/Apple Clang, and Windows/MSVC builds.
 literature: docs/research/prior-art/survey.md
 wayfinder:
   map: .scratch/gpack-foundation/map.md
   evidence:
     - docs/research/wayfinder-format-access.md
+    - docs/research/zip-profile-capabilities.md
     - docs/research/wayfinder-goose-boundary.md
     - docs/research/wayfinder-corpus-inventory.md
     - docs/research/wayfinder-codec-options.md
@@ -55,6 +60,21 @@ experiments:
         Four-reader/32 MiB defaults were exercised; measurements are scoped to
         one Linux host and do not validate the production CMake or other platforms.
       results: docs/research/experiments/v1-runtime-throughput/results.md
+    - hypothesis: product-v1-larger-real-workload
+      outcome: >-
+        Five paired Linux runs on Godot 4.7 3d/material_testers (109 files,
+        133,365,708 source bytes) measured a 0.970 median Goose/C throughput
+        ratio, within 10%; Goose median peak RSS was 106,684 KiB. The
+        supplementary small-corpus rerun was highly variable, so results
+        remain scoped to the measured workloads and host.
+      results: docs/research/experiments/v1-runtime-throughput/results-larger-corpus.md
+    - hypothesis: restricted-zip-comparison
+      outcome: >-
+        Goose readers passed source CRC, determinism, malformed-input, path-edge,
+        and four-reader gates on three workloads. GPack raw had a small container
+        size advantage over ZIP STORED; the codec profile tradeoff depended on
+        corpus. Keep the result scoped to these workloads and the Linux host.
+      results: docs/research/experiments/restricted-zip-comparison/results.md
     - hypothesis: H3-runtime
       outcome: >-
         Goose/native and C readers passed source-byte and malformed-input
@@ -85,9 +105,9 @@ experiments:
       results: docs/research/experiments/h1-queue-payload-cost/results.md
   next:
     - issue: .scratch/gpack-foundation/issues/23-platform-release-gate.md
-      action: Validate the native build and correctness matrix on Linux, macOS, and Windows.
+      action: Resume native macOS/Windows CI and cross-platform golden archive checks before release.
 evaluation:
-  baseline: Product v1 runtime performance measured on Linux; cross-platform validation is in progress.
+  baseline: Product v1 runtime performance measured on multiple Godot workloads on Linux; native macOS/Windows validation remains deferred.
   metrics:
     - archive correctness and deterministic byte equality
     - pack and full-asset read throughput and latency
@@ -95,6 +115,6 @@ evaluation:
     - compression ratio
     - full-asset lookup throughput and latency, including concurrent reads
     - malformed archive rejection
-  status: Issues 17–22 are implemented; issue 23's production CMake build and fixtures pass on Linux. Native macOS/Windows CI and cross-platform golden-byte identity remain unverified.
+  status: Issues 17–22 are implemented; production CMake build, fixtures, expanded runtime workloads, and the restricted ZIP comparison pass on Linux. Native macOS/Windows CI and cross-platform golden-byte identity remain deferred and unverified.
 next_action: >-
-  Start issue 23: validate the pinned native build, format correctness, and release artifacts across supported platforms.
+  Resume issue 23's deferred native macOS/Windows CI and cross-platform golden archive checks before release.

@@ -29,6 +29,11 @@ still open. Protocols describe methods and result artifacts record measurements.
 - [`wayfinder-format-access.md`](wayfinder-format-access.md) and
   [`wayfinder-goose-boundary.md`](wayfinder-goose-boundary.md) — focused
   primary-source evidence gathered for current Wayfinder decisions.
+- [`zip-profile-capabilities.md`](zip-profile-capabilities.md) — source review
+  of restricted ZIP capabilities against the accepted v1 contract.
+- [`larger-corpus-candidate.md`](larger-corpus-candidate.md) — acquisition,
+  notice scan, and benchmark evidence for the larger Godot Material Testers
+  project.
 - [`wayfinder-codec-options.md`](wayfinder-codec-options.md) and
   [`wayfinder-corpus-sources.md`](wayfinder-corpus-sources.md) — primary-source
   research on codec candidates and redistributable benchmark corpora.
@@ -38,9 +43,14 @@ still open. Protocols describe methods and result artifacts record measurements.
   artifacts. H1, H2, both H3 experiments, and the product v1 runtime gate are
   complete; see [`v1-runtime-throughput`](experiments/v1-runtime-throughput/results.md).
 - [`experiments/godot-4.7-corpus/`](experiments/godot-4.7-corpus/) — selected
-  demo corpus, verified release hashes, inventory, notices, and file manifest.
+  demo corpus, verified release hashes, inventory, notices, and file manifests,
+  including the larger Material Testers project.
 - [`experiments/v1-runtime-throughput/`](experiments/v1-runtime-throughput/) —
-  product v1 paired Goose/C benchmark protocol, results, and raw run data.
+  product v1 paired Goose/C benchmark protocol, the original acceptance run,
+  expanded larger-corpus results, and raw run data.
+- [`experiments/restricted-zip-comparison/`](experiments/restricted-zip-comparison/) —
+  completed Goose comparison across three workloads, with correctness results,
+  summaries, and raw paired observations.
 
 The initial [`../product/proposal.md`](../product/proposal.md) is retained as
 historical context; use the accepted product and format specifications for

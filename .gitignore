@@ -1,2 +1,4 @@
 /goose-bin/
 /build/
+__pycache__/
+*.py[cod]
