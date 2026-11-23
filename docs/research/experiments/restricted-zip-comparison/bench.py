@@ -87,12 +87,27 @@ def zip_malformed_checks(reader: pathlib.Path, zpack: pathlib.Path, archive: pat
     bad_size = bytearray(original)
     old_uncompressed = int.from_bytes(original[cd_offset + 24:cd_offset + 28], "little")
     bad_size[cd_offset + 24:cd_offset + 28] = (old_uncompressed + 1).to_bytes(4, "little")
+    zip64_compressed_size = bytearray(original)
+    zip64_compressed_size[cd_offset + 20:cd_offset + 24] = b"\xff\xff\xff\xff"
+    zip64_local_offset = bytearray(original)
+    zip64_local_offset[cd_offset + 42:cd_offset + 46] = b"\xff\xff\xff\xff"
+    zip64_entry_count = bytearray(original)
+    zip64_entry_count[eocd_at + 8:eocd_at + 12] = b"\xff\xff\xff\xff"
+    zip64_directory_size = bytearray(original)
+    zip64_directory_size[eocd_at + 12:eocd_at + 16] = b"\xff\xff\xff\xff"
+    zip64_directory_offset = bytearray(original)
+    zip64_directory_offset[eocd_at + 16:eocd_at + 20] = b"\xff\xff\xff\xff"
     cases: dict[str, bytes] = {
         "truncated_eocd": original[:-1],
         "truncated_central_directory": original[:eocd_at - 1] + original[eocd_at:],
         "malformed_central_directory_signature": bytes(malformed_cd),
         "unsupported_method": original[:cd_offset + 10] + b"\x63\x00" + original[cd_offset + 12:],
-        "zip64_required_boundary": original[:cd_offset + 24] + b"\xff\xff\xff\xff" + original[cd_offset + 28:],
+        "zip64_uncompressed_size": original[:cd_offset + 24] + b"\xff\xff\xff\xff" + original[cd_offset + 28:],
+        "zip64_compressed_size": bytes(zip64_compressed_size),
+        "zip64_local_header_offset": bytes(zip64_local_offset),
+        "zip64_entry_count": bytes(zip64_entry_count),
+        "zip64_directory_size": bytes(zip64_directory_size),
+        "zip64_directory_offset": bytes(zip64_directory_offset),
         "backslash_path": bytes(backslash),
         "nul_path": bytes(nul_name),
         "invalid_local_header_reference": bytes(bad_local_ref),

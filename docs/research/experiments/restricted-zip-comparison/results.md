@@ -16,8 +16,9 @@ The Goose ZIP reader rejected: truncated EOCD and central directory, malformed
 central signature, absolute/traversal/backslash/NUL paths, duplicate paths,
 unsupported method, invalid and out-of-range local-header references,
 overlapping payload ranges, central/local size mismatch, corrupt payload and
-descriptor CRC, a ZIP64-required size sentinel, and a 32 MiB + 1 asset. These
-are representative malformed-input fixtures, not an exhaustive parser fuzz
+descriptor CRC, ZIP64-required sentinels for member sizes and offsets, EOCD
+entry count, and directory size/offset, and a 32 MiB + 1 asset. These are
+representative malformed-input fixtures, not an exhaustive parser fuzz
 campaign.
 
 ## Method
@@ -58,12 +59,12 @@ Per-asset p50/p95 latencies are milliseconds.
 
 | Workload | Format | Archive bytes | Pack s | Pack RSS KiB | Parse ms | Read MiB/s | p50 / p95 ms | Reader RSS KiB |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Godot real | GPack raw | 1,202,379 | 0.018 | 3,576 | 0.126 | 161.4 | 0.004 / 0.101 | 3,520 |
-| Godot real | ZIP STORED | 1,208,064 | 0.018 | 3,708 | 0.286 | 282.7 | 0.003 / 0.070 | 3,752 |
-| Mixed | GPack raw | 137,553,714 | 0.340 | 3,760 | 0.208 | 1,255.4 | 0.009 / 0.009 | 133,832 |
-| Mixed | ZIP STORED | 137,602,046 | 0.345 | 3,844 | 1.175 | 1,320.8 | 0.008 / 0.023 | 134,044 |
-| Material Testers | GPack raw | 133,373,582 | 0.306 | 3,664 | 0.066 | 1,482.7 | 0.004 / 8.389 | 92,728 |
-| Material Testers | ZIP STORED | 133,382,650 | 0.309 | 3,740 | 0.157 | 1,503.5 | 0.004 / 8.311 | 92,844 |
+| Godot real | GPack raw | 1,202,379 | 0.015 | 3,584 | 0.135 | 185.0 | 0.008 / 0.143 | 3,632 |
+| Godot real | ZIP STORED | 1,208,064 | 0.016 | 3,716 | 0.265 | 184.6 | 0.007 / 0.125 | 3,760 |
+| Mixed | GPack raw | 137,553,714 | 0.337 | 3,876 | 0.300 | 1,362.2 | 0.009 / 0.010 | 133,948 |
+| Mixed | ZIP STORED | 137,602,046 | 0.334 | 3,940 | 0.521 | 1,359.8 | 0.009 / 0.010 | 134,100 |
+| Material Testers | GPack raw | 133,373,582 | 0.332 | 3,644 | 0.147 | 1,401.8 | 0.004 / 9.327 | 92,736 |
+| Material Testers | ZIP STORED | 133,382,650 | 0.325 | 3,728 | 0.172 | 1,386.1 | 0.004 / 9.638 | 92,956 |
 
 Raw GPack is smaller by 5.6 KiB, 47.2 KiB, and 8.9 KiB on these workloads.
 Those small differences are consistent with its single index and lack of ZIP
@@ -75,15 +76,15 @@ this arm. The small workload throughput is especially sensitive to run noise.
 
 | Workload | Format | Archive bytes | Pack s | Pack RSS KiB | Parse ms | Read MiB/s | p50 / p95 ms | Reader RSS KiB |
 | --- | --- | ---: | ---: | ---: | ---: | ---: | ---: | ---: |
-| Godot real | GPack Zstandard/raw | 1,118,384 | 0.031 | 6,808 | 0.129 | 211.9 | 0.007 / 0.132 | 3,836 |
-| Godot real | ZIP DEFLATE | 1,112,898 | 0.042 | 5,048 | 0.275 | 155.2 | 0.087 / 1.081 | 7,668 |
-| Mixed | GPack Zstandard/raw | 70,375,233 | 0.542 | 8,424 | 0.187 | 1,377.4 | 0.009 / 0.010 | 134,020 |
-| Mixed | ZIP DEFLATE | 71,004,327 | 1.190 | 5,152 | 0.522 | 1,334.6 | 0.025 / 0.028 | 138,032 |
-| Material Testers | GPack Zstandard/raw | 114,083,027 | 0.784 | 8,508 | 0.069 | 1,133.9 | 0.009 / 12.595 | 106,756 |
-| Material Testers | ZIP DEFLATE | 112,402,059 | 1.981 | 5,064 | 0.148 | 814.3 | 0.042 / 13.833 | 96,880 |
+| Godot real | GPack Zstandard/raw | 1,118,384 | 0.018 | 6,820 | 0.126 | 178.1 | 0.018 / 0.162 | 3,844 |
+| Godot real | ZIP DEFLATE | 1,112,898 | 0.034 | 4,956 | 0.282 | 81.4 | 0.079 / 1.030 | 7,728 |
+| Mixed | GPack Zstandard/raw | 70,375,233 | 0.522 | 8,372 | 0.191 | 1,382.8 | 0.009 / 0.011 | 134,020 |
+| Mixed | ZIP DEFLATE | 71,004,327 | 1.185 | 5,164 | 1.105 | 1,349.8 | 0.027 / 0.033 | 138,032 |
+| Material Testers | GPack Zstandard/raw | 114,083,027 | 0.825 | 8,616 | 0.063 | 1,034.6 | 0.009 / 13.854 | 106,760 |
+| Material Testers | ZIP DEFLATE | 112,402,059 | 2.089 | 4,964 | 0.166 | 741.6 | 0.056 / 15.618 | 97,060 |
 
 On the mixed workload GPack produced an archive 0.9% smaller, packed about
-2.2 times faster, read about 3% faster, and used about 4 MiB less reader RSS.
+2.3 times faster, read about 2% faster, and used about 4 MiB less reader RSS.
 On Material Testers, ZIP DEFLATE produced an archive 1.5% smaller and used
 about 9.6 MiB less reader RSS; GPack packed about 2.5 times faster and read
 about 39% faster. The small real workload favored ZIP DEFLATE slightly on
@@ -110,9 +111,10 @@ resource policy still require a deliberately constrained implementation.
 
 ## Scope and deviations
 
-- The ZIP profile is classic single-disk ZIP only. ZIP64 is rejected; the
-  tested corpora fit classic fields. ZIP64 writer/reader behavior remains
-  unimplemented and unmeasured.
+- The ZIP profile is classic single-disk ZIP only. ZIP64 archives are
+  unsupported; sentinel rejection was checked for member sizes/offsets and
+  EOCD directory/count fields. The tested corpora fit classic fields. Full
+  ZIP64 read/write support remains unimplemented and unmeasured.
 - The writer emits data descriptors and supports separate STORED and DEFLATE
   arms. It does not perform per-entry STORE fallback inside the DEFLATE arm.
 - DEFLATE level 3 uses system zlib-ng 1.3.1. The native shim is research-only;
