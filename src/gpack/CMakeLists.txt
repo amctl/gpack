@@ -1,0 +1,20 @@
+cmake_minimum_required(VERSION 3.16)
+project(gpack_native C)
+
+set(ZSTD_BUILD_PROGRAMS OFF CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_SHARED OFF CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_STATIC ON CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_TESTS OFF CACHE BOOL "" FORCE)
+set(ZSTD_BUILD_CONTRIB OFF CACHE BOOL "" FORCE)
+
+add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../../third_party/zstd-1.5.7/build/cmake" zstd)
+
+add_library(gpack_native STATIC native/abi_probe.c)
+target_include_directories(gpack_native PUBLIC native)
+target_link_libraries(gpack_native PUBLIC libzstd_static)
+target_compile_features(gpack_native PRIVATE c_std_11)
+if(MSVC)
+    target_compile_options(gpack_native PRIVATE /W4 /WX)
+else()
+    target_compile_options(gpack_native PRIVATE -Wall -Wextra -Werror)
+endif()

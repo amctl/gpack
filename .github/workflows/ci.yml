@@ -1,0 +1,36 @@
+name: CI
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  native:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            cc: gcc
+          - os: macos-14
+            cc: clang
+          - os: windows-2022
+            cc: cl
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install pinned Goose v2026.4
+        shell: bash
+        run: |
+          git clone https://github.com/aardappel/goose.git goose-src
+          git -C goose-src checkout dec4bd827a1da10041febd7eb583fe3c4f96a2b9
+          cmake -S goose-src -B goose-src/build -DCMAKE_BUILD_TYPE=Release
+          cmake --build goose-src/build --config Release --parallel
+      - name: Run native checks
+        shell: bash
+        env:
+          GOOSE: ${{ runner.os == 'Windows' && 'goose-src/build/Release/goose.exe' || 'goose-src/build/goose' }}
+        run: python scripts/gpack.py ci

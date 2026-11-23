@@ -1,2 +1,2 @@
-goose-bin
-*.md
+/goose-bin/
+/build/

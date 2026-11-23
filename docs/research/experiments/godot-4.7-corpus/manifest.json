@@ -1,0 +1,2015 @@
+{
+  "candidate_inventory": {
+    "2d": {
+      "median_regular_files": 22,
+      "project_count": 27,
+      "projects": [
+        {
+          "extension_counts": {
+            ".gd": 2,
+            ".godot": 1,
+            ".import": 4,
+            ".md": 1,
+            ".png": 5,
+            ".tscn": 1,
+            ".uid": 2,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "2d/bullet_shower",
+          "regular_files": 18,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 15
+          },
+          "total_bytes": 329389
+        },
+        {
+          "extension_counts": {
+            ".gd": 9,
+            ".godot": 1,
+            ".import": 1,
+            ".md": 1,
+            ".svg": 1,
+            ".tscn": 1,
+            ".uid": 9,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "2d/custom_drawing",
+          "regular_files": 25,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 23
+          },
+          "total_bytes": 85180
+        },
+        {
+          "extension_counts": {
+            ".gd": 4,
+            ".godot": 1,
+            ".import": 14,
+            ".md": 1,
+            ".ogg": 1,
+            ".png": 11,
+            ".tscn": 4,
+            ".ttf": 1,
+            ".txt": 2,
+            ".uid": 4,
+            ".wav": 1,
+            ".webp": 1,
+            "[no extension]": 3
+          },
+          "project": "2d/dodge_the_creeps",
+          "regular_files": 48,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 44,
+            ">256 KiB": 2
+          },
+          "total_bytes": 2170262
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 2,
+            ".md": 1,
+            ".svg": 1,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "2d/drawable_textures",
+          "regular_files": 11,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 9
+          },
+          "total_bytes": 200251
+        },
+        {
+          "extension_counts": {
+            ".gd": 2,
+            ".godot": 1,
+            ".import": 3,
+            ".md": 1,
+            ".png": 4,
+            ".tscn": 2,
+            ".uid": 2,
+            "[no extension]": 1
+          },
+          "project": "2d/dynamic_tilemap_layers",
+          "regular_files": 16,
+          "size_buckets": {
+            "0 bytes": 1,
+            "1\u201316 KiB": 15
+          },
+          "total_bytes": 35594
+        },
+        {
+          "extension_counts": {
+            ".gd": 19,
+            ".godot": 1,
+            ".import": 5,
+            ".md": 1,
+            ".png": 4,
+            ".tscn": 7,
+            ".ttf": 1,
+            ".uid": 19,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "2d/finite_state_machine",
+          "regular_files": 59,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 56
+          },
+          "total_bytes": 296295
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 4,
+            ".md": 1,
+            ".png": 4,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "2d/glow",
+          "regular_files": 16,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 10,
+            ">256 KiB": 3
+          },
+          "total_bytes": 1751781
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 28,
+            ".md": 1,
+            ".png": 28,
+            ".tres": 1,
+            ".tscn": 3,
+            ".uid": 1,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "2d/hexagonal_map",
+          "regular_files": 66,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 27,
+            "1\u201316 KiB": 37,
+            ">256 KiB": 1
+          },
+          "total_bytes": 942369
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 2,
+            ".md": 1,
+            ".png": 2,
+            ".tscn": 2,
+            ".uid": 1,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "2d/instancing",
+          "regular_files": 12,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 10
+          },
+          "total_bytes": 119807
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 20,
+            ".md": 1,
+            ".png": 19,
+            ".psd": 1,
+            ".tres": 1,
+            ".tscn": 10,
+            ".uid": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "2d/isometric",
+          "regular_files": 58,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 7,
+            "1\u201316 KiB": 47,
+            ">256 KiB": 3
+          },
+          "total_bytes": 5289772
+        },
+        {
+          "extension_counts": {
+            ".gd": 2,
+            ".godot": 1,
+            ".import": 6,
+            ".md": 1,
+            ".png": 6,
+            ".tscn": 2,
+            ".uid": 2,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "2d/kinematic_character",
+          "regular_files": 22,
+          "size_buckets": {
+            "0 bytes": 1,
+            "1\u201316 KiB": 21
+          },
+          "total_bytes": 57799
+        },
+        {
+          "extension_counts": {
+            ".godot": 1,
+            ".import": 3,
+            ".md": 1,
+            ".png": 3,
+            ".tscn": 1,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "2d/light2d_as_mask",
+          "regular_files": 11,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 8,
+            ">256 KiB": 1
+          },
+          "total_bytes": 1102367
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 7,
+            ".md": 1,
+            ".png": 7,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "2d/lights_and_shadows",
+          "regular_files": 21,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 18
+          },
+          "total_bytes": 373956
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 3,
+            ".md": 1,
+            ".png": 3,
+            ".res": 1,
+            ".tscn": 2,
+            ".uid": 1,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "2d/navigation",
+          "regular_files": 15,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 12
+          },
+          "total_bytes": 399550
+        },
+        {
+          "extension_counts": {
+            ".gd": 2,
+            ".godot": 1,
+            ".import": 5,
+            ".md": 1,
+            ".png": 4,
+            ".tres": 1,
+            ".tscn": 1,
+            ".uid": 2,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "2d/navigation_astar",
+          "regular_files": 20,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 3,
+            "1\u201316 KiB": 16
+          },
+          "total_bytes": 362109
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 1,
+            ".md": 1,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "2d/navigation_mesh_chunks",
+          "regular_files": 9,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 7
+          },
+          "total_bytes": 60768
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 6,
+            ".md": 1,
+            ".png": 5,
+            ".tres": 3,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "2d/particles",
+          "regular_files": 22,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 4,
+            "1\u201316 KiB": 15,
+            ">256 KiB": 2
+          },
+          "total_bytes": 1156086
+        },
+        {
+          "extension_counts": {
+            ".gd": 4,
+            ".godot": 1,
+            ".import": 26,
+            ".md": 1,
+            ".ogg": 1,
+            ".png": 20,
+            ".tres": 1,
+            ".tscn": 10,
+            ".uid": 4,
+            ".wav": 5,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "2d/physics_platformer",
+          "regular_files": 76,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 7,
+            "1\u201316 KiB": 67,
+            ">256 KiB": 1
+          },
+          "total_bytes": 2233040
+        },
+        {
+          "extension_counts": {
+            ".gd": 32,
+            ".godot": 1,
+            ".import": 3,
+            ".md": 1,
+            ".png": 2,
+            ".tres": 1,
+            ".tscn": 23,
+            ".uid": 32,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "2d/physics_tests",
+          "regular_files": 98,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 96
+          },
+          "total_bytes": 232416
+        },
+        {
+          "extension_counts": {
+            ".gd": 10,
+            ".godot": 1,
+            ".import": 37,
+            ".md": 1,
+            ".ogg": 1,
+            ".tres": 5,
+            ".tscn": 14,
+            ".ttf": 1,
+            ".uid": 10,
+            ".wav": 5,
+            ".webp": 31,
+            "[no extension]": 1
+          },
+          "project": "2d/platformer",
+          "regular_files": 117,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 10,
+            "1\u201316 KiB": 105,
+            ">256 KiB": 1
+          },
+          "total_bytes": 2581123
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 3,
+            ".md": 1,
+            ".png": 2,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "2d/polygons_lines",
+          "regular_files": 13,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 11
+          },
+          "total_bytes": 84813
+        },
+        {
+          "extension_counts": {
+            ".gd": 4,
+            ".godot": 1,
+            ".import": 4,
+            ".md": 1,
+            ".png": 4,
+            ".tscn": 1,
+            ".uid": 4,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "2d/pong",
+          "regular_files": 21,
+          "size_buckets": {
+            "0 bytes": 1,
+            "1\u201316 KiB": 20
+          },
+          "total_bytes": 16270
+        },
+        {
+          "extension_counts": {
+            ".gd": 14,
+            ".godot": 1,
+            ".import": 51,
+            ".json": 4,
+            ".md": 1,
+            ".otf": 1,
+            ".png": 51,
+            ".svg": 1,
+            ".tres": 15,
+            ".tscn": 12,
+            ".uid": 14,
+            "[no extension]": 1
+          },
+          "project": "2d/role_playing_game",
+          "regular_files": 166,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 8,
+            "1\u201316 KiB": 157
+          },
+          "total_bytes": 700653
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".gdshader": 11,
+            ".godot": 1,
+            ".import": 8,
+            ".jpg": 4,
+            ".md": 1,
+            ".png": 5,
+            ".tscn": 1,
+            ".uid": 12,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "2d/screen_space_shaders",
+          "regular_files": 46,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 3,
+            "1\u201316 KiB": 38,
+            ">256 KiB": 4
+          },
+          "total_bytes": 2402145
+        },
+        {
+          "extension_counts": {
+            ".gd": 2,
+            ".godot": 1,
+            ".import": 9,
+            ".md": 1,
+            ".png": 9,
+            ".tres": 1,
+            ".tscn": 3,
+            ".uid": 2,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "2d/skeleton",
+          "regular_files": 30,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 26,
+            ">256 KiB": 1
+          },
+          "total_bytes": 673204
+        },
+        {
+          "extension_counts": {
+            ".gdshader": 9,
+            ".godot": 1,
+            ".import": 2,
+            ".md": 1,
+            ".png": 2,
+            ".tscn": 1,
+            ".uid": 9,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "2d/sprite_shaders",
+          "regular_files": 27,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 24
+          },
+          "total_bytes": 261645
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 2,
+            ".md": 1,
+            ".png": 2,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "2d/tween",
+          "regular_files": 11,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 8
+          },
+          "total_bytes": 77599
+        }
+      ]
+    },
+    "3d": {
+      "median_regular_files": 26.5,
+      "project_count": 32,
+      "projects": [
+        {
+          "extension_counts": {
+            ".bin": 1,
+            ".gd": 1,
+            ".gltf": 1,
+            ".godot": 1,
+            ".import": 14,
+            ".jpg": 9,
+            ".md": 3,
+            ".png": 3,
+            ".tscn": 2,
+            ".uid": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/antialiasing",
+          "regular_files": 39,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 3,
+            "1\u201316 KiB": 24,
+            ">256 KiB": 11
+          },
+          "total_bytes": 9256107
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 2,
+            ".md": 2,
+            ".png": 1,
+            ".tres": 2,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/csg",
+          "regular_files": 14,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 11
+          },
+          "total_bytes": 275923
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 22,
+            ".md": 5,
+            ".png": 22,
+            ".tscn": 2,
+            ".uid": 1,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "3d/decals",
+          "regular_files": 56,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 14,
+            "1\u201316 KiB": 38,
+            ">256 KiB": 3
+          },
+          "total_bytes": 2228375
+        },
+        {
+          "extension_counts": {
+            ".blend": 2,
+            ".exr": 2,
+            ".gd": 2,
+            ".glb": 2,
+            ".godot": 1,
+            ".import": 5,
+            ".lmbake": 2,
+            ".md": 1,
+            ".png": 1,
+            ".res": 1,
+            ".tscn": 1,
+            ".uid": 2,
+            ".unwrap_cache": 2,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "3d/global_illumination",
+          "regular_files": 26,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 15,
+            ">256 KiB": 9
+          },
+          "total_bytes": 25153008
+        },
+        {
+          "extension_counts": {
+            ".bin": 1,
+            ".gd": 1,
+            ".gltf": 1,
+            ".godot": 1,
+            ".import": 11,
+            ".jpg": 9,
+            ".md": 1,
+            ".png": 1,
+            ".tscn": 2,
+            ".uid": 1,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "3d/graphics_settings",
+          "regular_files": 31,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 17,
+            ">256 KiB": 11
+          },
+          "total_bytes": 9116157
+        },
+        {
+          "extension_counts": {
+            ".cfg": 1,
+            ".dae": 2,
+            ".gd": 8,
+            ".godot": 1,
+            ".import": 9,
+            ".md": 2,
+            ".png": 8,
+            ".tres": 5,
+            ".tscn": 5,
+            ".uid": 8,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "3d/ik",
+          "regular_files": 51,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 4,
+            "1\u201316 KiB": 44,
+            ">256 KiB": 2
+          },
+          "total_bytes": 5107351
+        },
+        {
+          "extension_counts": {
+            ".gd": 2,
+            ".glb": 2,
+            ".godot": 1,
+            ".import": 4,
+            ".md": 1,
+            ".mesh": 1,
+            ".png": 1,
+            ".tres": 3,
+            ".tscn": 2,
+            ".uid": 2,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/kinematic_character",
+          "regular_files": 22,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 18,
+            ">256 KiB": 1
+          },
+          "total_bytes": 641463
+        },
+        {
+          "extension_counts": {
+            ".gd": 2,
+            ".gdshader": 1,
+            ".godot": 1,
+            ".import": 8,
+            ".json": 1,
+            ".md": 3,
+            ".png": 3,
+            ".tscn": 1,
+            ".ttf": 4,
+            ".uid": 3,
+            ".webp": 1,
+            ".woff2": 1,
+            "[no extension]": 1
+          },
+          "project": "3d/labels_and_texts",
+          "regular_files": 30,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 8,
+            "1\u201316 KiB": 21
+          },
+          "total_bytes": 1255905
+        },
+        {
+          "extension_counts": {
+            ".gd": 3,
+            ".godot": 1,
+            ".import": 7,
+            ".md": 2,
+            ".png": 4,
+            ".svg": 2,
+            ".tscn": 1,
+            ".uid": 3,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/lights_and_shadows",
+          "regular_files": 26,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 23,
+            ">256 KiB": 1
+          },
+          "total_bytes": 362657
+        },
+        {
+          "extension_counts": {
+            ".blend": 2,
+            ".gd": 1,
+            ".glb": 2,
+            ".godot": 1,
+            ".hdr": 5,
+            ".import": 39,
+            ".jpg": 14,
+            ".md": 1,
+            ".png": 17,
+            ".res": 1,
+            ".tres": 18,
+            ".tscn": 2,
+            ".uid": 1,
+            ".unwrap_cache": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/material_testers",
+          "regular_files": 108,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 14,
+            "1\u201316 KiB": 64,
+            ">256 KiB": 29
+          },
+          "total_bytes": 133364574
+        },
+        {
+          "extension_counts": {
+            ".gd": 3,
+            ".godot": 1,
+            ".import": 3,
+            ".md": 1,
+            ".mtl": 2,
+            ".obj": 2,
+            ".res": 1,
+            ".tscn": 1,
+            ".uid": 3,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/navigation",
+          "regular_files": 20,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 16,
+            ">256 KiB": 1
+          },
+          "total_bytes": 525928
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 1,
+            ".md": 1,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/navigation_mesh_chunks",
+          "regular_files": 9,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 6
+          },
+          "total_bytes": 214823
+        },
+        {
+          "extension_counts": {
+            ".blend": 1,
+            ".gd": 3,
+            ".glb": 1,
+            ".godot": 1,
+            ".import": 3,
+            ".md": 1,
+            ".occ": 1,
+            ".tscn": 2,
+            ".uid": 3,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/occlusion_culling_mesh_lod",
+          "regular_files": 19,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 13,
+            ">256 KiB": 3
+          },
+          "total_bytes": 5139107
+        },
+        {
+          "extension_counts": {
+            ".exr": 1,
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 4,
+            ".md": 2,
+            ".png": 3,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "3d/particles",
+          "regular_files": 16,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 3,
+            "1\u201316 KiB": 11,
+            ">256 KiB": 1
+          },
+          "total_bytes": 685951
+        },
+        {
+          "extension_counts": {
+            ".blend": 1,
+            ".gd": 1,
+            ".glb": 1,
+            ".godot": 1,
+            ".import": 2,
+            ".md": 1,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/physical_light_camera_units",
+          "regular_files": 12,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 4,
+            "1\u201316 KiB": 7
+          },
+          "total_bytes": 571991
+        },
+        {
+          "extension_counts": {
+            ".gd": 2,
+            ".godot": 1,
+            ".import": 2,
+            ".md": 1,
+            ".png": 1,
+            ".svg": 1,
+            ".tscn": 4,
+            ".uid": 2,
+            ".webp": 1,
+            "[no extension]": 2
+          },
+          "project": "3d/physics_interpolation",
+          "regular_files": 17,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 15
+          },
+          "total_bytes": 200010
+        },
+        {
+          "extension_counts": {
+            ".gd": 32,
+            ".godot": 1,
+            ".import": 1,
+            ".md": 1,
+            ".mesh": 1,
+            ".tres": 1,
+            ".tscn": 18,
+            ".txt": 1,
+            ".uid": 32,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/physics_tests",
+          "regular_files": 91,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 87,
+            ">256 KiB": 1
+          },
+          "total_bytes": 879266
+        },
+        {
+          "extension_counts": {
+            ".gd": 8,
+            ".gdshader": 1,
+            ".glb": 2,
+            ".godot": 1,
+            ".import": 40,
+            ".md": 1,
+            ".png": 3,
+            ".res": 25,
+            ".scn": 1,
+            ".tres": 9,
+            ".tscn": 8,
+            ".uid": 9,
+            ".wav": 6,
+            ".webp": 30,
+            "[no extension]": 1
+          },
+          "project": "3d/platformer",
+          "regular_files": 145,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 11,
+            "1\u201316 KiB": 130,
+            ">256 KiB": 3
+          },
+          "total_bytes": 3643007
+        },
+        {
+          "extension_counts": {
+            ".gd": 3,
+            ".gdshader": 1,
+            ".godot": 1,
+            ".import": 2,
+            ".md": 1,
+            ".png": 1,
+            ".tres": 16,
+            ".tscn": 2,
+            ".uid": 4,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/procedural_materials",
+          "regular_files": 34,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 30,
+            ">256 KiB": 1
+          },
+          "total_bytes": 437986
+        },
+        {
+          "extension_counts": {
+            ".exr": 1,
+            ".gd": 2,
+            ".glb": 1,
+            ".godot": 1,
+            ".import": 5,
+            ".lmbake": 1,
+            ".md": 5,
+            ".png": 1,
+            ".tres": 3,
+            ".tscn": 2,
+            ".uid": 2,
+            ".wav": 2,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "3d/ragdoll_physics",
+          "regular_files": 28,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 5,
+            "1\u201316 KiB": 19,
+            ">256 KiB": 3
+          },
+          "total_bytes": 4400004
+        },
+        {
+          "extension_counts": {
+            ".gd": 3,
+            ".glb": 2,
+            ".godot": 1,
+            ".import": 4,
+            ".md": 1,
+            ".mesh": 1,
+            ".png": 1,
+            ".tres": 3,
+            ".tscn": 3,
+            ".uid": 3,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/rigidbody_character",
+          "regular_files": 25,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 3,
+            "1\u201316 KiB": 21
+          },
+          "total_bytes": 542147
+        },
+        {
+          "extension_counts": {
+            ".gd": 2,
+            ".gdshader": 1,
+            ".godot": 1,
+            ".import": 5,
+            ".md": 1,
+            ".png": 2,
+            ".tres": 1,
+            ".tscn": 1,
+            ".uid": 3,
+            ".webp": 4,
+            "[no extension]": 1
+          },
+          "project": "3d/sky_shaders",
+          "regular_files": 22,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 3,
+            "1\u201316 KiB": 15,
+            ">256 KiB": 3
+          },
+          "total_bytes": 6774064
+        },
+        {
+          "extension_counts": {
+            ".blend": 1,
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 6,
+            ".jpg": 3,
+            ".md": 2,
+            ".obj": 1,
+            ".png": 1,
+            ".svg": 1,
+            ".tscn": 7,
+            ".uid": 1,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "3d/soft_body_physics",
+          "regular_files": 27,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 4,
+            "1\u201316 KiB": 19,
+            ">256 KiB": 3
+          },
+          "total_bytes": 2398610
+        },
+        {
+          "extension_counts": {
+            ".gd": 3,
+            ".gdshader": 5,
+            ".godot": 1,
+            ".import": 7,
+            ".md": 3,
+            ".png": 5,
+            ".svg": 1,
+            ".tres": 1,
+            ".tscn": 2,
+            ".uid": 8,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/sprites",
+          "regular_files": 39,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 3,
+            "1\u201316 KiB": 35
+          },
+          "total_bytes": 406303
+        },
+        {
+          "extension_counts": {
+            ".blend": 2,
+            ".gd": 4,
+            ".glb": 2,
+            ".godot": 1,
+            ".import": 5,
+            ".md": 1,
+            ".ogg": 1,
+            ".tres": 6,
+            ".tscn": 4,
+            ".ttf": 1,
+            ".txt": 1,
+            ".uid": 4,
+            ".webp": 2,
+            "[no extension]": 2
+          },
+          "project": "3d/squash_the_creeps",
+          "regular_files": 36,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 6,
+            "1\u201316 KiB": 28,
+            ">256 KiB": 1
+          },
+          "total_bytes": 2211320
+        },
+        {
+          "extension_counts": {
+            ".gd": 5,
+            ".gdshader": 2,
+            ".godot": 1,
+            ".import": 29,
+            ".md": 1,
+            ".png": 28,
+            ".svg": 1,
+            ".tscn": 5,
+            ".uid": 7,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "3d/tonemap_color_correction",
+          "regular_files": 81,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 4,
+            "1\u201316 KiB": 76
+          },
+          "total_bytes": 452115
+        },
+        {
+          "extension_counts": {
+            ".bin": 3,
+            ".gd": 5,
+            ".glb": 1,
+            ".gltf": 3,
+            ".godot": 1,
+            ".import": 35,
+            ".jpeg": 1,
+            ".md": 1,
+            ".ogg": 4,
+            ".png": 13,
+            ".res": 5,
+            ".tres": 10,
+            ".tscn": 7,
+            ".txt": 3,
+            ".uid": 5,
+            ".wav": 8,
+            ".webp": 8,
+            "[no extension]": 2
+          },
+          "project": "3d/truck_town",
+          "regular_files": 115,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 25,
+            "1\u201316 KiB": 79,
+            ">256 KiB": 10
+          },
+          "total_bytes": 10249475
+        },
+        {
+          "extension_counts": {
+            ".gd": 2,
+            ".gdshader": 1,
+            ".godot": 1,
+            ".import": 3,
+            ".md": 1,
+            ".png": 2,
+            ".tscn": 1,
+            ".uid": 3,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/variable_rate_shading",
+          "regular_files": 17,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 14,
+            ">256 KiB": 1
+          },
+          "total_bytes": 432216
+        },
+        {
+          "extension_counts": {
+            ".gd": 3,
+            ".godot": 1,
+            ".md": 1,
+            ".tres": 2,
+            ".tscn": 3,
+            ".uid": 3,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "3d/visibility_ranges",
+          "regular_files": 15,
+          "size_buckets": {
+            "0 bytes": 1,
+            "1\u201316 KiB": 13,
+            ">256 KiB": 1
+          },
+          "total_bytes": 534368
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 2,
+            ".md": 1,
+            ".png": 1,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "3d/volumetric_fog",
+          "regular_files": 11,
+          "size_buckets": {
+            "0 bytes": 1,
+            "1\u201316 KiB": 9,
+            ">256 KiB": 1
+          },
+          "total_bytes": 474218
+        },
+        {
+          "extension_counts": {
+            ".gd": 12,
+            ".godot": 1,
+            ".import": 10,
+            ".md": 1,
+            ".png": 9,
+            ".svg": 1,
+            ".tres": 3,
+            ".tscn": 5,
+            ".ttf": 1,
+            ".uid": 12,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "3d/voxel",
+          "regular_files": 57,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 53,
+            ">256 KiB": 1
+          },
+          "total_bytes": 1362578
+        },
+        {
+          "extension_counts": {
+            ".gd": 3,
+            ".godot": 1,
+            ".import": 3,
+            ".md": 1,
+            ".png": 1,
+            ".svg": 1,
+            ".tscn": 2,
+            ".ttf": 1,
+            ".uid": 3,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "3d/waypoints",
+          "regular_files": 18,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 15,
+            ">256 KiB": 1
+          },
+          "total_bytes": 386178
+        }
+      ]
+    },
+    "audio": {
+      "median_regular_files": 12,
+      "project_count": 9,
+      "projects": [
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 9,
+            ".md": 1,
+            ".ogg": 1,
+            ".tres": 1,
+            ".tscn": 1,
+            ".uid": 1,
+            ".wav": 7,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "audio/audio_effects",
+          "regular_files": 26,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 2,
+            "1\u201316 KiB": 16,
+            ">256 KiB": 7
+          },
+          "total_bytes": 4659070
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 7,
+            ".md": 1,
+            ".ogg": 1,
+            ".png": 5,
+            ".tscn": 1,
+            ".ttf": 1,
+            ".uid": 1,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "audio/bpm_sync",
+          "regular_files": 21,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 18,
+            ">256 KiB": 1
+          },
+          "total_bytes": 2728238
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 2,
+            ".md": 1,
+            ".ogg": 1,
+            ".png": 1,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "audio/device_changer",
+          "regular_files": 11,
+          "size_buckets": {
+            "0 bytes": 1,
+            "1\u201316 KiB": 9,
+            ">256 KiB": 1
+          },
+          "total_bytes": 726884
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 1,
+            ".md": 1,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 1
+          },
+          "project": "audio/generator",
+          "regular_files": 7,
+          "size_buckets": {
+            "1\u201316 KiB": 7
+          },
+          "total_bytes": 9195
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 2,
+            ".md": 1,
+            ".ogg": 1,
+            ".png": 1,
+            ".tres": 1,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "audio/mic_record",
+          "regular_files": 12,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 9,
+            ">256 KiB": 1
+          },
+          "total_bytes": 773478
+        },
+        {
+          "extension_counts": {
+            ".gd": 3,
+            ".godot": 1,
+            ".import": 2,
+            ".md": 1,
+            ".png": 1,
+            ".tscn": 3,
+            ".uid": 3,
+            ".wav": 1,
+            ".webp": 1,
+            "[no extension]": 1
+          },
+          "project": "audio/midi_piano",
+          "regular_files": 17,
+          "size_buckets": {
+            "0 bytes": 1,
+            "1\u201316 KiB": 15,
+            ">256 KiB": 1
+          },
+          "total_bytes": 1424384
+        },
+        {
+          "extension_counts": {
+            ".gd": 12,
+            ".godot": 1,
+            ".import": 5,
+            ".md": 1,
+            ".ogg": 1,
+            ".png": 2,
+            ".tscn": 3,
+            ".uid": 12,
+            ".wav": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "audio/rhythm_game",
+          "regular_files": 41,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 38,
+            ">256 KiB": 1
+          },
+          "total_bytes": 2765042
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 2,
+            ".md": 1,
+            ".ogg": 1,
+            ".tres": 1,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "audio/spectrum",
+          "regular_files": 12,
+          "size_buckets": {
+            "0 bytes": 1,
+            "1\u201316 KiB": 10,
+            ">256 KiB": 1
+          },
+          "total_bytes": 1591294
+        },
+        {
+          "extension_counts": {
+            ".gd": 1,
+            ".godot": 1,
+            ".import": 1,
+            ".md": 1,
+            ".tscn": 1,
+            ".uid": 1,
+            ".webp": 2,
+            "[no extension]": 1
+          },
+          "project": "audio/text_to_speech",
+          "regular_files": 9,
+          "size_buckets": {
+            "0 bytes": 1,
+            "16\u2013256 KiB": 1,
+            "1\u201316 KiB": 7
+          },
+          "total_bytes": 96449
+        }
+      ]
+    }
+  },
+  "commit": "6ad6167",
+  "corpus": "Pinned Godot demo projects for gpack experiments",
+  "inventory_method": "Recursively count regular files below every project.godot directory in the pinned source snapshot; do not follow symlinks; include hidden regular files such as screenshots/.gdignore. Category median is computed before per-project release ZIP packaging.",
+  "release": "4.7-6ad6167",
+  "release_metadata_url": "https://api.github.com/repos/godotengine/godot-demo-projects/releases/tags/4.7-6ad6167",
+  "repository": "https://github.com/godotengine/godot-demo-projects",
+  "selected_projects": [
+    {
+      "archive_sha256_verified": true,
+      "category": "2d",
+      "downloaded_sha256": "898a8d4b89d5fcce4fbe6cccbf1b7c89fc34d0d0ca422a217abc3d6ffb97aa05",
+      "extension_counts": {
+        ".gd": 2,
+        ".godot": 1,
+        ".import": 6,
+        ".md": 2,
+        ".png": 6,
+        ".tscn": 2,
+        ".uid": 2,
+        ".webp": 1,
+        "[no extension]": 1
+      },
+      "files": [
+        {
+          "path": "LICENSE.md",
+          "sha256": "0339177149b474f7ff676d32218ecb3a8f2538955610023c3769763720d09e4c",
+          "size_bytes": 1134
+        },
+        {
+          "path": "README.md",
+          "sha256": "be0a23305dda5e74e8a1938e9c2ada57af55e76e79aa8c1c74bd0b2076d86ff0",
+          "size_bytes": 497
+        },
+        {
+          "path": "icon.webp",
+          "sha256": "9755e821a83185a3a903ba210addac3fbdf4034f9e00b9dc4333b2ab3438801a",
+          "size_bytes": 7846
+        },
+        {
+          "path": "icon.webp.import",
+          "sha256": "c0ea1f55ccb2f20d0d4d4f848a5c573048df8517b2fab53c6f9a2f195a044ba7",
+          "size_bytes": 918
+        },
+        {
+          "path": "level/circle.png",
+          "sha256": "0aad8f7322e28cf484c5fda012ee5328bd80e77c1f1fca2fb767af9f2db65d29",
+          "size_bytes": 5814
+        },
+        {
+          "path": "level/circle.png.import",
+          "sha256": "e74f60e3d540cc35a1d3b8bfbc0dcc890a62a0d26bd80eb0cf8212e2417c5603",
+          "size_bytes": 927
+        },
+        {
+          "path": "level/long_obstacle.png",
+          "sha256": "8b10d9f59587c40fa7931e5573145c707b5920024ac07a18a06ecf6768cb2210",
+          "size_bytes": 401
+        },
+        {
+          "path": "level/long_obstacle.png.import",
+          "sha256": "eb048509517bffbc9e5e71cb80e6e3ae6ce00a76352d77299e0d2cf67365f8a1",
+          "size_bytes": 949
+        },
+        {
+          "path": "level/obstacle.png",
+          "sha256": "f753e51c1f5ba3915f06a82df2844e2d19ba3a92c558128b038929106456bbda",
+          "size_bytes": 379
+        },
+        {
+          "path": "level/obstacle.png.import",
+          "sha256": "db1d0b11a80f0931ec26f4200cad1f9c45cfa67e088ce00a7887b87d404158d2",
+          "size_bytes": 934
+        },
+        {
+          "path": "level/princess.gd",
+          "sha256": "2a5ffa5aa728838f7d044f2202c374bf5089acafad3270037211e1b1bb61ecf5",
+          "size_bytes": 109
+        },
+        {
+          "path": "level/princess.gd.uid",
+          "sha256": "1259c8b61ea42712ef575c05301b60dc6d8fdb30ef8dae59e97270733c3f0482",
+          "size_bytes": 20
+        },
+        {
+          "path": "level/princess.png",
+          "sha256": "ef61f42f562a43b96be8763deb952a420ceb254af0f3747f4d89d65810c08810",
+          "size_bytes": 398
+        },
+        {
+          "path": "level/princess.png.import",
+          "sha256": "3eddfd0197c86bb9c272df785be66339697dc479dece3f3a84af324c9fc7ce79",
+          "size_bytes": 934
+        },
+        {
+          "path": "player/player.gd",
+          "sha256": "20aace0d8ec32b106d09acef4f24b994e08c521104a3e2dac715b27a06113dec",
+          "size_bytes": 1255
+        },
+        {
+          "path": "player/player.gd.uid",
+          "sha256": "809b60915b0db8568961f57f339081b6990e57d0c55a995470a1478a9eeef601",
+          "size_bytes": 20
+        },
+        {
+          "path": "player/player.png",
+          "sha256": "b6af00fd70018d69fbdb87be1a2b712384daed7bbd3387b18e61f127f8c3bb90",
+          "size_bytes": 502
+        },
+        {
+          "path": "player/player.png.import",
+          "sha256": "04065755500949c9007a9ca080f6a4bca150bc2d66b832a607be13c8b65ff739",
+          "size_bytes": 929
+        },
+        {
+          "path": "player/player.tscn",
+          "sha256": "6cdebc59b21e09f812d989c971dfc15df500d0035b765d20db59f12d2b217ec3",
+          "size_bytes": 646
+        },
+        {
+          "path": "project.godot",
+          "sha256": "32a0fa83cf2d84a499f537a7017b877b5b8a97592739bb7aa36d0c10e79e5391",
+          "size_bytes": 4474
+        },
+        {
+          "path": "screenshots/.gdignore",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "screenshots/kinematic.png",
+          "sha256": "807c65a034de729a032c78ea4c853352a44b9da33c9df06f87ac26d1a5693eff",
+          "size_bytes": 16181
+        },
+        {
+          "path": "world.tscn",
+          "sha256": "4cc1c9bfc2ec1fc536b5f768146f401265b1689cd290fb9500bc63856119e2d1",
+          "size_bytes": 13666
+        }
+      ],
+      "project": "2d/kinematic_character",
+      "published_archive_size_bytes": 43351,
+      "published_sha256": "898a8d4b89d5fcce4fbe6cccbf1b7c89fc34d0d0ca422a217abc3d6ffb97aa05",
+      "release_asset": "2d_kinematic_character.zip",
+      "release_asset_url": "https://github.com/godotengine/godot-demo-projects/releases/download/4.7-6ad6167/2d_kinematic_character.zip",
+      "released_project_regular_file_count": 23,
+      "size_buckets": {
+        "0 bytes": 1,
+        "1\u201316 KiB": 22
+      },
+      "source_tree_regular_file_count": 22,
+      "total_unpacked_bytes": 58933
+    },
+    {
+      "archive_sha256_verified": true,
+      "category": "3d",
+      "downloaded_sha256": "b2a7d5922575833ff31476746ec3f7cf5ed9db4221824380e8cab0df2aeadab3",
+      "extension_counts": {
+        ".gd": 3,
+        ".godot": 1,
+        ".import": 7,
+        ".md": 3,
+        ".png": 4,
+        ".svg": 2,
+        ".tscn": 1,
+        ".uid": 3,
+        ".webp": 2,
+        "[no extension]": 1
+      },
+      "files": [
+        {
+          "path": "LICENSE.md",
+          "sha256": "0339177149b474f7ff676d32218ecb3a8f2538955610023c3769763720d09e4c",
+          "size_bytes": 1134
+        },
+        {
+          "path": "README.md",
+          "sha256": "8a5202052db4fcfd30889b8c41b4b7332323a4f825919f1e759a4616d96c7f24",
+          "size_bytes": 696
+        },
+        {
+          "path": "area_light_star.svg",
+          "sha256": "16edd35e78f1df0375a24a456596c86b8b40265d08ee11d948fef5740fe3ff2d",
+          "size_bytes": 200
+        },
+        {
+          "path": "area_light_star.svg.import",
+          "sha256": "3730eb21181bd2c6a8026c1b95b7b37af5c7b8f8a8808fb08aad5c1eeb25fe23",
+          "size_bytes": 1094
+        },
+        {
+          "path": "area_light_star_outline.svg",
+          "sha256": "4923802148e99ac4eddf3920e2f84b66215b2c5005cc0802dc7e47eeb6b2bbe6",
+          "size_bytes": 312
+        },
+        {
+          "path": "area_light_star_outline.svg.import",
+          "sha256": "bcd44a7eb613c7931f837473801bc450e15f7119fd92a9a2776404fc34b16e10",
+          "size_bytes": 1118
+        },
+        {
+          "path": "checker.LICENSE.md",
+          "sha256": "6bc8f5d346a33821415c5869c27ab2cedbd936e5c630dd0987468bf3727177c4",
+          "size_bytes": 151
+        },
+        {
+          "path": "checker.png",
+          "sha256": "5a9bef8571527d2021cd3e5bd49949eac6f8693dee61df2d8068c37a1bd698af",
+          "size_bytes": 1861
+        },
+        {
+          "path": "checker.png.import",
+          "sha256": "58514376fe922f9902e282b164def5b6cb222c379799d725f94cac8956635b81",
+          "size_bytes": 941
+        },
+        {
+          "path": "checker_normal.png",
+          "sha256": "33bdba4442e58973ef0e4ada9348d84ec5ff1f4606434350091d8063da536bc5",
+          "size_bytes": 3502
+        },
+        {
+          "path": "checker_normal.png.import",
+          "sha256": "9eca684585e590a6282b36ec4a32c088507eb36b1762064e9266d74281d5eeb3",
+          "size_bytes": 969
+        },
+        {
+          "path": "checker_roughness.png",
+          "sha256": "af6ae7c54dc222b2a74f9748ed1df7f5d62426579455017fe51c1dbc6dbc3655",
+          "size_bytes": 1894
+        },
+        {
+          "path": "checker_roughness.png.import",
+          "sha256": "7b0f472404f243ee74fb3ff7acb7ca974df4b0e16a3695635d1de9853bc53d20",
+          "size_bytes": 954
+        },
+        {
+          "path": "day_night_cycle.gd",
+          "sha256": "f07ea882aa5c575b3d4feb3b9c8fed70fc8cd63def427f0fd531032fc360bc08",
+          "size_bytes": 117
+        },
+        {
+          "path": "day_night_cycle.gd.uid",
+          "sha256": "ca57993ffbf65e1e6181bc1270b04a771e6970370a75d4f689afcb5a9bf2a6b6",
+          "size_bytes": 19
+        },
+        {
+          "path": "icon.webp",
+          "sha256": "a1b2a6423d638daf41e6dccd5c08bc93bcc24ebbc92b3f02a18fd7f225620883",
+          "size_bytes": 898
+        },
+        {
+          "path": "icon.webp.import",
+          "sha256": "ca360028d3cf9fa4c21747646ca08a0891cf8a0a016eed79682607f9a0b3b635",
+          "size_bytes": 919
+        },
+        {
+          "path": "logo_projector.png",
+          "sha256": "835f29c0b966d7ec44b1fb0af35cfd2819b1e3bb478414e5987735a299b01533",
+          "size_bytes": 9282
+        },
+        {
+          "path": "logo_projector.png.import",
+          "sha256": "802a992e39fa81d3245d51798c5702b055188434bc45c927c0eedd0669c77374",
+          "size_bytes": 945
+        },
+        {
+          "path": "project.godot",
+          "sha256": "7a14cde4362e904703227ed6d4efee4f2d512fb91623b570c9157a1b0ded3931",
+          "size_bytes": 1413
+        },
+        {
+          "path": "screenshots/.gdignore",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "screenshots/3d_lights_and_shadows.webp",
+          "sha256": "a4a18c3b2f027ffd19572d8bd537391648958e2b46801cd0a5e79676d4c3994c",
+          "size_bytes": 290650
+        },
+        {
+          "path": "spin.gd",
+          "sha256": "b5d298c03ea43fc147a4bc2572d271a4a6e162bb37f3c4b7c7443dfd661d344c",
+          "size_bytes": 258
+        },
+        {
+          "path": "spin.gd.uid",
+          "sha256": "28c11e124efeb1ba29ea071307b50fd762ac2a15aac7f0cd4da5cb303a20cb98",
+          "size_bytes": 19
+        },
+        {
+          "path": "test.tscn",
+          "sha256": "8350deed09624d584f04f4e54fdcb6d081ad83cc5d274afc8981419e9b4393f6",
+          "size_bytes": 40700
+        },
+        {
+          "path": "tester.gd",
+          "sha256": "5cb99352e79b77334a73f724388e90cc5a3a6014bf7747dbca715cd4fa73bdb4",
+          "size_bytes": 3725
+        },
+        {
+          "path": "tester.gd.uid",
+          "sha256": "6da7976e19cc64668e3821c63b5d48c845ab98813116c4d4913946faab240889",
+          "size_bytes": 20
+        }
+      ],
+      "project": "3d/lights_and_shadows",
+      "published_archive_size_bytes": 320348,
+      "published_sha256": "b2a7d5922575833ff31476746ec3f7cf5ed9db4221824380e8cab0df2aeadab3",
+      "release_asset": "3d_lights_and_shadows.zip",
+      "release_asset_url": "https://github.com/godotengine/godot-demo-projects/releases/download/4.7-6ad6167/3d_lights_and_shadows.zip",
+      "released_project_regular_file_count": 27,
+      "size_buckets": {
+        "0 bytes": 1,
+        "16\u2013256 KiB": 1,
+        "1\u201316 KiB": 24,
+        ">256 KiB": 1
+      },
+      "source_tree_regular_file_count": 26,
+      "total_unpacked_bytes": 363791
+    },
+    {
+      "archive_sha256_verified": true,
+      "category": "audio",
+      "downloaded_sha256": "36d728ec24fff6183242e4207669a35f926e9e04aeb92eb320703f366ba1036f",
+      "extension_counts": {
+        ".gd": 1,
+        ".godot": 1,
+        ".import": 2,
+        ".md": 2,
+        ".ogg": 1,
+        ".png": 1,
+        ".tres": 1,
+        ".tscn": 1,
+        ".uid": 1,
+        ".webp": 1,
+        "[no extension]": 1
+      },
+      "files": [
+        {
+          "path": "Intro.ogg",
+          "sha256": "e9f50a63efd3e96b978ff3b33dcbc8120b11e7dbc896333dd5ac2ae0daa4a509",
+          "size_bytes": 700233
+        },
+        {
+          "path": "Intro.ogg.import",
+          "sha256": "aa6ee83c85ff826a2eab35c497246b0edaff982bd525f210f83943c2f6366c30",
+          "size_bytes": 370
+        },
+        {
+          "path": "LICENSE.md",
+          "sha256": "0339177149b474f7ff676d32218ecb3a8f2538955610023c3769763720d09e4c",
+          "size_bytes": 1134
+        },
+        {
+          "path": "MicRecord.gd",
+          "sha256": "01c571f32ad4e1ae7cb30ae4e22a14e610829c44a8ada70030150e873eb55fb8",
+          "size_bytes": 2728
+        },
+        {
+          "path": "MicRecord.gd.uid",
+          "sha256": "8ef728a1c5de2c5f6b932d605e32cc2dbebe49697be4227734d685c67601bbdb",
+          "size_bytes": 19
+        },
+        {
+          "path": "MicRecord.tscn",
+          "sha256": "e2153c7a0c2a611663fd3781a9ae69afcedabb4e6418c863ba3aac4034ec0cf3",
+          "size_bytes": 4857
+        },
+        {
+          "path": "README.md",
+          "sha256": "5c201f50c1d421a9c4839eed39c03aa03b3c4d5c2b917c3cb98c5d3af9ee08cf",
+          "size_bytes": 427
+        },
+        {
+          "path": "default_bus_layout.tres",
+          "sha256": "ed022a5310e0c49ba84bcacc5bb102e9279fe4170c98df85a1c5a41cbb2e906f",
+          "size_bytes": 400
+        },
+        {
+          "path": "icon.webp",
+          "sha256": "4dacee2d5a7af83acb4102081bee78975614459e8ca08ce3305eb5dafcc193d7",
+          "size_bytes": 714
+        },
+        {
+          "path": "icon.webp.import",
+          "sha256": "4d48355de6cf7b5998ffa1d3029788d4c1930513e4f7d51a9d6ad5a9f43d7cea",
+          "size_bytes": 919
+        },
+        {
+          "path": "project.godot",
+          "sha256": "5b29ad095b03c0d76ab8786011eefb900cb80d0fdc829f8e3251aa60ef1bb2f6",
+          "size_bytes": 1079
+        },
+        {
+          "path": "screenshots/.gdignore",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "size_bytes": 0
+        },
+        {
+          "path": "screenshots/mic_record.png",
+          "sha256": "dfe6a625b34809985f97ae874cb7e56a98ca4624e31de37c1d1bd7b44e75a6a6",
+          "size_bytes": 61732
+        }
+      ],
+      "project": "audio/mic_record",
+      "published_archive_size_bytes": 742999,
+      "published_sha256": "36d728ec24fff6183242e4207669a35f926e9e04aeb92eb320703f366ba1036f",
+      "release_asset": "audio_mic_record.zip",
+      "release_asset_url": "https://github.com/godotengine/godot-demo-projects/releases/download/4.7-6ad6167/audio_mic_record.zip",
+      "released_project_regular_file_count": 13,
+      "size_buckets": {
+        "0 bytes": 1,
+        "16\u2013256 KiB": 1,
+        "1\u201316 KiB": 10,
+        ">256 KiB": 1
+      },
+      "source_tree_regular_file_count": 12,
+      "total_unpacked_bytes": 774612
+    }
+  ],
+  "selection_rule": "One project per 2D, 3D, and audio category, nearest the category median regular-file count among projects with reviewed, clear notices. Break equal-distance ties by lowest third-party attribution burden, then lexicographic project path."
+}

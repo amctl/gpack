@@ -1,0 +1,544 @@
+{
+  "build_mode": "Linux gcc; Goose v2026.4; vendored Zstandard 1.5.7 static; byte-table Goose CRC; one-shot decode through 1 MiB stored frame; C reference byte-table CRC",
+  "corpus_root": "/tmp/gpack-corpus-godot-4.7",
+  "date": "2026-11-24",
+  "experiment": "GPack product v1 runtime throughput",
+  "machine": {
+    "cc": "gcc (GCC) 16.2.1 20261029 (Red Hat 16.2.1-3)",
+    "cpu": "Intel(R) Core(TM) Ultra 7 255H",
+    "os": "Linux-7.3.4-300.fc45.x86_64-x86_64-with-glibc2.44",
+    "ram_bytes": 32963203072
+  },
+  "malformed_rejection": {
+    "c-reference": {
+      "index_crc_mismatch": true,
+      "invalid_frame_or_payload_crc": true,
+      "truncated_header": true,
+      "truncated_index": true
+    },
+    "goose": {
+      "index_crc_mismatch": true,
+      "invalid_frame_or_payload_crc": true,
+      "truncated_header": true,
+      "truncated_index": true
+    }
+  },
+  "observations": [
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "goose",
+        "c-reference"
+      ],
+      "files": 63,
+      "lookup_ns": 5188689,
+      "mib_s": 220.0688056864834,
+      "p50_ms": 0.01716,
+      "p95_ms": 0.18359,
+      "paired_run": 1,
+      "parse_ns": 164954,
+      "peak_rss_kib": 3888,
+      "reader": "goose",
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "goose",
+        "c-reference"
+      ],
+      "files": 63,
+      "lookup_ns": 6857736,
+      "mib_s": 166.508,
+      "p50_ms": 0.013893,
+      "p95_ms": 0.207731,
+      "paired_run": 1,
+      "parse_ns": 101074,
+      "peak_rss_kib": 4200,
+      "reader": "c-reference",
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "c-reference",
+        "goose"
+      ],
+      "files": 63,
+      "lookup_ns": 7772766,
+      "mib_s": 146.906,
+      "p50_ms": 0.009468,
+      "p95_ms": 0.249756,
+      "paired_run": 2,
+      "parse_ns": 106133,
+      "peak_rss_kib": 4016,
+      "reader": "c-reference",
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "c-reference",
+        "goose"
+      ],
+      "files": 63,
+      "lookup_ns": 6413906,
+      "mib_s": 178.03014127562733,
+      "p50_ms": 0.008511,
+      "p95_ms": 0.216575,
+      "paired_run": 2,
+      "parse_ns": 63146,
+      "peak_rss_kib": 3712,
+      "reader": "goose",
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "goose",
+        "c-reference"
+      ],
+      "files": 63,
+      "lookup_ns": 5717680,
+      "mib_s": 199.70837670324218,
+      "p50_ms": 0.01499,
+      "p95_ms": 0.141838,
+      "paired_run": 3,
+      "parse_ns": 143330,
+      "peak_rss_kib": 3644,
+      "reader": "goose",
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "goose",
+        "c-reference"
+      ],
+      "files": 63,
+      "lookup_ns": 7606054,
+      "mib_s": 150.126,
+      "p50_ms": 0.017823,
+      "p95_ms": 1.60926,
+      "paired_run": 3,
+      "parse_ns": 109277,
+      "peak_rss_kib": 4472,
+      "reader": "c-reference",
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "c-reference",
+        "goose"
+      ],
+      "files": 63,
+      "lookup_ns": 6283293,
+      "mib_s": 181.731,
+      "p50_ms": 0.017393,
+      "p95_ms": 0.182576,
+      "paired_run": 4,
+      "parse_ns": 84087,
+      "peak_rss_kib": 4152,
+      "reader": "c-reference",
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "c-reference",
+        "goose"
+      ],
+      "files": 63,
+      "lookup_ns": 6417979,
+      "mib_s": 177.91715917247373,
+      "p50_ms": 0.016293,
+      "p95_ms": 0.1431,
+      "paired_run": 4,
+      "parse_ns": 102960,
+      "peak_rss_kib": 3644,
+      "reader": "goose",
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "goose",
+        "c-reference"
+      ],
+      "files": 63,
+      "lookup_ns": 7255204,
+      "mib_s": 157.38614535285208,
+      "p50_ms": 0.021468,
+      "p95_ms": 0.226699,
+      "paired_run": 5,
+      "parse_ns": 147380,
+      "peak_rss_kib": 3840,
+      "reader": "goose",
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 1197336,
+      "execution_order": [
+        "goose",
+        "c-reference"
+      ],
+      "files": 63,
+      "lookup_ns": 6804257,
+      "mib_s": 167.817,
+      "p50_ms": 0.020364,
+      "p95_ms": 0.266498,
+      "paired_run": 5,
+      "parse_ns": 87991,
+      "peak_rss_kib": 4216,
+      "reader": "c-reference",
+      "workload": "godot-real"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "goose",
+        "c-reference"
+      ],
+      "files": 579,
+      "lookup_ns": 103997571,
+      "mib_s": 1261.0089575198692,
+      "p50_ms": 0.009588,
+      "p95_ms": 0.011431,
+      "paired_run": 1,
+      "parse_ns": 710630,
+      "peak_rss_kib": 133948,
+      "reader": "goose",
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "goose",
+        "c-reference"
+      ],
+      "files": 579,
+      "lookup_ns": 95100675,
+      "mib_s": 1378.979,
+      "p50_ms": 0.008267,
+      "p95_ms": 0.009438,
+      "paired_run": 1,
+      "parse_ns": 689526,
+      "peak_rss_kib": 198468,
+      "reader": "c-reference",
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "c-reference",
+        "goose"
+      ],
+      "files": 579,
+      "lookup_ns": 92226301,
+      "mib_s": 1421.957,
+      "p50_ms": 0.008057,
+      "p95_ms": 0.008808,
+      "paired_run": 2,
+      "parse_ns": 178137,
+      "peak_rss_kib": 198600,
+      "reader": "c-reference",
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "c-reference",
+        "goose"
+      ],
+      "files": 579,
+      "lookup_ns": 95820775,
+      "mib_s": 1368.6162378806537,
+      "p50_ms": 0.009203,
+      "p95_ms": 0.015189,
+      "paired_run": 2,
+      "parse_ns": 196639,
+      "peak_rss_kib": 133948,
+      "reader": "goose",
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "goose",
+        "c-reference"
+      ],
+      "files": 579,
+      "lookup_ns": 101943465,
+      "mib_s": 1286.4176099106362,
+      "p50_ms": 0.009299,
+      "p95_ms": 0.011376,
+      "paired_run": 3,
+      "parse_ns": 764174,
+      "peak_rss_kib": 133888,
+      "reader": "goose",
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "goose",
+        "c-reference"
+      ],
+      "files": 579,
+      "lookup_ns": 96431344,
+      "mib_s": 1359.951,
+      "p50_ms": 0.008283,
+      "p95_ms": 0.009306,
+      "paired_run": 3,
+      "parse_ns": 212072,
+      "peak_rss_kib": 198404,
+      "reader": "c-reference",
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "c-reference",
+        "goose"
+      ],
+      "files": 579,
+      "lookup_ns": 93193272,
+      "mib_s": 1407.203,
+      "p50_ms": 0.008435,
+      "p95_ms": 0.009269,
+      "paired_run": 4,
+      "parse_ns": 152703,
+      "peak_rss_kib": 198532,
+      "reader": "c-reference",
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "c-reference",
+        "goose"
+      ],
+      "files": 579,
+      "lookup_ns": 101455975,
+      "mib_s": 1292.5987709576355,
+      "p50_ms": 0.00862,
+      "p95_ms": 0.00972,
+      "paired_run": 4,
+      "parse_ns": 183148,
+      "peak_rss_kib": 133868,
+      "reader": "goose",
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "goose",
+        "c-reference"
+      ],
+      "files": 579,
+      "lookup_ns": 108102538,
+      "mib_s": 1213.1247889046656,
+      "p50_ms": 0.009205,
+      "p95_ms": 0.010797,
+      "paired_run": 5,
+      "parse_ns": 779651,
+      "peak_rss_kib": 133888,
+      "reader": "goose",
+      "workload": "mixed"
+    },
+    {
+      "bytes": 137512216,
+      "execution_order": [
+        "goose",
+        "c-reference"
+      ],
+      "files": 579,
+      "lookup_ns": 99503869,
+      "mib_s": 1317.957,
+      "p50_ms": 0.008209,
+      "p95_ms": 0.009904,
+      "paired_run": 5,
+      "parse_ns": 220658,
+      "peak_rss_kib": 198648,
+      "reader": "c-reference",
+      "workload": "mixed"
+    }
+  ],
+  "paired_runs": 5,
+  "reader_limit_bytes": 33554432,
+  "reader_threads": 4,
+  "summaries": {
+    "godot-real": {
+      "c-reference": {
+        "lookup_ns": {
+          "max": 7772766,
+          "median": 6857736,
+          "min": 6283293
+        },
+        "mib_s": {
+          "max": 181.731,
+          "median": 166.508,
+          "min": 146.906
+        },
+        "p50_ms": {
+          "max": 0.020364,
+          "median": 0.017393,
+          "min": 0.009468
+        },
+        "p95_ms": {
+          "max": 1.60926,
+          "median": 0.249756,
+          "min": 0.182576
+        },
+        "parse_ns": {
+          "max": 109277,
+          "median": 101074,
+          "min": 84087
+        },
+        "peak_rss_kib": {
+          "max": 4472,
+          "median": 4200,
+          "min": 4016
+        }
+      },
+      "goose": {
+        "lookup_ns": {
+          "max": 7255204,
+          "median": 6413906,
+          "min": 5188689
+        },
+        "mib_s": {
+          "max": 220.0688056864834,
+          "median": 178.03014127562733,
+          "min": 157.38614535285208
+        },
+        "p50_ms": {
+          "max": 0.021468,
+          "median": 0.016293,
+          "min": 0.008511
+        },
+        "p95_ms": {
+          "max": 0.226699,
+          "median": 0.18359,
+          "min": 0.141838
+        },
+        "parse_ns": {
+          "max": 164954,
+          "median": 143330,
+          "min": 63146
+        },
+        "peak_rss_kib": {
+          "max": 3888,
+          "median": 3712,
+          "min": 3644
+        }
+      },
+      "paired_throughput_ratio_goose_over_c": {
+        "max": 1.330271749751823,
+        "median": 1.2118643300860912,
+        "min": 0.9378438737008293,
+        "runs": {
+          "1": 1.3216710649727543,
+          "2": 1.2118643300860912,
+          "3": 1.330271749751823,
+          "4": 0.9790138125717337,
+          "5": 0.9378438737008293
+        }
+      }
+    },
+    "mixed": {
+      "c-reference": {
+        "lookup_ns": {
+          "max": 99503869,
+          "median": 95100675,
+          "min": 92226301
+        },
+        "mib_s": {
+          "max": 1421.957,
+          "median": 1378.979,
+          "min": 1317.957
+        },
+        "p50_ms": {
+          "max": 0.008435,
+          "median": 0.008267,
+          "min": 0.008057
+        },
+        "p95_ms": {
+          "max": 0.009904,
+          "median": 0.009306,
+          "min": 0.008808
+        },
+        "parse_ns": {
+          "max": 689526,
+          "median": 212072,
+          "min": 152703
+        },
+        "peak_rss_kib": {
+          "max": 198648,
+          "median": 198532,
+          "min": 198404
+        }
+      },
+      "goose": {
+        "lookup_ns": {
+          "max": 108102538,
+          "median": 101943465,
+          "min": 95820775
+        },
+        "mib_s": {
+          "max": 1368.6162378806537,
+          "median": 1286.4176099106362,
+          "min": 1213.1247889046656
+        },
+        "p50_ms": {
+          "max": 0.009588,
+          "median": 0.009205,
+          "min": 0.00862
+        },
+        "p95_ms": {
+          "max": 0.015189,
+          "median": 0.011376,
+          "min": 0.00972
+        },
+        "parse_ns": {
+          "max": 779651,
+          "median": 710630,
+          "min": 183148
+        },
+        "peak_rss_kib": {
+          "max": 133948,
+          "median": 133888,
+          "min": 133868
+        }
+      },
+      "paired_throughput_ratio_goose_over_c": {
+        "max": 0.9624877811921553,
+        "median": 0.9204585497893069,
+        "min": 0.9144511682337941,
+        "runs": {
+          "1": 0.9144511682337941,
+          "2": 0.9624877811921553,
+          "3": 0.9459293826841086,
+          "4": 0.9185588511093534,
+          "5": 0.9204585497893069
+        }
+      }
+    }
+  },
+  "workload_metadata": {
+    "godot-real": {
+      "archive_bytes": 1118384,
+      "archive_sha256": "bc62d2c34dc6437b50f4f87940b40b402873c441cb856c75ef8e756e0db689ad",
+      "files": 63,
+      "source_bytes": 1197336
+    },
+    "mixed": {
+      "archive_bytes": 70375233,
+      "archive_sha256": "89c9a93357468d3c1e9035abb302668e95d66b11fa09d2e417dc645328ec381a",
+      "files": 579,
+      "source_bytes": 137512216
+    }
+  },
+  "zstd_version_number": 10507
+}

@@ -1,0 +1,4 @@
+c_sources = ["../h3-native-streaming-boundary/h3_backend.c"];
+c_include = ["../h3-native-streaming-boundary"];
+c_libs = ["zstd"];
+output = "h1_driver";

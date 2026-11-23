@@ -1,0 +1,100 @@
+project: gpack
+question: >-
+  What build-time archive and runtime lookup design best serves Goose game/runtime
+  assets with random access, safe paths, reproducible builds, and a maintainable
+  cross-platform implementation?
+status: implementation_in_progress
+updated: 2026-11-24
+scope:
+  - Review the existing docs/product/proposal.md proposal against primary-source prior art.
+  - Inspect the bundled Goose language docs, stdlib, and sample programs.
+  - Identify architecture constraints, risks, and testable next hypotheses.
+current_understanding: >-
+  Issues 17–22 have implemented the v1 product and measured runtime
+  performance on Linux. H1, H2, and both H3 experiments are complete; indexed
+  H3 runtime lookup passed correctness but missed its throughput gate. Issue 22's product v1 benchmark
+  later met the median throughput gate on the measured Linux build after a
+  byte-table CRC update and a bounded one-shot decoder for small frames. H3 supports a native streaming
+  pack boundary on large controls, while H1 supports selective staging for
+  large high-entropy payloads at higher worker counts. Neither result selects
+  a general packing concurrency default.
+  V1 is a build-time CLI plus runtime API for complete asset reads by normalized
+  path, using a separately distributable read-only archive with concurrent
+  readers; the application replaces whole archives outside gpack. The user
+  selected a new versioned format, Goose desktop platforms, regular-file inputs,
+  safe normalized paths, omitted source timestamps/permissions, duplicate-path
+  rejection, source-mutation failure, pinned-build byte reproducibility, and
+  accidental corruption detection without authenticity claims. V1 scope is
+  pack/list/verify plus complete path reads, one pinned Zstandard codec with
+  raw fallback, CRC32 integrity, no deduplication, and a configurable 32 MiB
+  per-asset default with four concurrent reads. Primary-source
+  research shows random access alone does not justify a custom format. Goose
+  v2026.4 makes native streaming I/O a candidate for bounded-memory large-file
+  handling; H3 measured material pack-side gains, while runtime positional
+  lookup is functional but missed the preregistered throughput gap. The verified benchmark
+  corpus is one MIT Godot 4.7 demo each from 2D, 3D, and audio; the 3D project's
+  CC0 checker notice is retained. The repository plan keeps format ownership
+  in Goose and limits native code to I/O/Zstandard; it pins Goose v2026.4 and
+  targets native Linux/GCC, macOS/Apple Clang, and Windows/MSVC builds.
+literature: docs/research/prior-art/survey.md
+wayfinder:
+  map: .scratch/gpack-foundation/map.md
+  evidence:
+    - docs/research/wayfinder-format-access.md
+    - docs/research/wayfinder-goose-boundary.md
+    - docs/research/wayfinder-corpus-inventory.md
+    - docs/research/wayfinder-codec-options.md
+    - docs/research/wayfinder-corpus-sources.md
+experiments:
+  completed:
+    - hypothesis: product-v1-runtime-throughput
+      outcome: >-
+        Five paired runs on byte-identical product v1 archives passed source
+        CRC and malformed-input checks. Goose median throughput was 6.9%
+        above C on Godot-real and 6.7% below C on mixed, within the 10% gate.
+        Four-reader/32 MiB defaults were exercised; measurements are scoped to
+        one Linux host and do not validate the production CMake or other platforms.
+      results: docs/research/experiments/v1-runtime-throughput/results.md
+    - hypothesis: H3-runtime
+      outcome: >-
+        Goose/native and C readers passed source-byte and malformed-input
+        checks. Goose median throughput was 27.4% below C on the real corpus
+        and 12.1% below C on mixed, missing the maximum 10% gap. Queue/allocation
+        overhead and a practical per-reader memory budget need follow-up.
+      results: docs/research/experiments/h3-runtime-lookup/results.md
+    - hypothesis: H2
+      outcome: >-
+        Large high-entropy and mixed controls met the chunking gain/cost rule;
+        the full hypothesis remains inconclusive for a default because the real
+        Godot corpus showed no material granularity advantage and repetitive
+        large inputs compressed much worse when split into frames.
+      results: docs/research/experiments/h2-frame-granularity/results.md
+    - hypothesis: H3-pack
+      outcome: >-
+        The native Goose pack path met the gain/cost rule on all large controls:
+        peak RSS fell 92.2–95.6% versus Goose whole-file processing and median
+        throughput was not more than 10% below the C reference. Indexed H3
+        runtime correctness passed, but its throughput gate failed.
+      results: docs/research/experiments/h3-native-streaming-boundary/results.md
+    - hypothesis: H1
+      outcome: >-
+        Metadata staging met the predeclared gain/cost rule in five large
+        high-entropy configurations, especially at 16 workers, but did not
+        qualify on the real corpus or large compressible controls. The evidence
+        supports selective staging rather than a general default.
+      results: docs/research/experiments/h1-queue-payload-cost/results.md
+  next:
+    - issue: .scratch/gpack-foundation/issues/23-platform-release-gate.md
+      action: Validate the native build and correctness matrix on Linux, macOS, and Windows.
+evaluation:
+  baseline: Product v1 runtime performance measured on Linux; cross-platform validation is in progress.
+  metrics:
+    - archive correctness and deterministic byte equality
+    - pack and full-asset read throughput and latency
+    - peak resident memory
+    - compression ratio
+    - full-asset lookup throughput and latency, including concurrent reads
+    - malformed archive rejection
+  status: Issues 17–22 are implemented; issue 23's production CMake build and fixtures pass on Linux. Native macOS/Windows CI and cross-platform golden-byte identity remain unverified.
+next_action: >-
+  Start issue 23: validate the pinned native build, format correctness, and release artifacts across supported platforms.

@@ -1,0 +1,2 @@
+cmake_target = "gpack_native";
+c_headers = ["native/gpack_native.h"];

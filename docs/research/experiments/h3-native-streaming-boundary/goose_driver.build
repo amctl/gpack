@@ -1,0 +1,3 @@
+c_sources = ["h3_backend.c"];
+c_libs = ["zstd"];
+output = "goose_driver";
