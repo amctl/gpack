@@ -1,7 +1,7 @@
 # Validate cross-platform archives and release artifacts
 
 Type: task
-Status: open
+Status: claimed
 Blocked by: 17, 20, 21, 22
 
 ## Goal
