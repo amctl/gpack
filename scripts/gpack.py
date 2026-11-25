@@ -193,7 +193,65 @@ def ci() -> None:
     test()
 
 
-COMMANDS = {"format": format_sources, "check": check, "build": build, "test": test, "ci": ci}
+def package() -> None:
+    import hashlib
+    import platform
+    import tarfile
+    import zipfile
+
+    verify_notices()
+    exe_name = "gpack.exe" if os.name == "nt" else "gpack"
+    gpack_exe = BUILD / exe_name
+    if not gpack_exe.is_file():
+        raise RuntimeError(f"missing built CLI binary: {gpack_exe} (run 'build' or 'ci' first)")
+
+    ver_out = subprocess.run([str(gpack_exe), "--version"], capture_output=True, text=True, check=True).stdout.strip()
+    if not ver_out.startswith("gpack "):
+        raise RuntimeError(f"unexpected --version output: {ver_out!r}")
+    cli_version = ver_out.split()[1]
+
+    tag = os.environ.get("GPACK_RELEASE_TAG", f"v{cli_version}")
+    expected_version = tag.removeprefix("v").split("-", 1)[0]
+    if cli_version != expected_version:
+        raise RuntimeError(f"release tag {tag!r} does not match CLI version {cli_version!r}")
+
+    os_label = "windows" if os.name == "nt" else ("macos" if sys.platform == "darwin" else "linux")
+    machine = platform.machine().lower()
+    arch_label = {"x86_64": "x64", "amd64": "x64", "arm64": "arm64", "aarch64": "arm64"}.get(machine, machine)
+    target = os.environ.get("GPACK_RELEASE_TARGET", f"{os_label}-{arch_label}")
+
+    bundle_name = f"gpack-{tag}-{target}"
+    dist_dir = BUILD / "dist"
+    stage_dir = dist_dir / bundle_name
+    if stage_dir.exists():
+        shutil.rmtree(stage_dir)
+    notices_dst = stage_dir / "THIRD_PARTY_NOTICES"
+    notices_dst.mkdir(parents=True)
+    shutil.copy2(gpack_exe, stage_dir / exe_name)
+    shutil.copyfile(ROOT / "LICENSE", stage_dir / "LICENSE")
+    shutil.copyfile(BUILD / "THIRD_PARTY_NOTICES" / "ZSTD-LICENSE", notices_dst / "ZSTD-LICENSE")
+    shutil.copyfile(BUILD / "THIRD_PARTY_NOTICES" / "ZSTD-COPYING", notices_dst / "ZSTD-COPYING")
+
+    if os.name == "nt":
+        archive_path = dist_dir / f"{bundle_name}.zip"
+        with zipfile.ZipFile(archive_path, "w", compression=zipfile.ZIP_DEFLATED) as zf:
+            for item in sorted(stage_dir.rglob("*")):
+                if item.is_file():
+                    zf.write(item, f"{bundle_name}/{item.relative_to(stage_dir).as_posix()}")
+    else:
+        archive_path = dist_dir / f"{bundle_name}.tar.gz"
+        with tarfile.open(archive_path, "w:gz") as tf:
+            for item in sorted(stage_dir.rglob("*")):
+                if item.is_file():
+                    tf.add(item, arcname=f"{bundle_name}/{item.relative_to(stage_dir).as_posix()}")
+
+    digest = hashlib.sha256(archive_path.read_bytes()).hexdigest()
+    (dist_dir / f"{archive_path.name}.sha256").write_text(f"{digest}  {archive_path.name}\n", encoding="utf-8")
+    shutil.rmtree(stage_dir)
+    print(f"packaged {archive_path} (sha256={digest})")
+
+
+COMMANDS = {"format": format_sources, "check": check, "build": build, "test": test, "ci": ci, "package": package}
 
 if __name__ == "__main__":
     if len(sys.argv) != 2 or sys.argv[1] not in COMMANDS:

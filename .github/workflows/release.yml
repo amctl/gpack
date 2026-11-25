@@ -1,0 +1,84 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v[0-9]+.[0-9]+.[0-9]+"
+      - "v[0-9]+.[0-9]+.[0-9]+-*"
+
+permissions:
+  contents: write
+
+jobs:
+  build:
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - os: ubuntu-24.04
+            target: linux-x64
+          - os: macos-15
+            target: macos-arm64
+          - os: windows-2022
+            target: windows-x64
+    runs-on: ${{ matrix.os }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
+      - name: Install pinned Goose v2026.4
+        shell: bash
+        run: |
+          git clone --depth 1 --branch v2026.4 https://github.com/aardappel/goose.git goose-src
+          cmake -S goose-src -B goose-src/build -DCMAKE_BUILD_TYPE=Release
+          cmake --build goose-src/build --config Release --parallel
+      - name: Run CI checks and package release bundle
+        shell: bash
+        env:
+          GOOSE: ${{ runner.os == 'Windows' && 'goose-src/build/Release/goose.exe' || 'goose-src/build/goose' }}
+          GPACK_RELEASE_TAG: ${{ github.ref_name }}
+          GPACK_RELEASE_TARGET: ${{ matrix.target }}
+        run: |
+          python scripts/gpack.py ci
+          python scripts/gpack.py package
+      - name: Print Goose CMake logs on failure
+        if: failure()
+        shell: bash
+        run: |
+          find "${USERPROFILE:-$HOME}/.goose" -name "cmake-build.log" -exec head -n 200 {} + 2>/dev/null || true
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-${{ matrix.target }}
+          path: |
+            build/dist/*.tar.gz
+            build/dist/*.zip
+            build/dist/*.sha256
+
+  release:
+    needs: build
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          path: release-assets
+          merge-multiple: true
+      - name: Generate combined checksums
+        shell: bash
+        run: |
+          cd release-assets
+          cat *.sha256 > SHA256SUMS.txt
+          cat SHA256SUMS.txt
+      - name: Create draft GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          draft: true
+          prerelease: ${{ contains(github.ref_name, '-') }}
+          generate_release_notes: true
+          files: |
+            release-assets/*.tar.gz
+            release-assets/*.zip
+            release-assets/*.sha256
+            release-assets/SHA256SUMS.txt

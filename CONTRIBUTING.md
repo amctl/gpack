@@ -28,6 +28,9 @@ python scripts/gpack.py test
 
 # Run the complete CI pipeline (check + build + test)
 python scripts/gpack.py ci
+
+# Package a release bundle + SHA-256 checksum into build/dist/
+python scripts/gpack.py package
 ```
 
 If using a local compiler binary or custom Goose home directory:

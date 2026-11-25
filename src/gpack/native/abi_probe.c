@@ -1,4 +1,4 @@
-#if !defined(_WIN32)
+#if !defined(_WIN32) && !defined(__APPLE__)
 #define _POSIX_C_SOURCE 200809L
 #endif
 #define GPACK_NATIVE_IMPL 1
