@@ -1,7 +1,8 @@
 # gpack v1 product specification
 
-Status: implementation in progress; build foundation, v1 format primitives,
-and the raw pack/read slice are implemented.
+Status: v1 implemented and verified on Linux (correctness, golden archive,
+runtime throughput, and CLI checks); native macOS and Windows CI validation
+remains deferred in [issue 23](../../.scratch/gpack-foundation/issues/23-platform-release-gate.md).
 
 ## Product contract
 
@@ -18,9 +19,11 @@ the archive or provide partial archive updates.
 ## User-facing surface
 
 ```text
-gpack pack INPUT_DIR OUTPUT.gpk
-gpack list ARCHIVE.gpk
-gpack verify ARCHIVE.gpk
+gpack pack [-v|-q] [--json] INPUT_DIR OUTPUT.gpk
+gpack list [-l|--long] [--json] ARCHIVE.gpk
+gpack info [--json] ARCHIVE.gpk
+gpack verify [-m|--max-size SIZE] [-j|--jobs N] [-v|-q] [--json] ARCHIVE.gpk
+gpack read [-m|--max-size SIZE] ARCHIVE.gpk ASSET_PATH
 ```
 
 - `pack` walks the input tree recursively, rejects symlinks and other
@@ -28,9 +31,15 @@ gpack verify ARCHIVE.gpk
   It fails if it detects source mutation during the build. The caller must
   keep the input tree stable while packing.
 - `list` validates the header and complete index, then prints canonical paths
-  and stored/uncompressed sizes. It does not decode payloads.
+  and stored/uncompressed sizes (or `--long`/`--json` metadata). It does not
+  decode payloads.
+- `info` validates metadata and prints archive header, codec breakdown, and
+  total sizes without decoding payloads.
 - `verify` validates metadata and reads every asset, checking the stored
-  content CRC32 and any Zstandard frame checksum.
+  content CRC32 and any Zstandard frame checksum (defaulting to 4 concurrent
+  workers and a 32 MiB per-asset limit, configurable via `--jobs`/`--max-size`).
+- `read` validates metadata and writes one verified asset by canonical path to
+  `stdout`, without extracting paths onto a host filesystem.
 - The runtime library exposes archive open/close and complete-asset read by
   path. Reads use positional I/O and may run concurrently on one open archive.
 
@@ -89,11 +98,11 @@ mismatches, and Zstandard data that is not exactly one complete frame.
 
 ## Supported builds
 
-| Target | Compiler | Codec |
-|---|---|---|
-| Linux | GCC | Static, pinned Zstandard 1.5.7 |
-| macOS | Apple Clang | Static, pinned Zstandard 1.5.7 |
-| Windows | MSVC | Static, pinned Zstandard 1.5.7 |
+| Target | Compiler | Codec | Status |
+|---|---|---|---|
+| Linux | GCC | Static, pinned Zstandard 1.5.7 | Verified |
+| macOS | Apple Clang | Static, pinned Zstandard 1.5.7 | WIP (pending hosted CI) |
+| Windows | MSVC | Static, pinned Zstandard 1.5.7 | WIP (pending hosted CI) |
 
 Builds run natively on each target. The Goose package owns archive policy,
 parsing, path indexing, and orchestration. Its native C target owns file

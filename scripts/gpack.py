@@ -86,6 +86,96 @@ def verify_static_zstd() -> None:
             raise RuntimeError(f"unexpected dynamic Zstandard dependency in {executable}: {result.stdout} {result.stderr}")
 
 
+def test_cli() -> None:
+    import json
+
+    gpack_exe = BUILD / ("gpack.exe" if os.name == "nt" else "gpack")
+    cli_dir = BUILD / "cli-test"
+    if cli_dir.exists():
+        shutil.rmtree(cli_dir)
+    input_dir = cli_dir / "input"
+    (input_dir / "sub").mkdir(parents=True)
+    alpha_bytes = b"hello cli\n" * 64
+    (input_dir / "alpha.txt").write_bytes(alpha_bytes)
+    (input_dir / "sub" / "empty.bin").write_bytes(b"")
+    archive = cli_dir / "out.gpk"
+
+    help_res = subprocess.run([str(gpack_exe), "--help"], capture_output=True, text=True, check=True)
+    if "Commands:" not in help_res.stdout or "verify" not in help_res.stdout:
+        raise RuntimeError(f"unexpected --help output: {help_res.stdout!r}")
+    subprocess.run([str(gpack_exe), "help", "verify"], capture_output=True, text=True, check=True)
+    ver_res = subprocess.run([str(gpack_exe), "--version"], capture_output=True, text=True, check=True)
+    if "gpack 1.0.0" not in ver_res.stdout or "zstd 1.5.7" not in ver_res.stdout:
+        raise RuntimeError(f"unexpected --version output: {ver_res.stdout!r}")
+
+    pack_res = subprocess.run([str(gpack_exe), "pack", "--json", str(input_dir), str(archive)], capture_output=True, text=True, check=True)
+    pack_json = json.loads(pack_res.stdout)
+    if not pack_json["ok"] or pack_json["entry_count"] != 2 or pack_json["empty_count"] != 1:
+        raise RuntimeError(f"unexpected pack --json output: {pack_res.stdout!r}")
+
+    listed = subprocess.run([str(gpack_exe), "list", str(archive)], capture_output=True, text=True, check=True)
+    lines = listed.stdout.splitlines()
+    if len(lines) != 2 or not lines[0].startswith("alpha.txt ") or lines[1] != "sub/empty.bin 0 0":
+        raise RuntimeError(f"unexpected gpack list output: {listed.stdout!r}")
+
+    list_long = subprocess.run([str(gpack_exe), "list", "--long", str(archive)], capture_output=True, text=True, check=True)
+    if "CODEC" not in list_long.stdout or "alpha.txt" not in list_long.stdout:
+        raise RuntimeError(f"unexpected list --long output: {list_long.stdout!r}")
+
+    list_json_res = subprocess.run([str(gpack_exe), "list", "--json", str(archive)], capture_output=True, text=True, check=True)
+    list_json = json.loads(list_json_res.stdout)
+    if list_json["entry_count"] != 2 or len(list_json["entries"]) != 2:
+        raise RuntimeError(f"unexpected list --json output: {list_json_res.stdout!r}")
+
+    info_res = subprocess.run([str(gpack_exe), "info", "--json", str(archive)], capture_output=True, text=True, check=True)
+    info_json = json.loads(info_res.stdout)
+    if info_json["format"] != "1.0" or info_json["entry_count"] != 2:
+        raise RuntimeError(f"unexpected info --json output: {info_res.stdout!r}")
+    subprocess.run([str(gpack_exe), "info", str(archive)], capture_output=True, text=True, check=True)
+
+    run([str(gpack_exe), "verify", str(archive)])
+    verify_res = subprocess.run([str(gpack_exe), "verify", "--jobs=2", "--max-size=1M", "--json", str(archive)], capture_output=True, text=True, check=True)
+    verify_json = json.loads(verify_res.stdout)
+    if not verify_json["ok"] or verify_json["verified_entries"] != 2:
+        raise RuntimeError(f"unexpected verify --json output: {verify_res.stdout!r}")
+
+    read_res = subprocess.run([str(gpack_exe), "read", str(archive), "alpha.txt"], capture_output=True, check=True)
+    if read_res.stdout != alpha_bytes:
+        raise RuntimeError("gpack read returned mismatched bytes")
+    read_missing = subprocess.run([str(gpack_exe), "read", str(archive), "missing.txt"], capture_output=True, text=True, check=False)
+    if read_missing.returncode != 1:
+        raise RuntimeError(f"expected read missing failure (1), got {read_missing.returncode}")
+    read_cap = subprocess.run([str(gpack_exe), "read", "--max-size", "4", str(archive), "alpha.txt"], capture_output=True, text=True, check=False)
+    if read_cap.returncode != 1:
+        raise RuntimeError(f"expected read max-size failure (1), got {read_cap.returncode}")
+
+    corrupt = cli_dir / "corrupt.gpk"
+    data = bytearray(archive.read_bytes())
+    data[64] ^= 0x01
+    corrupt.write_bytes(data)
+    bad_verify = subprocess.run([str(gpack_exe), "verify", str(corrupt)], capture_output=True, text=True, check=False)
+    if bad_verify.returncode != 1 or "alpha.txt" not in bad_verify.stderr:
+        raise RuntimeError(f"expected verify failure (1) naming alpha.txt, got rc={bad_verify.returncode} stderr={bad_verify.stderr!r}")
+
+    bad_usage = subprocess.run([str(gpack_exe)], capture_output=True, text=True, check=False)
+    if bad_usage.returncode != 2:
+        raise RuntimeError(f"expected usage error (2), got {bad_usage.returncode}")
+    bad_flag = subprocess.run([str(gpack_exe), "verify", "--nope", str(archive)], capture_output=True, text=True, check=False)
+    if bad_flag.returncode != 2:
+        raise RuntimeError(f"expected unknown-flag error (2), got {bad_flag.returncode}")
+
+    if os.name != "nt":
+        sym_dir = cli_dir / "sym-input"
+        sym_dir.mkdir()
+        (sym_dir / "real.txt").write_bytes(b"ok")
+        os.symlink(sym_dir / "real.txt", sym_dir / "link.txt")
+        sym_out = cli_dir / "sym.gpk"
+        bad_pack = subprocess.run([str(gpack_exe), "pack", str(sym_dir), str(sym_out)], capture_output=True, text=True, check=False)
+        if bad_pack.returncode != 1 or sym_out.exists():
+            raise RuntimeError(f"expected symlink pack rejection, got rc={bad_pack.returncode}")
+    shutil.rmtree(cli_dir)
+
+
 def test() -> None:
     verify_notices()
     exe = BUILD / ("native_abi.exe" if os.name == "nt" else "native_abi")
@@ -94,6 +184,7 @@ def test() -> None:
     run([str(format_exe)])
     pack_exe = BUILD / ("pack_read.exe" if os.name == "nt" else "pack_read")
     run([str(pack_exe)])
+    test_cli()
 
 
 def ci() -> None:

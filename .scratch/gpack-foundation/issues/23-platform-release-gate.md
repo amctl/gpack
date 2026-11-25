@@ -45,3 +45,8 @@ procedure.
   API from this network. Native hosted-runner results therefore cannot be
   inspected or triggered from this environment.
 - Native macOS and Windows validation is deferred by the user for later.
+- Hardened Windows `OVERLAPPED` positional I/O with a per-call event handle for
+  concurrent reads, retried POSIX `EINTR`, fixed multi-chunk Zstandard fallback
+  handling for >1 MiB inputs, and added streaming Zstandard decode, empty
+  archive, path-edge, and CLI `pack`/`list`/`verify`/symlink-rejection tests to
+  `scripts/gpack.py ci`.

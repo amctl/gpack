@@ -129,6 +129,15 @@ fn main() {
         noise.push(random_state as u8);
     }
     assert(write_file("build/pack-read-input/incompressible", noise));
+    var stream_data: u8[>..] = [];
+    for _ in 1310720 {
+        random_state = random_state ^ (random_state << 13);
+        random_state = random_state ^ (random_state >> 17);
+        random_state = random_state ^ (random_state << 5);
+        stream_data.push(random_state as u8);
+    }
+    for _ in 524288 { stream_data.push(0x5a); }
+    assert(write_file("build/pack-read-input/stream_zstd", stream_data));
 
     let archive_path = "build/pack-read.gpk";
     let second_path = "build/pack-read-second.gpk";
@@ -165,10 +174,14 @@ fn main() {
     assert(reader::read(archive, "nested/small", bytes) && bytes == "hello gpack");
     assert(reader::read(archive, "boundary", bytes) && bytes == boundary);
     assert(reader::read(archive, "incompressible", bytes) && bytes == noise);
+    assert(reader::read(archive, "stream_zstd", bytes) && bytes == stream_data);
     let compressed_index = reader::find(archive, "boundary");
     let raw_index = reader::find(archive, "incompressible");
+    let stream_index = reader::find(archive, "stream_zstd");
     assert(archive.entries[compressed_index].codec == format::ZSTD);
     assert(archive.entries[raw_index].codec == format::RAW);
+    assert(archive.entries[stream_index].codec == format::ZSTD);
+    assert(archive.entries[stream_index].stored_size > reader::SMALL_FRAME_ONE_SHOT_MAX);
     assert(!reader::read(archive, "missing", bytes));
     let r0, ok0 = reader::request(archive, "parallel-0", 0);
     let r1, ok1 = reader::request(archive, "parallel-1", 1);
@@ -255,4 +268,48 @@ fn main() {
         assert(preserved == "preserve-existing-archive");
         assert(!has_gpack_temporary("build"));
     }
+
+    assert(make_dir("build/pack-read-empty-input"));
+    let empty_archive_path = "build/pack-read-empty.gpk";
+    assert(pack::pack_directory("build/pack-read-empty-input/", empty_archive_path));
+    var empty_archive = reader::Archive { .. };
+    assert(reader::open(empty_archive_path, empty_archive));
+    assert(empty_archive.entries.len == 0);
+    assert(reader::count(empty_archive) == 0);
+    assert(!reader::contains(empty_archive, "missing"));
+    let _, missing_entry_ok = reader::entry_at(empty_archive, 0);
+    assert(!missing_entry_ok);
+    reader::close(empty_archive);
+    assert(reader::list(empty_archive_path));
+    assert(reader::verify(empty_archive_path));
+
+    assert(gpack::zstd_version() == 10507);
+    assert(gpack::FORMAT_MAJOR == 1 && gpack::FORMAT_MINOR == 0);
+
+    var summary = pack::PackSummary { 0, 0, 0, 0, 0, 0, 0 };
+    var pack_err: u8[>..] = [];
+    let detailed_path = "build/pack-read-detailed.gpk";
+    assert(pack::pack_directory_detailed(root, detailed_path, summary, pack_err));
+    assert(pack_err.len == 0 && summary.entry_count == 9);
+    assert(summary.empty_count == 1 && summary.zstd_count >= 2 && summary.raw_count >= 1);
+
+    var detailed_archive = reader::Archive { .. };
+    var open_err: u8[>..] = [];
+    assert(reader::open_detailed(detailed_path, detailed_archive, reader::DEFAULT_MAX_ASSET_SIZE, open_err));
+    assert(reader::count(detailed_archive) == 9);
+    assert(reader::contains(detailed_archive, "nested/small"));
+    let first_entry, first_ok = reader::entry_at(detailed_archive, 0);
+    assert(first_ok && first_entry.uncompressed_size > 0);
+    let archive_info = reader::info(detailed_archive);
+    assert(archive_info.entry_count == 9 && archive_info.file_size == summary.archive_bytes);
+    reader::close(detailed_archive);
+
+    var verified_count: u64     = 0;
+    var verified_bytes: u64     = 0;
+    var failed_path:    u8[>..] = [];
+    var verify_err:     u8[>..] = [];
+    assert(reader::verify_detailed(detailed_path, 4, reader::DEFAULT_MAX_ASSET_SIZE, verified_count, verified_bytes, failed_path, verify_err));
+    assert(verified_count == 9 && verified_bytes == summary.uncompressed_bytes);
+    assert(!reader::verify_detailed(compressed_damage_path, 4, reader::DEFAULT_MAX_ASSET_SIZE, verified_count, verified_bytes, failed_path, verify_err));
+    assert(failed_path == "boundary");
 }

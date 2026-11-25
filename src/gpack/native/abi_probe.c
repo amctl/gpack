@@ -112,14 +112,18 @@ uint64_t gpack_file_stamp(uint64_t handle) {
 
 static int64_t gpack_transfer(uint64_t handle, uint64_t offset, gpack_bytes bytes, int write_mode) {
     if (bytes.len < 0 || offset > INT64_MAX) return -1;
+    HANDLE ev = CreateEventW(NULL, TRUE, FALSE, NULL);
+    if (!ev) return -1;
     int64_t done = 0;
     while (done < bytes.len) {
         uint64_t remaining = (uint64_t)(bytes.len - done);
         DWORD amount = remaining > MAXDWORD ? MAXDWORD : (DWORD)remaining;
         OVERLAPPED ov;
         memset(&ov, 0, sizeof(ov));
+        ResetEvent(ev);
+        ov.hEvent = ev;
         uint64_t position = offset + (uint64_t)done;
-        if (position > INT64_MAX) return -1;
+        if (position > INT64_MAX) { CloseHandle(ev); return -1; }
         ov.Offset = (DWORD)position;
         ov.OffsetHigh = (DWORD)(position >> 32);
         DWORD transferred = 0;
@@ -128,11 +132,12 @@ static int64_t gpack_transfer(uint64_t handle, uint64_t offset, gpack_bytes byte
             : ReadFile(gpack_handle(handle), bytes.data + (size_t)done, amount, &transferred, &ov);
         if (!ok && GetLastError() == ERROR_IO_PENDING)
             ok = GetOverlappedResult(gpack_handle(handle), &ov, &transferred, TRUE);
-        if (!ok) return done == 0 ? -1 : done;
+        if (!ok) { CloseHandle(ev); return done == 0 ? -1 : done; }
         if (transferred == 0) break;
         done += transferred;
         if (!write_mode && transferred < amount) break;
     }
+    CloseHandle(ev);
     return done;
 }
 
@@ -142,6 +147,7 @@ int32_t gpack_file_flush(uint64_t h) { return FlushFileBuffers(gpack_handle(h)) 
 void gpack_file_close(uint64_t h) { if (h) CloseHandle(gpack_handle(h)); }
 
 #else
+#include <errno.h>
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <sys/types.h>
@@ -268,7 +274,10 @@ static int64_t gpack_transfer(uint64_t handle, uint64_t offset, gpack_bytes byte
         ssize_t n = write_mode
             ? pwrite(fd, bytes.data + done, (size_t)(bytes.len - done), (off_t)position)
             : pread(fd, bytes.data + done, (size_t)(bytes.len - done), (off_t)position);
-        if (n < 0) return done == 0 ? -1 : done;
+        if (n < 0) {
+            if (errno == EINTR) continue;
+            return done == 0 ? -1 : done;
+        }
         if (n == 0) break;
         done += n;
         if (!write_mode && n < bytes.len - (done - n)) break;

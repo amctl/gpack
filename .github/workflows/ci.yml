@@ -12,11 +12,16 @@ jobs:
         include:
           - os: ubuntu-24.04
             cc: gcc
+            wip: false
+          # macOS and Windows native builds are WIP until verified on hosted runners.
           - os: macos-14
             cc: clang
+            wip: true
           - os: windows-2022
             cc: cl
+            wip: true
     runs-on: ${{ matrix.os }}
+    continue-on-error: ${{ matrix.wip }}
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-python@v5

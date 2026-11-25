@@ -1,8 +1,10 @@
 # gpack v1 architecture
 
 This document maps the accepted design in the [product specification](spec.md)
-onto implementation modules. The package/build foundation, v1 format
-primitives, raw packing, and runtime reads are implemented.
+onto implementation modules. The v1 package/build foundation, format
+primitives, packing, Zstandard/raw runtime reads, and `list`/`verify` CLI are
+implemented and verified on Linux; cross-platform CI remains open in
+[issue 23](../../.scratch/gpack-foundation/issues/23-platform-release-gate.md).
 The native seam follows the measured [Goose boundary findings](../research/wayfinder-goose-boundary.md)
 and the H3 [pack](../research/experiments/h3-native-streaming-boundary/results.md)
 and [runtime](../research/experiments/h3-runtime-lookup/results.md) results.
@@ -88,13 +90,10 @@ src/gpack/
   gpack.build
   CMakeLists.txt
   format.goose
-  paths.goose
   pack.goose
   reader.goose
-  verify.goose
   native/gpack_native.h
-  native/io.c
-  native/codec.c
+  native/abi_probe.c
 third_party/zstd-1.5.7/
 tests/
   *.goose

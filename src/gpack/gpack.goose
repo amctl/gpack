@@ -1,7 +1,15 @@
 namespace gpack;
 
+let VERSION:      const u8[:] = "1.0.0";
+let FORMAT_MAJOR: u16         = 1;
+let FORMAT_MINOR: u16         = 0;
+
 extern fn gpack_native_abi_probe(value: u64) -> u64 = "gpack_native_abi_probe";
 extern fn gpack_native_zstd_version() -> u32 = "gpack_native_zstd_version";
+
+fn zstd_version() -> u32 {
+    return gpack_native_zstd_version();
+}
 extern fn native_file_open_read(path: const u8[:]) -> u64 = "gpack_file_open_read";
 extern fn native_file_open_write(path: const u8[:]) -> u64 = "gpack_file_open_write";
 extern fn native_file_open_exclusive(path: const u8[:]) -> u64 = "gpack_file_open_exclusive";

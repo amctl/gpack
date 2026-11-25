@@ -19,11 +19,29 @@ fn assert_golden(path: const u8[:], bytes: const u8[:]) {
 fn main() {
     assert(format::crc32("123456789") == 0xcbf43926);
     assert(format::valid_path("textures/player.png"));
+    assert(!format::valid_path(""));
+    assert(!format::valid_path("."));
+    assert(!format::valid_path(".."));
+    assert(!format::valid_path("a/./b"));
     assert(!format::valid_path("../secret"));
+    assert(!format::valid_path("a/../b"));
+    assert(!format::valid_path("/a"));
+    assert(!format::valid_path("a/"));
     assert(!format::valid_path("a//b"));
     assert(!format::valid_path("a\\b"));
+    let nul_path: u8[3] = ['a', 0, 'b'];
+    assert(!format::valid_path(nul_path));
+    var long_path: u8[>..] = [];
+    for _ in 4097 { long_path.push('a'); }
+    assert(!format::valid_path(long_path));
     let invalid_utf8: u8[2] = [0xc0, 0xaf];
     assert(!format::valid_path(invalid_utf8));
+    let surrogate_utf8: u8[3] = [0xed, 0xa0, 0x80];
+    assert(!format::valid_path(surrogate_utf8));
+    let truncated_utf8: u8[1] = [0xc2];
+    assert(!format::valid_path(truncated_utf8));
+    let out_of_range_utf8: u8[4] = [0xf4, 0x90, 0x80, 0x80];
+    assert(!format::valid_path(out_of_range_utf8));
 
     let index: u8[4] = [0, 0, 0, 0];
     let header_bytes = format::encode_header(format::Header { 0, 64, 4, 0x2144df1c });
@@ -94,4 +112,15 @@ fn main() {
         format::Entry { "a", format::RAW, 0, 64, 0, 0 },
     ];
     assert(!format::validate_entries(duplicate_paths, 65));
+    let unsorted_paths: format::Entry[2] = [
+        format::Entry { "b", format::RAW, 0, 64, 0, 0 },
+        format::Entry { "a", format::RAW, 0, 64, 0, 0 },
+    ];
+    assert(!format::validate_entries(unsorted_paths, 65));
+    let empty_zstd: format::Entry[1] = [format::Entry { "a", format::ZSTD, 0, 64, 0, 0 }];
+    assert(!format::validate_entries(empty_zstd, 65));
+    let empty_bad_crc: format::Entry[1] = [format::Entry { "a", format::RAW, 0, 64, 0, 1 }];
+    assert(!format::validate_entries(empty_bad_crc, 65));
+    let zero_stored: format::Entry[1] = [format::Entry { "a", format::ZSTD, 10, 64, 0, 0 }];
+    assert(!format::validate_entries(zero_stored, 65));
 }
