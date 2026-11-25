@@ -36,7 +36,7 @@ def check() -> None:
 
 def build() -> None:
     BUILD.mkdir(exist_ok=True)
-    goose("build", "cmd/gpack.goose", "-o", str(BUILD / ("gpack.exe" if os.name == "nt" else "gpack")))
+    goose("build", "--stack-reserve", "16G", "cmd/gpack.goose", "-o", str(BUILD / ("gpack.exe" if os.name == "nt" else "gpack")))
     goose("build", "tests/native_abi.goose", "-o", str(BUILD / ("native_abi.exe" if os.name == "nt" else "native_abi")))
     goose("build", "tests/format_v1.goose", "-o", str(BUILD / ("format_v1.exe" if os.name == "nt" else "format_v1")))
     goose("build", "tests/pack_read.goose", "-o", str(BUILD / ("pack_read.exe" if os.name == "nt" else "pack_read")))
@@ -164,6 +164,43 @@ def test_cli() -> None:
     if bad_flag.returncode != 2:
         raise RuntimeError(f"expected unknown-flag error (2), got {bad_flag.returncode}")
 
+    help_help = subprocess.run([str(gpack_exe), "help", "--help"], capture_output=True, text=True, check=False)
+    if help_help.returncode != 0 or "Usage: gpack help" not in help_help.stdout:
+        raise RuntimeError(f"expected help --help success, got rc={help_help.returncode} out={help_help.stdout!r}")
+    help_extra = subprocess.run([str(gpack_exe), "help", "pack", "extra"], capture_output=True, text=True, check=False)
+    if help_extra.returncode != 2 or "unknown help topic" in help_extra.stderr:
+        raise RuntimeError(f"expected extra-arg help error, got rc={help_extra.returncode} stderr={help_extra.stderr!r}")
+
+    for args in (
+        ["pack", "--json", str(cli_dir / "missing_dir"), str(cli_dir / "missing.gpk")],
+        ["list", "--json", str(cli_dir / "missing.gpk")],
+        ["info", "--json", str(cli_dir / "missing.gpk")],
+        ["verify", "--json", str(corrupt)],
+    ):
+        err_res = subprocess.run([str(gpack_exe), *args], capture_output=True, text=True, check=False)
+        if err_res.returncode != 1:
+            raise RuntimeError(f"expected exit 1 for {args}, got {err_res.returncode}")
+        err_json = json.loads(err_res.stdout)
+        if err_json.get("ok") is not False or not err_json.get("error"):
+            raise RuntimeError(f"unexpected --json error payload for {args}: {err_res.stdout!r}")
+    verify_err_json = json.loads(
+        subprocess.run([str(gpack_exe), "verify", "--json", str(corrupt)], capture_output=True, text=True, check=False).stdout
+    )
+    if verify_err_json.get("failed_path") != "alpha.txt":
+        raise RuntimeError(f"expected failed_path='alpha.txt' in verify --json error: {verify_err_json!r}")
+
+    dash_dir = cli_dir / "dash-input"
+    dash_dir.mkdir()
+    (dash_dir / "-dash.txt").write_bytes(b"dash payload")
+    dash_gpk = cli_dir / "dash.gpk"
+    subprocess.run([str(gpack_exe), "pack", str(dash_dir), str(dash_gpk)], capture_output=True, text=True, check=True)
+    ls_res = subprocess.run([str(gpack_exe), "ls", str(dash_gpk)], capture_output=True, text=True, check=True)
+    if not ls_res.stdout.startswith("-dash.txt "):
+        raise RuntimeError(f"unexpected ls output: {ls_res.stdout!r}")
+    cat_res = subprocess.run([str(gpack_exe), "cat", "--", str(dash_gpk), "-dash.txt"], capture_output=True, check=True)
+    if cat_res.stdout != b"dash payload":
+        raise RuntimeError("cat -- -dash.txt returned mismatched bytes")
+
     if os.name != "nt":
         sym_dir = cli_dir / "sym-input"
         sym_dir.mkdir()
@@ -173,6 +210,88 @@ def test_cli() -> None:
         bad_pack = subprocess.run([str(gpack_exe), "pack", str(sym_dir), str(sym_out)], capture_output=True, text=True, check=False)
         if bad_pack.returncode != 1 or sym_out.exists():
             raise RuntimeError(f"expected symlink pack rejection, got rc={bad_pack.returncode}")
+
+    # Verify and read >2 GiB raw assets (guards against 32-bit pread/INT_MAX/stack-reserve limits).
+    import struct
+    import zlib
+
+    large_size = 0x80001000
+    large_crc = 0
+    zero_chunk = b"\x00" * (1024 * 1024)
+    remaining = large_size
+    while remaining > 0:
+        n = min(remaining, len(zero_chunk))
+        large_crc = zlib.crc32(zero_chunk[:n], large_crc)
+        remaining -= n
+    large_crc &= 0xFFFFFFFF
+    large_name = b"large_raw.bin"
+    large_index_offset = 64 + large_size
+    large_index = bytearray(struct.pack("<I", 1))
+    large_index += struct.pack("<IB3BQQQII", len(large_name), 0, 0, 0, 0, large_size, 64, large_size, large_crc, 0)
+    large_index += large_name
+    large_index_crc = zlib.crc32(large_index) & 0xFFFFFFFF
+    large_hdr = bytearray(64)
+    large_hdr[0:8] = b"GPKARCH\0"
+    struct.pack_into("<HHIQQQI", large_hdr, 8, 1, 0, 64, 1, large_index_offset, len(large_index), large_index_crc)
+    struct.pack_into("<I", large_hdr, 44, zlib.crc32(large_hdr) & 0xFFFFFFFF)
+    large_gpk = cli_dir / "large_raw.gpk"
+    with open(large_gpk, "wb") as f:
+        f.write(large_hdr)
+        f.seek(large_index_offset)
+        f.write(large_index)
+
+    large_verify = subprocess.run([str(gpack_exe), "verify", "-j", "2", "-m", "4G", str(large_gpk)], capture_output=True, text=True, check=False)
+    if large_verify.returncode != 0:
+        raise RuntimeError(f"expected >2 GiB raw verify to pass, got rc={large_verify.returncode}: {large_verify.stderr}")
+    proc = subprocess.Popen([str(gpack_exe), "read", "-m", "4G", str(large_gpk), "large_raw.bin"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    assert proc.stdout is not None
+    read_total = 0
+    while True:
+        chunk = proc.stdout.read(1024 * 1024)
+        if not chunk:
+            break
+        read_total += len(chunk)
+    _, stderr_bytes = proc.communicate()
+    if proc.returncode != 0 or read_total != large_size:
+        raise RuntimeError(f"expected >2 GiB raw read to write {large_size} bytes, got rc={proc.returncode} size={read_total} stderr={stderr_bytes!r}")
+
+    # Verify and read >2 GiB streaming Zstandard asset (stored_size > 1 MiB, uncompressed > INT_MAX).
+    zstd_src = cli_dir / "large-zstd-src"
+    zstd_src.mkdir()
+    rng_state = 0x12345678
+    prefix = bytearray(1258291)
+    for idx in range(len(prefix)):
+        rng_state = (rng_state * 1664525 + 1013904223) & 0xFFFFFFFF
+        prefix[idx] = (rng_state >> 24) & 0xFF
+    large_zstd_input = zstd_src / "large_zstd.bin"
+    large_zstd_size = len(prefix) + 0x80000000
+    with open(large_zstd_input, "wb") as f:
+        f.write(prefix)
+        f.truncate(large_zstd_size)
+    large_zstd_gpk = cli_dir / "large_zstd.gpk"
+    subprocess.run([str(gpack_exe), "pack", str(zstd_src), str(large_zstd_gpk)], capture_output=True, text=True, check=True)
+    zstd_list = json.loads(subprocess.run([str(gpack_exe), "list", "--json", str(large_zstd_gpk)], capture_output=True, text=True, check=True).stdout)
+    zstd_entry = zstd_list["entries"][0]
+    if zstd_entry["codec"] != "zstd" or zstd_entry["stored_size"] <= 1024 * 1024:
+        raise RuntimeError(f"expected streaming zstd >1 MiB entry, got {zstd_entry!r}")
+    large_zstd_verify = subprocess.run([str(gpack_exe), "verify", "-j", "2", "-m", "4G", str(large_zstd_gpk)], capture_output=True, text=True, check=False)
+    if large_zstd_verify.returncode != 0:
+        raise RuntimeError(f"expected >2 GiB zstd verify to pass, got rc={large_zstd_verify.returncode}: {large_zstd_verify.stderr}")
+    zproc = subprocess.Popen([str(gpack_exe), "read", "-m", "4G", str(large_zstd_gpk), "large_zstd.bin"], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    assert zproc.stdout is not None
+    zread_total = 0
+    zread_head = bytearray()
+    while True:
+        chunk = zproc.stdout.read(1024 * 1024)
+        if not chunk:
+            break
+        if len(zread_head) < len(prefix):
+            need = len(prefix) - len(zread_head)
+            zread_head.extend(chunk[:need])
+        zread_total += len(chunk)
+    _, zstderr_bytes = zproc.communicate()
+    if zproc.returncode != 0 or zread_total != large_zstd_size or zread_head != prefix:
+        raise RuntimeError(f"expected >2 GiB zstd read to match {large_zstd_size} bytes, got rc={zproc.returncode} size={zread_total} stderr={zstderr_bytes!r}")
     shutil.rmtree(cli_dir)
 
 

@@ -7,6 +7,7 @@ import format;
 
 let DEFAULT_MAX_ASSET_SIZE:   u64 = 32 * 1024 * 1024;
 let SMALL_FRAME_ONE_SHOT_MAX: u64 = 1024 * 1024;
+let STREAM_CHUNK_SIZE:        i64 = 1024 * 1024;
 
 struct RuntimeEntry {
     path_start:     i64, path_len: i64, codec: u8, uncompressed_size: u64,
@@ -20,6 +21,7 @@ struct ArchiveInfo {
 }
 struct ReadRequest { handle: u64, payload_offset: u64, size: u64, stored_size: u64, content_crc32: u32, codec: u8, ticket: u64 }
 struct ReadResult { ticket: u64, ok: bool, bytes: u8[] }
+struct VerifyResult { ticket: u64, ok: bool }
 
 root struct Archive {
     handle:         u64               = 0,
@@ -168,15 +170,49 @@ fn path_at(archive: Archive&, index: i64) -> const u8[:] {
     return archive.path_bytes[entry.path_start..entry.path_start + entry.path_len];
 }
 
-fn request(archive: Archive&, path: const u8[:], ticket: u64 = 0) -> ReadRequest, bool {
-    if archive.handle == 0 { return ReadRequest { 0, 0, 0, 0, 0, 0, 0 }, false; }
+fn request_detailed(archive: Archive&, path: const u8[:], ticket: u64, error: u8[>..]&) -> ReadRequest, bool {
+    let empty = ReadRequest { 0, 0, 0, 0, 0, 0, 0 };
+    error.clear();
+    if archive.handle == 0 {
+        set_error(error, "archive is not open");
+        return empty, false;
+    }
+    if !format::valid_path(path) {
+        set_error(error, str("invalid canonical asset path: ", path));
+        return empty, false;
+    }
     let i = find(archive, path);
-    if i < 0 { return ReadRequest { 0, 0, 0, 0, 0, 0, 0 }, false; }
+    if i < 0 {
+        set_error(error, str("asset not found: ", path));
+        return empty, false;
+    }
     let entry = archive.entries[i];
-    if (entry.codec != format::RAW && entry.codec != format::ZSTD) || entry.uncompressed_size > archive.max_asset_size || entry.uncompressed_size > 0x7fffffffffffffff {
-        return ReadRequest { 0, 0, 0, 0, 0, 0, 0 }, false;
+    if entry.uncompressed_size > archive.max_asset_size || entry.uncompressed_size > 0x7fffffffffffffff {
+        set_error(error, str("asset exceeds configured max size: ", path));
+        return empty, false;
+    }
+    if entry.codec != format::RAW && entry.codec != format::ZSTD {
+        set_error(error, str("unsupported asset codec: ", path));
+        return empty, false;
     }
     return ReadRequest { archive.handle, entry.payload_offset, entry.uncompressed_size, entry.stored_size, entry.content_crc32, entry.codec, ticket }, true;
+}
+
+fn request(archive: Archive&, path: const u8[:], ticket: u64 = 0) -> ReadRequest, bool {
+    var error: u8[>..] = [];
+    return request_detailed(archive, path, ticket, error);
+}
+
+fn zstd_fill_chunk(request: ReadRequest, input_buffer: u8[>..]&, input_offset: u64&, in_pos: i64&, in_len: i64&) -> bool {
+    if in_pos < in_len { return true; }
+    if input_offset >= request.stored_size { return false; }
+    let count = min((request.stored_size - input_offset) as i64, input_buffer.len);
+    if gpack::native_file_read_at(request.handle, request.payload_offset + input_offset, input_buffer[..count]) != count {
+        return false;
+    }
+    in_pos = 0;
+    in_len = count;
+    return true;
 }
 
 fn read_request(request: ReadRequest, out: u8[>..]&) -> bool {
@@ -201,27 +237,30 @@ fn read_request(request: ReadRequest, out: u8[>..]&) -> bool {
         let context = gpack::native_zstd_decompress_begin(window_log(request.size));
         if context == 0 { out.clear(); return false; }
         var input_buffer: u8[>..] = [];
-        input_buffer.resize(1024 * 1024, 0);
+        input_buffer.resize(STREAM_CHUNK_SIZE, 0);
         var input_offset:  u64 = 0;
         var output_offset: i64 = 0;
+        var in_pos:        i64 = 0;
+        var in_len:        i64 = 0;
         var done = false;
         var failed = false;
-        while input_offset < request.stored_size && !done && !failed {
-            let count = min((request.stored_size - input_offset) as i64, input_buffer.len);
-            let input = input_buffer[..count];
-            if gpack::native_file_read_at(request.handle, request.payload_offset + input_offset, input) != count {
-                failed = true; break;
+        while !done && !failed {
+            if in_pos == in_len {
+                if input_offset >= request.stored_size { break; }
+                if !zstd_fill_chunk(request, input_buffer, input_offset, in_pos, in_len) {
+                    failed = true; break;
+                }
             }
-            let output = out[output_offset..];
-            let result = gpack::native_zstd_decompress_step(context, input, output);
+            let step_end = min(output_offset + STREAM_CHUNK_SIZE, out.len);
+            let result = gpack::native_zstd_decompress_step(context, input_buffer[in_pos..in_len], out[output_offset..step_end]);
             if result == 0xffffffffffffffff { failed = true; break; }
-            let consumed = (result >> 32) & 0x7fffffff;
+            let consumed = ((result >> 32) & 0x7fffffff) as i64;
             let produced = (result & 0x7fffffff) as i64;
             done = result & 0x8000000000000000 != 0;
             if consumed == 0 && produced == 0 && !done { failed = true; break; }
-            input_offset += consumed;
+            in_pos += consumed;
+            input_offset += consumed as u64;
             output_offset += produced;
-            if done && input_offset != request.stored_size { failed = true; }
         }
         if !done || input_offset != request.stored_size || output_offset != request.size as i64 { failed = true; }
         gpack::native_zstd_decompress_end(context);
@@ -229,6 +268,62 @@ fn read_request(request: ReadRequest, out: u8[>..]&) -> bool {
     }
     if format::crc32(out) != request.content_crc32 { out.clear(); return false; }
     return true;
+}
+
+fn verify_request(request: ReadRequest) -> bool {
+    if request.handle == 0 || request.size > 0x7fffffffffffffff || (request.codec != format::RAW && request.codec != format::ZSTD) { return false; }
+    if request.size == 0 {
+        return request.codec == format::RAW && request.stored_size == 0 && request.content_crc32 == 0;
+    }
+    var scratch: u8[>..] = [];
+    scratch.resize(min(request.size as i64, STREAM_CHUNK_SIZE), 0);
+    var crc_state: u32 = 0xffffffff;
+    if request.codec == format::RAW {
+        var offset: u64 = 0;
+        while offset < request.size {
+            let count = min((request.size - offset) as i64, scratch.len);
+            let chunk = scratch[..count];
+            if gpack::native_file_read_at(request.handle, request.payload_offset + offset, chunk) != count { return false; }
+            crc_state = format::crc32_update(crc_state, chunk);
+            offset += count as u64;
+        }
+        return ~crc_state == request.content_crc32;
+    }
+    if request.stored_size == 0 { return false; }
+    let context = gpack::native_zstd_decompress_begin(window_log(request.size));
+    if context == 0 { return false; }
+    var input_buffer: u8[>..] = [];
+    input_buffer.resize(min(request.stored_size as i64, STREAM_CHUNK_SIZE), 0);
+    var input_offset:  u64 = 0;
+    var decoded_total: u64 = 0;
+    var in_pos:        i64 = 0;
+    var in_len:        i64 = 0;
+    var done = false;
+    var failed = false;
+    while !done && !failed {
+        if in_pos == in_len {
+            if input_offset >= request.stored_size { break; }
+            if !zstd_fill_chunk(request, input_buffer, input_offset, in_pos, in_len) {
+                failed = true; break;
+            }
+        }
+        let result = gpack::native_zstd_decompress_step(context, input_buffer[in_pos..in_len], scratch);
+        if result == 0xffffffffffffffff { failed = true; break; }
+        let consumed = ((result >> 32) & 0x7fffffff) as i64;
+        let produced = (result & 0x7fffffff) as i64;
+        done = result & 0x8000000000000000 != 0;
+        if consumed == 0 && produced == 0 && !done { failed = true; break; }
+        if produced > 0 {
+            if (produced as u64) > request.size - decoded_total { failed = true; break; }
+            crc_state = format::crc32_update(crc_state, scratch[..produced]);
+            decoded_total += produced as u64;
+        }
+        in_pos += consumed;
+        input_offset += consumed as u64;
+    }
+    if !done || input_offset != request.stored_size || decoded_total != request.size { failed = true; }
+    gpack::native_zstd_decompress_end(context);
+    return !failed && ~crc_state == request.content_crc32;
 }
 
 fn window_log(size: u64) -> i32 {
@@ -247,14 +342,28 @@ thread_fn read_worker(request: ReadRequest) {
     assert(qput(ReadResult { request.ticket, ok, copy(bytes) }));
 }
 
+thread_fn verify_worker(request: ReadRequest) {
+    assert(qput(VerifyResult { request.ticket, verify_request(request) }));
+}
+
+// Reads one complete asset into out with a diagnostic error message on failure.
+fn read_detailed(archive: Archive&, path: const u8[:], out: u8[>..]&, error: u8[>..]&) -> bool {
+    out.clear();
+    let req, ok = request_detailed(archive, path, 0, error);
+    if !ok { return false; }
+    if !read_request(req, out) {
+        set_error(error, str("payload decode or CRC32/frame verification failed for: ", path));
+        return false;
+    }
+    return true;
+}
+
 // Reads one complete raw asset into out. Separate output builders can be used
 // concurrently with the same archive because the native operation is pread/
 // overlapped I/O and the validated index is immutable after open.
 fn read(archive: Archive&, path: const u8[:], out: u8[>..]&) -> bool {
-    out.clear();
-    let request, ok = request(archive, path);
-    if !ok { return false; }
-    return read_request(request, out);
+    var error: u8[>..] = [];
+    return read_detailed(archive, path, out, error);
 }
 
 fn list(path: const u8[:]) -> bool {
@@ -286,73 +395,74 @@ fn verify_detailed(path: const u8[:], workers: i64, max_asset_size: u64,
     if !open_detailed(path, archive, max_asset_size, error) { return false; }
     let total = archive.entries.len;
     if workers == 1 || total <= 1 {
-        var bytes: u8[>..] = [];
         for i in total {
             let asset_path = path_at(archive, i);
-            let entry = archive.entries[i];
-            if entry.uncompressed_size > archive.max_asset_size {
+            let req, req_ok = request(archive, asset_path, i as u64);
+            if !req_ok {
                 failed_path.append(asset_path);
                 set_error(error, "asset exceeds configured max size");
                 close(archive);
                 return false;
             }
-            if !read(archive, asset_path, bytes) {
+            if !verify_request(req) {
                 failed_path.append(asset_path);
                 set_error(error, "payload decode or CRC32/frame verification failed");
                 close(archive);
                 return false;
             }
             verified_count += 1;
-            total_bytes += entry.uncompressed_size;
+            total_bytes += archive.entries[i].uncompressed_size;
         }
         close(archive);
         return true;
     }
 
-    qlimit<ReadResult>(workers);
-    var next_index: i64 = 0;
-    while next_index < total {
-        var handles: i64[>..] = [];
-        var pre_failed = false;
-        while handles.len < workers && next_index < total {
+    qlimit<VerifyResult>(workers);
+    var next_index: i64      = 0;
+    var in_flight:  i64      = 0;
+    var handles:    i64[>..] = [];
+    var pre_failed = false;
+    var pre_failed_index: i64 = 0;
+    var failed = false;
+    var bad_ticket: u64 = 0;
+    while (next_index < total && !failed && !pre_failed) || in_flight > 0 {
+        while !failed && !pre_failed && in_flight < workers && next_index < total {
             let asset_path = path_at(archive, next_index);
             let req, req_ok = request(archive, asset_path, next_index as u64);
             if !req_ok {
-                failed_path.append(asset_path);
-                set_error(error, "asset exceeds configured max size or invalid metadata");
                 pre_failed = true;
+                pre_failed_index = next_index;
                 break;
             }
-            handles.push(thread_spawn(read_worker, req));
+            handles.push(thread_spawn(verify_worker, req));
+            in_flight += 1;
             next_index += 1;
         }
-        var batch_failed = false;
-        var bad_ticket: u64 = 0;
-        for _ in handles.len {
-            let result = qget<ReadResult>();
+        if in_flight > 0 {
+            let result = qget<VerifyResult>();
+            in_flight -= 1;
             if !result.ok {
-                if !batch_failed || result.ticket < bad_ticket {
+                if !failed || result.ticket < bad_ticket {
                     bad_ticket = result.ticket;
                 }
-                batch_failed = true;
+                failed = true;
+            } else {
+                verified_count += 1;
+                total_bytes += archive.entries[result.ticket as i64].uncompressed_size;
             }
         }
-        for handle in handles { thread_wait(handle); }
-        if pre_failed {
-            close(archive);
-            return false;
-        }
-        if batch_failed {
+    }
+    for handle in handles { thread_wait(handle); }
+    if failed || pre_failed {
+        if failed && (!pre_failed || bad_ticket < pre_failed_index as u64) {
             failed_path.append(path_at(archive, bad_ticket as i64));
             set_error(error, "payload decode or CRC32/frame verification failed");
-            close(archive);
-            return false;
+        } else {
+            failed_path.append(path_at(archive, pre_failed_index));
+            set_error(error, "asset exceeds configured max size or invalid metadata");
         }
-        let batch_start = next_index - handles.len;
-        for j in batch_start..next_index {
-            verified_count += 1;
-            total_bytes += archive.entries[j].uncompressed_size;
-        }
+        close(archive);
+        return false;
     }
     close(archive);
     return true;

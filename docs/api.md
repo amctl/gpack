@@ -168,6 +168,8 @@ root struct Archive { ... }
 
 - `fn read(archive: Archive&, path: const u8[:], out: u8[>..]&) -> bool`
   Synchronously reads, decodes (strictly one Zstandard frame or raw), and CRC32-verifies the complete asset into `out`.
+- `fn read_detailed(archive: Archive&, path: const u8[:], out: u8[>..]&, error: u8[>..]&) -> bool`
+  Like `read`, populating an actionable diagnostic message in `error` on failure.
 - `fn request(archive: Archive&, path: const u8[:], ticket: u64 = 0) -> ReadRequest, bool`
   Resolves `path` and enforces `max_asset_size` into a flat `ReadRequest` safe to pass across Goose worker queues.
 - `fn read_request(request: ReadRequest, out: u8[>..]&) -> bool`
@@ -208,4 +210,4 @@ reader::close(archive);
 
 ### Memory Budget
 
-`max_asset_size` (32 MiB default) bounds the uncompressed allocation of a single read. With `N` concurrent workers (4 by default), in-flight working memory scales as `O(N * max_asset_size)` plus any decoded asset buffers retained by the caller and the archive index (capped at 64 MiB by format v1).
+`max_asset_size` (32 MiB default) bounds the uncompressed allocation of a single `read` / `read_request`. With `N` concurrent `read_worker` threads (4 by default), in-flight working memory scales as `O(N * max_asset_size)` plus any decoded asset buffers retained by the caller and the archive index (capped at 64 MiB by format v1). Because Goose defaults to a 2 GiB per-stack virtual reservation (`GS_STACK_RESERVE`), applications calling `read` on assets `>= 2 GiB` must build with `--stack-reserve` (for example `--stack-reserve 16G`, as used by `cmd/gpack`). `verify` and `verify_detailed` stream payloads in bounded ~1 MiB buffers per worker and verify assets up to 8 GiB without full-asset allocation.

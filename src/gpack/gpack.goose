@@ -11,7 +11,6 @@ fn zstd_version() -> u32 {
     return gpack_native_zstd_version();
 }
 extern fn native_file_open_read(path: const u8[:]) -> u64 = "gpack_file_open_read";
-extern fn native_file_open_write(path: const u8[:]) -> u64 = "gpack_file_open_write";
 extern fn native_file_open_exclusive(path: const u8[:]) -> u64 = "gpack_file_open_exclusive";
 extern fn native_temp_nonce() -> u64 = "gpack_temp_nonce";
 extern fn native_file_replace(source: const u8[:], destination: const u8[:]) -> i32 = "gpack_file_replace";

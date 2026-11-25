@@ -74,8 +74,7 @@ worker boundary, callers resolve a path into a flat `ReadRequest` and dispatch
 up to four `reader::read_worker` tasks; each result carries its ticket and
 verified bytes. The archive must remain open until those workers finish.
 
-`list` prints validated index metadata. `verify` routes each record through the
-same full-asset read and integrity path as the runtime API.
+`list` prints validated index metadata. `verify` routes each record through streaming validation (`verify_request`) across a sliding worker window, checking raw/Zstandard framing and IEEE CRC32 with bounded per-worker scratch buffers instead of materializing full assets in memory.
 
 Compressed frames up to 1 MiB use a bounded one-shot native decode after the
 reader confirms the exact frame extent. Larger frames retain streaming decode,
@@ -93,7 +92,7 @@ src/gpack/
   pack.goose
   reader.goose
   native/gpack_native.h
-  native/abi_probe.c
+  native/gpack_native.c
 third_party/zstd-1.5.7/
 tests/
   *.goose

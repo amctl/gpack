@@ -59,15 +59,6 @@ int32_t gpack_path_kind(gpack_bytes path) {
     return kind;
 }
 
-uint64_t gpack_file_open_write(gpack_bytes path) {
-    wchar_t *wide = gpack_wide_path(path);
-    if (!wide) return 0;
-    HANDLE h = CreateFileW(wide, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,
-                           FILE_ATTRIBUTE_NORMAL | FILE_FLAG_OVERLAPPED, NULL);
-    free(wide);
-    return h == INVALID_HANDLE_VALUE ? 0 : gpack_id(h);
-}
-
 static volatile LONG64 gpack_temp_counter = 0;
 uint64_t gpack_temp_nonce(void) {
     return ((uint64_t)GetCurrentProcessId() << 32) |
@@ -236,17 +227,6 @@ uint64_t gpack_file_open_read(gpack_bytes path) {
     return (uint64_t)fd + 1;
 }
 
-uint64_t gpack_file_open_write(gpack_bytes path) {
-    if (path.len < 0 || (uint64_t)path.len > SIZE_MAX - 1 || memchr(path.data, 0, (size_t)path.len)) return 0;
-    char *text = (char *)malloc((size_t)path.len + 1);
-    if (!text) return 0;
-    memcpy(text, path.data, (size_t)path.len);
-    text[path.len] = '\0';
-    int fd = open(text, O_WRONLY | O_CREAT | O_TRUNC | O_CLOEXEC, 0666);
-    free(text);
-    return fd < 0 ? 0 : (uint64_t)fd + 1;
-}
-
 uint64_t gpack_file_size(uint64_t handle) {
     struct stat info;
     int fd = gpack_fd(handle);
@@ -282,7 +262,6 @@ static int64_t gpack_transfer(uint64_t handle, uint64_t offset, gpack_bytes byte
         }
         if (n == 0) break;
         done += n;
-        if (!write_mode && n < bytes.len - (done - n)) break;
     }
     return done;
 }
@@ -367,8 +346,8 @@ int32_t gpack_zstd_decompress_one_shot(gpack_bytes input, gpack_bytes output, in
     return !ZSTD_isError(decoded) && decoded == (size_t)output.len;
 }
 
-_Static_assert(sizeof(uint64_t) == 8, "uint64_t ABI width must be 8 bytes");
-_Static_assert(sizeof(uint32_t) == 4, "uint32_t ABI width must be 4 bytes");
+GPACK_STATIC_ASSERT(sizeof(uint64_t) == 8, "uint64_t ABI width must be 8 bytes");
+GPACK_STATIC_ASSERT(sizeof(uint32_t) == 4, "uint32_t ABI width must be 4 bytes");
 
 uint64_t gpack_native_abi_probe(uint64_t value) {
     return value;

@@ -9,7 +9,7 @@ set(ZSTD_BUILD_CONTRIB OFF CACHE BOOL "" FORCE)
 
 add_subdirectory("${CMAKE_CURRENT_LIST_DIR}/../../third_party/zstd-1.5.7/build/cmake" zstd)
 
-add_library(gpack_native STATIC native/abi_probe.c)
+add_library(gpack_native STATIC native/gpack_native.c)
 target_include_directories(gpack_native PUBLIC native)
 target_link_libraries(gpack_native PUBLIC libzstd_static)
 target_compile_features(gpack_native PRIVATE c_std_11)

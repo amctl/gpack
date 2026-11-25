@@ -17,7 +17,7 @@ gpack <command> [options] [args...]
 | `1` | Archive, path, I/O, size-limit, or verification error |
 | `2` | CLI usage error (unknown command/flag, missing or invalid argument) |
 
-Use `--` before positional arguments to pass paths beginning with `-`.
+Use `--` before positional arguments to pass paths beginning with `-`. Commands supporting `--json` (`pack`, `list`, `info`, `verify`) emit a JSON object with `"ok":false` and `"error":"..."` to `stdout` on runtime failure (exit `1`); usage errors (exit `2`) always write to `stderr`.
 
 ## Commands
 
@@ -78,7 +78,7 @@ Options:
 - `-j`, `--jobs N` — concurrent reader workers, `1..16` (default `4`).
 - `-v`, `--verbose` — print verified asset count and byte total on success.
 - `-q`, `--quiet` — suppress non-error output (default).
-- `--json` — print verification result JSON (`ok`, `archive`, `verified_entries`, `uncompressed_bytes`, or `failed_path` and `error` on failure).
+- `--json` — print verification result JSON (`ok`, `archive`, `verified_entries`, `uncompressed_bytes`, or `ok`, `archive`, optional `failed_path`, and `error` on failure).
 - `-h`, `--help` — show `verify` help.
 
 ### `read` (alias: `cat`)

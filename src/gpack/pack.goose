@@ -81,6 +81,7 @@ fn scan_tree(root: const u8[:], host_arena: u8[>..]&, path_arena: u8[>..]&,
 }
 
 fn pack_one(source: Source, output: u64, output_offset: u64&,
+            input_buffer: u8[>..]&, output_buffer: u8[>..]&,
             entries: format::Entry[>..]&, summary: PackSummary&, error: u8[>..]&) -> bool {
     let input = gpack::native_file_open_read(source.host_path);
     if input == 0 {
@@ -112,11 +113,8 @@ fn pack_one(source: Source, output: u64, output_offset: u64&,
             set_error(error, "cannot initialize Zstandard compressor");
             return false;
         }
-        var input_buffer: u8[>..] = [];
-        input_buffer.resize(COPY_CHUNK, 0);
-        var output_buffer:   u8[>..] = [];
-        var compressed_size: u64     = 0;
-        var copied:          u64     = 0;
+        var compressed_size: u64 = 0;
+        var copied:          u64 = 0;
         var fallback = false;
         crc_state = 0xffffffff;
 
@@ -130,8 +128,7 @@ fn pack_one(source: Source, output: u64, output_offset: u64&,
                 let room = size - compressed_size;
                 if room == 0 { fallback = true; break; }
                 let output_capacity = min(room as i64, COPY_CHUNK);
-                output_buffer.resize(output_capacity, 0);
-                let result = gpack::native_zstd_compress_step(context, chunk[chunk_pos..], output_buffer, false);
+                let result = gpack::native_zstd_compress_step(context, chunk[chunk_pos..], output_buffer[..output_capacity], false);
                 if result == 0xffffffffffffffff { failed = true; break; }
                 let consumed = ((result >> 32) & 0x7fffffff) as i64;
                 let produced = (result & 0x7fffffff) as i64;
@@ -149,8 +146,7 @@ fn pack_one(source: Source, output: u64, output_offset: u64&,
             let room = size - compressed_size;
             if room == 0 { fallback = true; break; }
             let output_capacity = min(room as i64, COPY_CHUNK);
-            output_buffer.resize(output_capacity, 0);
-            let result = gpack::native_zstd_compress_step(context, "", output_buffer, true);
+            let result = gpack::native_zstd_compress_step(context, "", output_buffer[..output_capacity], true);
             if result == 0xffffffffffffffff { failed = true; break; }
             let produced = (result & 0x7fffffff) as i64;
             let done = result & 0x8000000000000000 != 0;
@@ -176,15 +172,21 @@ fn pack_one(source: Source, output: u64, output_offset: u64&,
             fallback = true;
         }
         if fallback {
-            crc_state = 0xffffffff;
-            var raw_copied: u64 = 0;
-            while raw_copied < size {
-                let count = min((size - raw_copied) as i64, COPY_CHUNK);
-                let chunk = input_buffer[..count];
-                if gpack::native_file_read_at(input, raw_copied, chunk) != count { failed = true; break; }
-                crc_state = format::crc32_update(crc_state, chunk);
-                if gpack::native_file_write_at(output, payload_offset + raw_copied, chunk) != count { failed = true; break; }
-                raw_copied += count as u64;
+            if size <= COPY_CHUNK as u64 {
+                if gpack::native_file_write_at(output, payload_offset, input_buffer[..size as i64]) != size as i64 {
+                    failed = true;
+                }
+            } else {
+                crc_state = 0xffffffff;
+                var raw_copied: u64 = 0;
+                while raw_copied < size {
+                    let count = min((size - raw_copied) as i64, COPY_CHUNK);
+                    let chunk = input_buffer[..count];
+                    if gpack::native_file_read_at(input, raw_copied, chunk) != count { failed = true; break; }
+                    crc_state = format::crc32_update(crc_state, chunk);
+                    if gpack::native_file_write_at(output, payload_offset + raw_copied, chunk) != count { failed = true; break; }
+                    raw_copied += count as u64;
+                }
             }
             if failed {
                 gpack::native_file_close(input);
@@ -263,9 +265,15 @@ fn pack_directory_detailed(input_dir: const u8[:], output_path: const u8[:],
         return false;
     }
     var entries:       format::Entry[>..] = [];
-    var output_offset: u64                = format::HEADER_SIZE as u64;
+    var input_buffer:  u8[>..]            = [];
+    var output_buffer: u8[>..]            = [];
+    if sources.len > 0 {
+        input_buffer.resize(COPY_CHUNK, 0);
+        output_buffer.resize(COPY_CHUNK, 0);
+    }
+    var output_offset: u64 = format::HEADER_SIZE as u64;
     for source in sources {
-        if !pack_one(source, output, output_offset, entries, summary, error) {
+        if !pack_one(source, output, output_offset, input_buffer, output_buffer, entries, summary, error) {
             gpack::native_file_close(output); gpack::native_file_remove(temporary_path); return false;
         }
     }

@@ -1,5 +1,6 @@
 // Goose-owned field-by-field implementation of the normative v1 wire format.
 namespace format;
+import binary;
 import std;
 
 let HEADER_SIZE:    i64 = 64;
@@ -95,53 +96,21 @@ fn crc32(data: const u8[:]) -> u32 {
 
 fn crc32_header(data: const u8[:]) -> u32 {
     if data.len != HEADER_SIZE { return 0; }
-    var crc: u32 = 0xffffffff;
-    for i in 0..data.len {
-        let byte = if i >= 44 && i < 48 { 0 } else { data[i] };
-        crc = crc ^ byte;
-        for _ in 0..8 {
-            if crc & 1 != 0 { crc = (crc >> 1) ^ 0xedb88320; }
-            else { crc = crc >> 1; }
-        }
-    }
+    let zero_crc: u8[4] = [0, 0, 0, 0];
+    var crc = crc32_update(0xffffffff, data[..44]);
+    crc = crc32_update(crc, zero_crc);
+    crc = crc32_update(crc, data[48..HEADER_SIZE]);
     return ~crc;
-}
-
-fn put_u8(out: u8[>..]&, value: u8) {
-    let one: u8[1] = [value];
-    out.append(one);
-}
-fn put_u16(out: u8[>..]&, value: u16) {
-    put_u8(out, value as u8); put_u8(out, (value >> 8) as u8);
-}
-fn put_u32(out: u8[>..]&, value: u32) {
-    for i in 0..4 { put_u8(out, (value >> (i * 8)) as u8); }
-}
-fn put_u64(out: u8[>..]&, value: u64) {
-    for i in 0..8 { put_u8(out, (value >> (i * 8)) as u8); }
-}
-fn get_u16(data: const u8[:], at: i64) -> u16 {
-    data[at] | (data[at + 1] as u16 << 8)
-}
-fn get_u32(data: const u8[:], at: i64) -> u32 {
-    var value: u32 = 0;
-    for i in 0..4 { value = value | (data[at + i] as u32 << (i * 8)); }
-    return value;
-}
-fn get_u64(data: const u8[:], at: i64) -> u64 {
-    var value: u64 = 0;
-    for i in 0..8 { value = value | (data[at + i] as u64 << (i * 8)); }
-    return value;
 }
 
 fn encode_header(header: Header) -> u8[>..] {
     var out: u8[>..] = [];
     out.append("GPKARCH\0");
-    put_u16(out, 1); put_u16(out, 0); put_u32(out, HEADER_SIZE as u32);
-    put_u64(out, header.entry_count); put_u64(out, header.index_offset);
-    put_u64(out, header.index_size); put_u32(out, header.index_crc32);
-    put_u32(out, 0);
-    for _ in 0..16 { put_u8(out, 0); }
+    binary::write_u16le(out, 1); binary::write_u16le(out, 0); binary::write_u32le(out, HEADER_SIZE as u32);
+    binary::write_u64le(out, header.entry_count); binary::write_u64le(out, header.index_offset);
+    binary::write_u64le(out, header.index_size); binary::write_u32le(out, header.index_crc32);
+    binary::write_u32le(out, 0);
+    for _ in 0..16 { binary::write_u8(out, 0); }
     let checksum = crc32_header(out);
     for i in 0..4 { out[44 + i] = (checksum >> (i * 8)) as u8; }
     return out;
@@ -150,15 +119,15 @@ fn encode_header(header: Header) -> u8[>..] {
 fn decode_header(data: const u8[:], file_size: u64) -> Header, bool {
     let empty = Header { 0, 0, 0, 0 };
     if data.len != HEADER_SIZE || data[0..8] != "GPKARCH\0" { return empty, false; }
-    if get_u16(data, 8) != 1 || get_u16(data, 10) != 0 || get_u32(data, 12) != 64 { return empty, false; }
-    if get_u32(data, 44) != crc32_header(data) { return empty, false; }
+    if binary::u16le(data, 8) != 1 || binary::u16le(data, 10) != 0 || binary::u32le(data, 12) != 64 { return empty, false; }
+    if binary::u32le(data, 44) != crc32_header(data) { return empty, false; }
     for i in 48..64 { if data[i] != 0 { return empty, false; } }
-    let count = get_u64(data, 16);
-    let offset = get_u64(data, 24);
-    let size = get_u64(data, 32);
+    let count = binary::u64le(data, 16);
+    let offset = binary::u64le(data, 24);
+    let size = binary::u64le(data, 32);
     if count > MAX_ENTRIES || size < 4 || size > MAX_INDEX_SIZE { return empty, false; }
     if offset < 64 || offset > file_size || size != file_size - offset { return empty, false; }
-    return Header { count, offset, size, get_u32(data, 40) }, true;
+    return Header { count, offset, size, binary::u32le(data, 40) }, true;
 }
 
 fn valid_utf8(data: const u8[:]) -> bool {
@@ -210,12 +179,12 @@ fn encode_index(entries: const Entry[:]) -> u8[>..], bool {
         encoded_size += record_size;
     }
     var out: u8[>..] = [];
-    put_u32(out, entries.len as u32);
+    binary::write_u32le(out, entries.len as u32);
     for entry in entries {
-        put_u32(out, entry.path.len as u32);
-        put_u8(out, entry.codec); put_u8(out, 0); put_u8(out, 0); put_u8(out, 0);
-        put_u64(out, entry.uncompressed_size); put_u64(out, entry.payload_offset);
-        put_u64(out, entry.stored_size); put_u32(out, entry.content_crc32); put_u32(out, 0);
+        binary::write_u32le(out, entry.path.len as u32);
+        binary::write_u8(out, entry.codec); binary::write_u8(out, 0); binary::write_u8(out, 0); binary::write_u8(out, 0);
+        binary::write_u64le(out, entry.uncompressed_size); binary::write_u64le(out, entry.payload_offset);
+        binary::write_u64le(out, entry.stored_size); binary::write_u32le(out, entry.content_crc32); binary::write_u32le(out, 0);
         out.append(entry.path);
     }
     return out, true;
@@ -223,20 +192,20 @@ fn encode_index(entries: const Entry[:]) -> u8[>..], bool {
 
 fn decode_index(data: const u8[:], header: Header, entries: Entry[>..]&) -> bool {
     if header.index_size < 4 || header.index_size > MAX_INDEX_SIZE || data.len < 4 || data.len as u64 != header.index_size || crc32(data) != header.index_crc32 { return false; }
-    let count = get_u32(data, 0) as u64;
+    let count = binary::u32le(data, 0) as u64;
     if count != header.entry_count || count > MAX_ENTRIES { return false; }
     entries.clear();
     var at: i64 = 4;
     for _ in 0..count {
         if at > data.len || data.len - at < 40 { entries.clear(); return false; }
-        let path_len = get_u32(data, at) as u64;
+        let path_len = binary::u32le(data, at) as u64;
         let codec = data[at + 4];
         if path_len == 0 || path_len > 4096 { entries.clear(); return false; }
-        if data[at + 5] != 0 || data[at + 6] != 0 || data[at + 7] != 0 || get_u32(data, at + 36) != 0 { entries.clear(); return false; }
-        let uncompressed = get_u64(data, at + 8);
-        let offset = get_u64(data, at + 16);
-        let stored = get_u64(data, at + 24);
-        let content_crc = get_u32(data, at + 32);
+        if data[at + 5] != 0 || data[at + 6] != 0 || data[at + 7] != 0 || binary::u32le(data, at + 36) != 0 { entries.clear(); return false; }
+        let uncompressed = binary::u64le(data, at + 8);
+        let offset = binary::u64le(data, at + 16);
+        let stored = binary::u64le(data, at + 24);
+        let content_crc = binary::u32le(data, at + 32);
         at += 40;
         if path_len > (data.len - at) as u64 { entries.clear(); return false; }
         let path = data[at..at + path_len as i64];

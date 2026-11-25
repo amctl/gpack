@@ -31,7 +31,6 @@ extern "C" {
 uint64_t gpack_native_abi_probe(uint64_t value);
 uint32_t gpack_native_zstd_version(void);
 uint64_t gpack_file_open_read(gpack_bytes path);
-uint64_t gpack_file_open_write(gpack_bytes path);
 uint64_t gpack_file_open_exclusive(gpack_bytes path);
 uint64_t gpack_temp_nonce(void);
 int32_t gpack_file_replace(gpack_bytes source, gpack_bytes destination);

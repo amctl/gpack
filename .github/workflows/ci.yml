@@ -29,7 +29,14 @@ jobs:
           python-version: "3.12"
       - if: runner.os == 'Windows'
         uses: ilammy/msvc-dev-cmd@v1
+      - name: Cache pinned Goose v2026.4
+        id: cache-goose
+        uses: actions/cache@v4
+        with:
+          path: goose-src
+          key: ${{ runner.os }}-${{ runner.arch }}-goose-v2026.4
       - name: Install pinned Goose v2026.4
+        if: steps.cache-goose.outputs.cache-hit != 'true'
         shell: bash
         run: |
           git clone --depth 1 --branch v2026.4 https://github.com/aardappel/goose.git goose-src

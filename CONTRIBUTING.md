@@ -42,7 +42,7 @@ GOOSE=./goose-bin/goose GOOSE_HOME=/tmp/gpack-goose-home python scripts/gpack.py
 ## Architecture & Format Contracts
 
 - **Goose owns format semantics; C owns I/O & Zstandard only.** Keep parsing, path normalization, ordering, CRC32, and validation in `src/gpack/*.goose`. Do not teach `src/gpack/native/` about gpack headers or index records.
-- **Keep the native ABI aligned.** Any signature change in `src/gpack/gpack.goose` must match `src/gpack/native/gpack_native.h` and `src/gpack/native/abi_probe.c` (compiled with `-Wall -Wextra -Werror` / `/W4 /WX`).
+- **Keep the native ABI aligned.** Any signature change in `src/gpack/gpack.goose` must match `src/gpack/native/gpack_native.h` and `src/gpack/native/gpack_native.c` (compiled with `-Wall -Wextra -Werror` / `/W4 /WX`).
 - **Format changes require a versioned update.** Update [`docs/format/v1.md`](docs/format/v1.md), `src/gpack/format.goose`, golden fixtures under `tests/fixtures/`, and version checks together.
 - **No dynamic `libzstd` dependency.** `scripts/gpack.py build` enforces static Zstandard `1.5.7` linkage across all executables.
 - **Canonical vocabulary.** Follow [`GLOSSARY.md`](GLOSSARY.md) in code, docs, and issues.

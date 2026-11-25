@@ -12,6 +12,20 @@ fn write_err(msg: const u8[:]) {
     write_stderr("\n");
 }
 
+fn emit_cmd_err(as_json: bool, error: const u8[:], fallback: const u8[:]) -> i32 {
+    let message = if error.len > 0 { error } else { fallback };
+    if as_json {
+        var out: u8[>..] = [];
+        out.append("{\"ok\":false,\"error\":");
+        json::format_string(out, message);
+        out.append("}\n");
+        write_stdout(out);
+    } else {
+        write_err(message);
+    }
+    return 1;
+}
+
 fn usage_err(msg: const u8[:]) -> i32 {
     write_err(msg);
     write_stderr("Run 'gpack --help' for usage.\n");
@@ -211,9 +225,7 @@ fn cmd_pack(arguments: u8[:][:]) -> i32 {
     var summary = pack::PackSummary { 0, 0, 0, 0, 0, 0, 0 };
     var error: u8[>..] = [];
     if !pack::pack_directory_detailed(pos[0], pos[1], summary, error) {
-        if error.len == 0 { write_err("pack failed"); }
-        else { write_err(error); }
-        return 1;
+        return emit_cmd_err(as_json, error, "pack failed");
     }
     if as_json {
         var out: u8[>..] = [];
@@ -263,9 +275,7 @@ fn cmd_list(arguments: u8[:][:]) -> i32 {
     var archive = reader::Archive { .. };
     var error: u8[>..] = [];
     if !reader::open_detailed(pos[0], archive, reader::DEFAULT_MAX_ASSET_SIZE, error) {
-        if error.len == 0 { write_err("cannot read or validate archive"); }
-        else { write_err(error); }
-        return 1;
+        return emit_cmd_err(as_json, error, "cannot read or validate archive");
     }
 
     if as_json {
@@ -356,9 +366,7 @@ fn cmd_info(arguments: u8[:][:]) -> i32 {
     var archive = reader::Archive { .. };
     var error: u8[>..] = [];
     if !reader::open_detailed(pos[0], archive, reader::DEFAULT_MAX_ASSET_SIZE, error) {
-        if error.len == 0 { write_err("cannot read or validate archive"); }
-        else { write_err(error); }
-        return 1;
+        return emit_cmd_err(as_json, error, "cannot read or validate archive");
     }
     let meta = reader::info(archive);
     reader::close(archive);
@@ -527,27 +535,12 @@ fn cmd_read(arguments: u8[:][:]) -> i32 {
     var archive = reader::Archive { .. };
     var error: u8[>..] = [];
     if !reader::open_detailed(pos[0], archive, max_size, error) {
-        if error.len == 0 { write_err("cannot read or validate archive"); }
-        else { write_err(error); }
-        return 1;
-    }
-    let idx = reader::find(archive, pos[1]);
-    if idx < 0 {
-        reader::close(archive);
-        write_err(str("asset not found: ", pos[1]));
-        return 1;
-    }
-    let entry = archive.entries[idx];
-    if entry.uncompressed_size > archive.max_asset_size {
-        reader::close(archive);
-        write_err(str("asset exceeds configured max size: ", pos[1]));
-        return 1;
+        return emit_cmd_err(false, error, "cannot read or validate archive");
     }
     var bytes: u8[>..] = [];
-    if !reader::read(archive, pos[1], bytes) {
+    if !reader::read_detailed(archive, pos[1], bytes, error) {
         reader::close(archive);
-        write_err(str("payload decode or CRC32/frame verification failed for: ", pos[1]));
-        return 1;
+        return emit_cmd_err(false, error, str("cannot read asset: ", pos[1]));
     }
     reader::close(archive);
     if gpack::native_write_stdout(bytes) == 0 {
@@ -582,7 +575,14 @@ fn main() {
             print_main_help();
             return;
         }
-        if arguments.len == 3 && print_command_help(arguments[2]) {
+        if arguments[2] == "-h" || arguments[2] == "--help" {
+            print_command_help("help");
+            return;
+        }
+        if arguments.len > 3 {
+            exit(usage_err("help takes at most one topic"));
+        }
+        if print_command_help(arguments[2]) {
             return;
         }
         exit(usage_err(str("unknown help topic: ", arguments[2])));
