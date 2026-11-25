@@ -4,7 +4,7 @@ gpack releases are cut from version tags after the native platform matrix
 passes. This repository does not publish releases automatically.
 
 1. Confirm the target commit has a successful `CI / native` matrix run on
-   `ubuntu-24.04`, `macos-14`, and `windows-2022`, including the golden archive,
+   `ubuntu-24.04`, `macos-15`, and `windows-2022`, including the golden archive,
    Unicode/case path, correctness, and static Zstandard checks.
 2. Create and push an annotated `vMAJOR.MINOR.PATCH` tag at that exact commit.
    Wait for CI on the tag and stop if any platform job fails.

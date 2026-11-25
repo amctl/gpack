@@ -14,7 +14,7 @@ jobs:
             cc: gcc
             wip: false
           # macOS and Windows native builds are WIP until verified on hosted runners.
-          - os: macos-14
+          - os: macos-15
             cc: clang
             wip: true
           - os: windows-2022

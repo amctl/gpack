@@ -108,7 +108,7 @@ For concurrent 4-worker reads (`reader::request` + `reader::read_worker`), forma
 | Platform | Compiler | Codec | Status |
 |---|---|---|---|
 | Linux (`ubuntu-24.04`) | GCC | Static Zstandard `1.5.7` | Verified |
-| macOS (`macos-14`) | Apple Clang | Static Zstandard `1.5.7` | **WIP** (CI matrix configured; pending hosted runner validation) |
+| macOS (`macos-15`) | Apple Clang | Static Zstandard `1.5.7` | **WIP** (CI matrix configured; pending hosted runner validation) |
 | Windows (`windows-2022`) | MSVC | Static Zstandard `1.5.7` | **WIP** (CI matrix configured; pending hosted runner validation) |
 
 ## Project Status & Evidence
@@ -117,7 +117,7 @@ For concurrent 4-worker reads (`reader::request` + `reader::read_worker`), forma
 - **Throughput & ZIP comparison:**
   - The [v1 runtime throughput gate](docs/research/experiments/v1-runtime-throughput/results.md) and [127 MiB Material Testers run](docs/research/experiments/v1-runtime-throughput/results-larger-corpus.md) met the 10% median throughput target vs. C on the measured Linux host.
   - The [restricted ZIP comparison](docs/research/experiments/restricted-zip-comparison/results.md) measured a small raw-container size advantage for `gpack` and workload-dependent Zstandard vs. DEFLATE tradeoffs (no general format winner claimed; results are scoped to the measured Linux workloads).
-- **Open release gate ([issue 23](.scratch/gpack-foundation/issues/23-platform-release-gate.md)):** Native `macos-14` (Apple Clang) and `windows-2022` (MSVC) GitHub Actions matrix runs and cross-platform golden-archive byte-identity checks remain to be verified on hosted CI runners before tagging a release.
+- **Open release gate ([issue 23](.scratch/gpack-foundation/issues/23-platform-release-gate.md)):** Native `macos-15` (Apple Clang) and `windows-2022` (MSVC) GitHub Actions matrix runs and cross-platform golden-archive byte-identity checks remain to be verified on hosted CI runners before tagging a release.
 
 ## Documentation Map
 
