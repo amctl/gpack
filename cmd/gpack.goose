@@ -550,7 +550,10 @@ fn cmd_read(arguments: u8[:][:]) -> i32 {
         return 1;
     }
     reader::close(archive);
-    write_stdout(bytes);
+    if gpack::native_write_stdout(bytes) == 0 {
+        write_err("failed writing asset bytes to stdout");
+        return 1;
+    }
     return 0;
 }
 

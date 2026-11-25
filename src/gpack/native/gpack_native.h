@@ -35,6 +35,7 @@ int64_t gpack_file_read_at(uint64_t handle, uint64_t offset, gpack_bytes output)
 int64_t gpack_file_write_at(uint64_t handle, uint64_t offset, gpack_bytes input);
 int32_t gpack_file_flush(uint64_t handle);
 void gpack_file_close(uint64_t handle);
+int32_t gpack_write_stdout(gpack_bytes data);
 uint64_t gpack_zstd_compress_begin(uint64_t source_size);
 uint64_t gpack_zstd_compress_step(uint64_t context, gpack_bytes input, gpack_bytes output, uint8_t finish);
 void gpack_zstd_compress_end(uint64_t context);

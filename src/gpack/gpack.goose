@@ -23,6 +23,7 @@ extern fn native_file_read_at(handle: u64, offset: u64, output: u8[:]) -> i64 = 
 extern fn native_file_write_at(handle: u64, offset: u64, input: const u8[:]) -> i64 = "gpack_file_write_at";
 extern fn native_file_flush(handle: u64) -> i32 = "gpack_file_flush";
 extern fn native_file_close(handle: u64) = "gpack_file_close";
+extern fn native_write_stdout(data: const u8[:]) -> i32 = "gpack_write_stdout";
 extern fn native_zstd_compress_begin(source_size: u64) -> u64 = "gpack_zstd_compress_begin";
 extern fn native_zstd_compress_step(context: u64, input: const u8[:], output: u8[:], finish: bool) -> u64 = "gpack_zstd_compress_step";
 extern fn native_zstd_compress_end(context: u64) = "gpack_zstd_compress_end";

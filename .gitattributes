@@ -1,0 +1,4 @@
+* text=auto eol=lf
+*.goose text eol=lf
+*.hex text eol=lf
+tests/fixtures/v1-golden-input/** binary

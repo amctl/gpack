@@ -12,6 +12,8 @@
 
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
+#include <fcntl.h>
+#include <io.h>
 #include <windows.h>
 static HANDLE gpack_handle(uint64_t value) { return (HANDLE)(uintptr_t)value; }
 static uint64_t gpack_id(HANDLE value) { return (uint64_t)(uintptr_t)value; }
@@ -374,4 +376,15 @@ uint64_t gpack_native_abi_probe(uint64_t value) {
 
 uint32_t gpack_native_zstd_version(void) {
     return (uint32_t) ZSTD_versionNumber();
+}
+
+int32_t gpack_write_stdout(gpack_bytes data) {
+    if (data.len < 0) return 0;
+    if (data.len == 0) return 1;
+#if defined(_WIN32)
+    fflush(stdout);
+    _setmode(_fileno(stdout), _O_BINARY);
+#endif
+    size_t written = fwrite(data.data, 1, (size_t)data.len, stdout);
+    return written == (size_t)data.len && fflush(stdout) == 0;
 }
