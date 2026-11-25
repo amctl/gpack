@@ -220,14 +220,33 @@ def package() -> None:
     arch_label = {"x86_64": "x64", "amd64": "x64", "arm64": "arm64", "aarch64": "arm64"}.get(machine, machine)
     target = os.environ.get("GPACK_RELEASE_TARGET", f"{os_label}-{arch_label}")
 
-    bundle_name = f"gpack-{tag}-{target}"
     dist_dir = BUILD / "dist"
+    if dist_dir.exists():
+        shutil.rmtree(dist_dir)
+    dist_dir.mkdir(parents=True)
+
+    standalone_name = f"gpack-{target}.exe" if os.name == "nt" else f"gpack-{target}"
+    standalone_path = dist_dir / standalone_name
+    shutil.copy2(gpack_exe, standalone_path)
+    if os.name != "nt":
+        strip_cmd = shutil.which("strip")
+        if strip_cmd is not None:
+            strip_args = [strip_cmd, "-x", str(standalone_path)] if sys.platform == "darwin" else [strip_cmd, str(standalone_path)]
+            subprocess.run(strip_args, check=False)
+        standalone_path.chmod(0o755)
+    subprocess.run([str(standalone_path), "--version"], capture_output=True, text=True, check=True)
+
+    standalone_digest = hashlib.sha256(standalone_path.read_bytes()).hexdigest()
+    (dist_dir / f"{standalone_name}.sha256").write_text(f"{standalone_digest}  {standalone_name}\n", encoding="utf-8")
+
+    bundle_name = f"gpack-{tag}-{target}"
     stage_dir = dist_dir / bundle_name
-    if stage_dir.exists():
-        shutil.rmtree(stage_dir)
+    bin_dir = stage_dir / "bin"
     notices_dst = stage_dir / "THIRD_PARTY_NOTICES"
+    bin_dir.mkdir(parents=True)
     notices_dst.mkdir(parents=True)
-    shutil.copy2(gpack_exe, stage_dir / exe_name)
+    shutil.copy2(standalone_path, bin_dir / exe_name)
+    shutil.copyfile(ROOT / "README.md", stage_dir / "README.md")
     shutil.copyfile(ROOT / "LICENSE", stage_dir / "LICENSE")
     shutil.copyfile(BUILD / "THIRD_PARTY_NOTICES" / "ZSTD-LICENSE", notices_dst / "ZSTD-LICENSE")
     shutil.copyfile(BUILD / "THIRD_PARTY_NOTICES" / "ZSTD-COPYING", notices_dst / "ZSTD-COPYING")
@@ -243,11 +262,16 @@ def package() -> None:
         with tarfile.open(archive_path, "w:gz") as tf:
             for item in sorted(stage_dir.rglob("*")):
                 if item.is_file():
-                    tf.add(item, arcname=f"{bundle_name}/{item.relative_to(stage_dir).as_posix()}")
+                    rel = item.relative_to(stage_dir).as_posix()
+                    info = tf.gettarinfo(str(item), arcname=f"{bundle_name}/{rel}")
+                    info.mode = 0o755 if rel == f"bin/{exe_name}" else 0o644
+                    with item.open("rb") as fh:
+                        tf.addfile(info, fh)
 
     digest = hashlib.sha256(archive_path.read_bytes()).hexdigest()
     (dist_dir / f"{archive_path.name}.sha256").write_text(f"{digest}  {archive_path.name}\n", encoding="utf-8")
     shutil.rmtree(stage_dir)
+    print(f"packaged {standalone_path} (sha256={standalone_digest})")
     print(f"packaged {archive_path} (sha256={digest})")
 
 

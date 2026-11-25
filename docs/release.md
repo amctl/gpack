@@ -12,13 +12,19 @@ passes. This repository does not publish releases automatically.
    `python scripts/gpack.py package` with Goose v2026.4 available (or let
    [`.github/workflows/release.yml`](../.github/workflows/release.yml) run on
    the pushed `v*` tag). This builds and verifies the CLI, writes the Zstandard
-   `LICENSE` and `COPYING` files into `build/THIRD_PARTY_NOTICES/`, and
-   packages the binary, `LICENSE`, notices, and `.sha256` files into
-   `build/dist/`.
+   `LICENSE` and `COPYING` files into `build/THIRD_PARTY_NOTICES/`, and emits
+   into `build/dist/`:
+   - standalone directly runnable executables (`gpack-linux-x64`,
+     `gpack-macos-arm64`, `gpack-windows-x64.exe`) plus `.sha256` files, and
+   - packaged archives (`gpack-<tag>-<target>.tar.gz`/`.zip`) containing
+     `bin/gpack` (or `bin/gpack.exe`), `README.md`, `LICENSE`, and
+     `THIRD_PARTY_NOTICES/`, plus `.sha256` files.
 4. The tag workflow creates a **draft** GitHub Release after all three platform
-   jobs succeed. Review the draft release, artifact hashes, and release notes,
-   then publish manually. Do not claim cross-platform byte identity unless the
-   golden checks passed on all three platform jobs.
+   jobs succeed, attaching the standalone executables, archives, per-file
+   `.sha256` files, and combined `SHA256SUMS.txt`. Review the draft release,
+   artifact hashes, and release notes, then publish manually. Do not claim
+   cross-platform byte identity unless the golden checks passed on all three
+   platform jobs.
 
 This procedure documents a release; it does not authorize publication. A
 maintainer must explicitly approve any release upload or announcement.

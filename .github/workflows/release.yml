@@ -52,10 +52,7 @@ jobs:
       - uses: actions/upload-artifact@v4
         with:
           name: release-${{ matrix.target }}
-          path: |
-            build/dist/*.tar.gz
-            build/dist/*.zip
-            build/dist/*.sha256
+          path: build/dist/gpack-*
 
   release:
     needs: build
@@ -78,7 +75,5 @@ jobs:
           prerelease: ${{ contains(github.ref_name, '-') }}
           generate_release_notes: true
           files: |
-            release-assets/*.tar.gz
-            release-assets/*.zip
-            release-assets/*.sha256
+            release-assets/gpack-*
             release-assets/SHA256SUMS.txt
