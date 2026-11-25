@@ -11,7 +11,7 @@
 
 ### Prerequisites
 
-- **Goose** `v2026.4` (pinned commit `dec4bd827a1da10041febd7eb583fe3c4f96a2b9`)
+- **Goose** `v2026.4` (tagged release [`v2026.4`](https://github.com/aardappel/goose/releases/tag/v2026.4))
 - **CMake** (`>= 3.16`) and a C/C++ compiler (`gcc`/`g++` on Linux, Apple Clang on macOS, MSVC on Windows)
 - **Python 3** (`>= 3.10`) for build and CI orchestration
 

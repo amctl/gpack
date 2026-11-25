@@ -27,11 +27,12 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: "3.12"
+      - if: runner.os == 'Windows'
+        uses: ilammy/msvc-dev-cmd@v1
       - name: Install pinned Goose v2026.4
         shell: bash
         run: |
-          git clone https://github.com/aardappel/goose.git goose-src
-          git -C goose-src checkout dec4bd827a1da10041febd7eb583fe3c4f96a2b9
+          git clone --depth 1 --branch v2026.4 https://github.com/aardappel/goose.git goose-src
           cmake -S goose-src -B goose-src/build -DCMAKE_BUILD_TYPE=Release
           cmake --build goose-src/build --config Release --parallel
       - name: Run native checks

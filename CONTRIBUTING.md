@@ -4,7 +4,7 @@ Thank you for contributing to `gpack`!
 
 ## Toolchain Requirements
 
-- **Goose** `v2026.4` (commit `dec4bd827a1da10041febd7eb583fe3c4f96a2b9` as pinned in [`.github/workflows/ci.yml`](.github/workflows/ci.yml))
+- **Goose** `v2026.4` (tag `v2026.4` as pinned in [`.github/workflows/ci.yml`](.github/workflows/ci.yml))
 - **CMake** (`>= 3.16`)
 - **C/C++ compiler**: GCC/G++ on Linux, Apple Clang on macOS, MSVC on Windows
 - **Python 3** (`>= 3.10`)
