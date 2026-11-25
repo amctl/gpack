@@ -4,16 +4,24 @@
 #include <stdint.h>
 #include <stddef.h>
 
+#if defined(__STDC_VERSION__) && __STDC_VERSION__ >= 201112L
+#define GPACK_STATIC_ASSERT(cond, msg) _Static_assert(cond, msg)
+#elif defined(__cplusplus)
+#define GPACK_STATIC_ASSERT(cond, msg) static_assert(cond, msg)
+#else
+#define GPACK_STATIC_ASSERT(cond, msg) typedef char gpack_static_assert_##__LINE__[(cond) ? 1 : -1]
+#endif
+
 #ifdef GPACK_NATIVE_IMPL
 typedef struct { uint8_t *data; int64_t len; } gpack_bytes;
 #else
 typedef sl_u8 gpack_bytes;
-_Static_assert(sizeof(gpack_bytes) == sizeof(sl_u8), "Goose byte-slice ABI mismatch");
+GPACK_STATIC_ASSERT(sizeof(gpack_bytes) == sizeof(sl_u8), "Goose byte-slice ABI mismatch");
 #endif
 
 #if defined(GPACK_NATIVE_IMPL)
-_Static_assert(offsetof(gpack_bytes, len) == sizeof(uint8_t *), "native byte-slice field offset mismatch");
-_Static_assert(sizeof(gpack_bytes) == sizeof(uint8_t *) + sizeof(int64_t), "native byte-slice size mismatch");
+GPACK_STATIC_ASSERT(offsetof(gpack_bytes, len) == sizeof(uint8_t *), "native byte-slice field offset mismatch");
+GPACK_STATIC_ASSERT(sizeof(gpack_bytes) == sizeof(uint8_t *) + sizeof(int64_t), "native byte-slice size mismatch");
 #endif
 
 #ifdef __cplusplus

@@ -40,3 +40,8 @@ jobs:
         env:
           GOOSE: ${{ runner.os == 'Windows' && 'goose-src/build/Release/goose.exe' || 'goose-src/build/goose' }}
         run: python scripts/gpack.py ci
+      - name: Print Goose CMake logs on failure
+        if: failure()
+        shell: bash
+        run: |
+          find "${USERPROFILE:-$HOME}/.goose" -name "cmake-build.log" -exec head -n 200 {} + 2>/dev/null || true

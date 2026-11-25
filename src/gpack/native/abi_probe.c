@@ -8,7 +8,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-#include <stdatomic.h>
 
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
@@ -151,6 +150,7 @@ void gpack_file_close(uint64_t h) { if (h) CloseHandle(gpack_handle(h)); }
 #else
 #include <errno.h>
 #include <fcntl.h>
+#include <stdatomic.h>
 #include <sys/stat.h>
 #include <sys/types.h>
 #include <unistd.h>
