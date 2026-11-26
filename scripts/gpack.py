@@ -105,7 +105,7 @@ def test_cli() -> None:
         raise RuntimeError(f"unexpected --help output: {help_res.stdout!r}")
     subprocess.run([str(gpack_exe), "help", "verify"], capture_output=True, text=True, check=True)
     ver_res = subprocess.run([str(gpack_exe), "--version"], capture_output=True, text=True, check=True)
-    if "gpack 1.0.0" not in ver_res.stdout or "zstd 1.5.7" not in ver_res.stdout:
+    if "gpack 1.1.0" not in ver_res.stdout or "zstd 1.5.7" not in ver_res.stdout:
         raise RuntimeError(f"unexpected --version output: {ver_res.stdout!r}")
 
     pack_res = subprocess.run([str(gpack_exe), "pack", "--json", str(input_dir), str(archive)], capture_output=True, text=True, check=True)

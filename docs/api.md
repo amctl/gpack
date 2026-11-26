@@ -20,7 +20,7 @@ import gpack.reader;
 
 ### Constants & Functions
 
-- `VERSION: const u8[:]` — package version string (`"1.0.0"`).
+- `VERSION: const u8[:]` — package version string (`"1.1.0"`).
 - `FORMAT_MAJOR: u16` — v1 major format version (`1`).
 - `FORMAT_MINOR: u16` — v1 minor format version (`0`).
 - `fn zstd_version() -> u32` — returns the linked Zstandard version integer (e.g. `10507` for `1.5.7`).

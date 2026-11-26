@@ -1,6 +1,6 @@
 namespace gpack;
 
-let VERSION:      const u8[:] = "1.0.0";
+let VERSION:      const u8[:] = "1.1.0";
 let FORMAT_MAJOR: u16         = 1;
 let FORMAT_MINOR: u16         = 0;
 
