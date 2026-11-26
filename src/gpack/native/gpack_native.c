@@ -9,6 +9,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#define GPACK_IO_CHUNK (64U * 1024U * 1024U)
+
 #if defined(_WIN32)
 #define WIN32_LEAN_AND_MEAN
 #include <fcntl.h>
@@ -109,7 +111,7 @@ static int64_t gpack_transfer(uint64_t handle, uint64_t offset, gpack_bytes byte
     int64_t done = 0;
     while (done < bytes.len) {
         uint64_t remaining = (uint64_t)(bytes.len - done);
-        DWORD amount = remaining > MAXDWORD ? MAXDWORD : (DWORD)remaining;
+        DWORD amount = remaining > GPACK_IO_CHUNK ? (DWORD)GPACK_IO_CHUNK : (DWORD)remaining;
         OVERLAPPED ov;
         memset(&ov, 0, sizeof(ov));
         ResetEvent(ev);
@@ -253,9 +255,11 @@ static int64_t gpack_transfer(uint64_t handle, uint64_t offset, gpack_bytes byte
     while (done < bytes.len) {
         uint64_t position = offset + (uint64_t)done;
         if (position > INT64_MAX) return -1;
+        uint64_t remaining = (uint64_t)(bytes.len - done);
+        size_t amount = remaining > GPACK_IO_CHUNK ? (size_t)GPACK_IO_CHUNK : (size_t)remaining;
         ssize_t n = write_mode
-            ? pwrite(fd, bytes.data + done, (size_t)(bytes.len - done), (off_t)position)
-            : pread(fd, bytes.data + done, (size_t)(bytes.len - done), (off_t)position);
+            ? pwrite(fd, bytes.data + done, amount, (off_t)position)
+            : pread(fd, bytes.data + done, amount, (off_t)position);
         if (n < 0) {
             if (errno == EINTR) continue;
             return done == 0 ? -1 : done;
@@ -364,6 +368,14 @@ int32_t gpack_write_stdout(gpack_bytes data) {
     fflush(stdout);
     _setmode(_fileno(stdout), _O_BINARY);
 #endif
-    size_t written = fwrite(data.data, 1, (size_t)data.len, stdout);
-    return written == (size_t)data.len && fflush(stdout) == 0;
+    size_t offset = 0;
+    size_t total = (size_t)data.len;
+    while (offset < total) {
+        size_t remaining = total - offset;
+        size_t chunk = remaining > GPACK_IO_CHUNK ? (size_t)GPACK_IO_CHUNK : remaining;
+        size_t written = fwrite(data.data + offset, 1, chunk, stdout);
+        if (written != chunk) return 0;
+        offset += written;
+    }
+    return fflush(stdout) == 0;
 }
